@@ -423,8 +423,8 @@ real4     = df4[target_columns].values
 norm4_sc   = scale_arr(real4)          # scaler training → [-0.1, 1.1]
 pred_norm  = scale_arr(pred_signal)    # scaler training → [-0.1, 1.1]
 
-# Gambar 1: per-kolom min-max dari 4 hari itu sendiri → [0,1], tiap sinyal jelas
-norm4_g1   = normalize_per_col_data_lama(df4).values  # (4*PPD, 21)
+# Gambar 1: pakai min/max dari semua 12 hari (sama dengan plot_all) → apple to apple
+norm4_g1   = norm_all.iloc[-4 * COMPRESSED_POINTS_PER_DAY:].values  # (4*PPD, 21)
 
 PPD_ds = COMPRESSED_POINTS_PER_DAY // PLOT_DOWNSAMPLE   # titik per hari setelah downsample
 
