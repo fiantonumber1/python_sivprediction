@@ -418,17 +418,29 @@ print("  → plot_all_parameters_TCN.png")
 last4_dfs = compressed_dfs[-4:]
 df4       = pd.concat(last4_dfs, ignore_index=True)
 real4     = df4[target_columns].values
-norm4     = scale_arr(real4)          # scaler training → [-0.1, 1.1]
-pred_norm = scale_arr(pred_signal)    # scaler training → [-0.1, 1.1]
-x4        = np.arange(len(df4))
-n3        = 3 * COMPRESSED_POINTS_PER_DAY
 
-# setup_plot — identik Data Lama
+# Gambar 2 & 3: training scaler (skala sama untuk real vs prediksi)
+norm4_sc   = scale_arr(real4)          # scaler training → [-0.1, 1.1]
+pred_norm  = scale_arr(pred_signal)    # scaler training → [-0.1, 1.1]
+
+# Gambar 1: per-kolom min-max dari 4 hari itu sendiri → [0,1], tiap sinyal jelas
+norm4_g1   = normalize_per_col_data_lama(df4).values  # (4*PPD, 21)
+
+PPD_ds = COMPRESSED_POINTS_PER_DAY // PLOT_DOWNSAMPLE   # titik per hari setelah downsample
+
+# Downsample semua array untuk plot
+norm4_sc_ds  = norm4_sc[::PLOT_DOWNSAMPLE]              # (4*PPD_ds, 21)
+norm4_g1_ds  = norm4_g1[::PLOT_DOWNSAMPLE]              # (4*PPD_ds, 21)
+pred_norm_ds = pred_norm[::PLOT_DOWNSAMPLE]              # (PPD_ds, 21)
+x4_ds = np.arange(4 * PPD_ds)
+n3_ds = 3 * PPD_ds
+
+# setup_plot — pakai PPD_ds (downsampled)
 # override_last: jika diisi int (0/1/2), hari ke-4 (slot prediksi) pakai status ini
-def setup_plot(ax, title, override_last=None):
-    bounds = np.arange(0, 5 * COMPRESSED_POINTS_PER_DAY, COMPRESSED_POINTS_PER_DAY)
+def setup_plot(ax, title, ylim_low=-0.1, override_last=None):
+    bounds = np.arange(0, 5 * PPD_ds, PPD_ds)
     for b in bounds[1:]:
-        if b < len(x4):
+        if b < len(x4_ds):
             ax.axvline(b, color='red', linestyle='--', alpha=0.8)
     mids = [(bounds[i] + bounds[i+1]) // 2 for i in range(4)]
     for i, m in enumerate(mids):
@@ -445,18 +457,18 @@ def setup_plot(ax, title, override_last=None):
                 transform=ax.get_xaxis_transform())
     ax.set_title(title, fontsize=15)
     ax.grid(alpha=0.3)
-    ax.set_ylim(-0.1, 1.3)
+    ax.set_ylim(ylim_low, 1.3)
 
 # =========================================================
 # GAMBAR 1 — 4 Hari Real Data + Health Status
-# IDENTIK Data Lama: hanya data real, tanpa prediksi
+# Normalisasi per-kolom min-max (konsisten dengan plot_all)
 # =========================================================
 print("[Plot] gambar1_4hari_real_TCN.png ...")
 
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
-    ax.plot(x4, norm4[:, i], linewidth=1, alpha=0.8)
-setup_plot(ax, "GAMBAR 1: 4 Hari Real Data + Health Status (TCN Pipeline)")
+    ax.plot(x4_ds, norm4_g1_ds[:, i], linewidth=1, alpha=0.8)
+setup_plot(ax, "GAMBAR 1: 4 Hari Real Data + Health Status (TCN Pipeline)", ylim_low=0)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2)
 plt.tight_layout()
 plt.savefig(os.path.join(BASE_DIR, "gambar1_4hari_real_TCN.png"), dpi=300, bbox_inches='tight')
@@ -465,16 +477,16 @@ print("  → gambar1_4hari_real_TCN.png")
 
 # =========================================================
 # GAMBAR 2 — 3 Hari Input + 1 Hari Prediksi
-# IDENTIK Data Lama
+# Training scaler → skala real dan prediksi konsisten
 # =========================================================
 print("[Plot] gambar2_input_plus_prediksi_TCN.png ...")
 
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
-    ax.plot(x4[:n3], norm4[:n3, i], linewidth=1.2, label=col)
+    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, label=col)
 for i, col in enumerate(target_columns):
     color = ax.get_lines()[i].get_color()
-    ax.plot(x4[n3:], pred_norm[:, i], '--', linewidth=2.8, color=color, alpha=0.95)
+    ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=2.8, color=color, alpha=0.95)
 setup_plot(ax, "GAMBAR 2: 3 Hari Input + 1 Hari Prediksi (TCN Pipeline)", override_last=pred_status)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
 plt.tight_layout()
@@ -484,24 +496,24 @@ print("  → gambar2_input_plus_prediksi_TCN.png")
 
 # =========================================================
 # GAMBAR 3 — Real vs Prediksi Hari Terakhir
-# IDENTIK Data Lama:
+# Training scaler → skala real dan prediksi konsisten
 #   • 3 hari input → solid tipis
-#   • real day 4 (hari ke-9 dari CSV) → solid tebal
-#   • prediksi day 4 → dashed tebal (overlay di slot hari ke-4)
+#   • real day 4 → solid tebal
+#   • prediksi day 4 → dashed tebal (overlay)
 # =========================================================
 print("[Plot] gambar3_real_vs_prediksi_TCN.png ...")
 
 fig, ax = plt.subplots(figsize=(24, 10))
 # 3 hari input (solid)
 for i, col in enumerate(target_columns):
-    ax.plot(x4[:n3], norm4[:n3, i], linewidth=1.2)
+    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2)
 # Real day 4 (solid tebal)
 for i, col in enumerate(target_columns):
-    ax.plot(x4[n3:], norm4[n3:, i], linewidth=1.8, alpha=0.9)
+    ax.plot(x4_ds[n3_ds:], norm4_sc_ds[n3_ds:, i], linewidth=1.8, alpha=0.9)
 # Prediksi (dashed tebal, warna sama)
 for i, col in enumerate(target_columns):
     color = ax.get_lines()[i].get_color()
-    ax.plot(x4[n3:], pred_norm[:, i], '--', linewidth=3, color=color, alpha=0.95,
+    ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=3, color=color, alpha=0.95,
             label=f'Pred {col}' if i == 0 else None)
 setup_plot(ax, "GAMBAR 3: Real vs Prediksi Hari Terakhir (TCN Pipeline)")
 ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
