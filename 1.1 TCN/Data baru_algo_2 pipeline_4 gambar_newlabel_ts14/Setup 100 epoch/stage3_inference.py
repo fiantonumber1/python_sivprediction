@@ -26,6 +26,7 @@ DATA_DIR = os.path.join(BASE_DIR, "data")   # folder CSV terisolasi
 # CONFIG
 # =========================================================
 COMPRESSION_FACTOR         = 1
+PLOT_DOWNSAMPLE            = 10      # ambil setiap N-th point untuk plot (hemat memori)
 N_TAKE                     = 150_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 FUTURE                     = COMPRESSED_POINTS_PER_DAY
@@ -183,13 +184,13 @@ print("[Inference] Model TCN dan MLP loaded")
 def read_csv_day(filepath):
     print(f"\n  Membaca: {os.path.basename(filepath)}")
 
-    with open(filepath, 'r', encoding='utf-8', errors='ignore') as f:
+    with open(filepath, 'r', encoding='utf-8-sig', errors='ignore') as f:
         first_line = f.readline()
     sep = ';' if first_line.count(';') > first_line.count(',') else ','
     print(f"    Separator: '{sep}'")
 
     try:
-        df = pd.read_csv(filepath, sep=sep, engine='python', on_bad_lines='skip')
+        df = pd.read_csv(filepath, encoding='utf-8-sig', sep=sep, engine='python', on_bad_lines='skip')
     except Exception as e:
         raise ValueError(f"\nGagal membaca CSV:\n{filepath}\n\n{str(e)}")
 
@@ -223,7 +224,7 @@ def read_csv_day(filepath):
         (df['ts_date'] <= datetime.combine(date0, END_TIME))
     ]
 
-    min_required = int(N_DROP_FIRST + N_TAKE * 0.5)
+    min_required = int(N_DROP_FIRST + N_TAKE * 0.8)
     if len(df) < min_required:
         raise ValueError(f"Data terlalu sedikit: {len(df)} rows (min {min_required})")
 
@@ -248,7 +249,7 @@ def read_csv_day(filepath):
 # =========================================================
 def label_health_status(df_day):
     n_active = sum(1 for col in fault_columns
-                   if col in df_day.columns and (df_day[col] == 1).any())
+                   if col in df_day.columns and (df_day[col] > 0).any())
     if n_active == 0:   return 0  # Sehat
     elif n_active == 1: return 1  # Warning
     else:               return 2  # Not Ready
@@ -383,12 +384,14 @@ print("\n[Plot] plot_all_parameters_TCN.png ...")
 df_all  = pd.concat(compressed_dfs, ignore_index=True)
 norm_all = normalize_per_col_data_lama(df_all)   # per-kolom [0,1]
 
-x = np.arange(len(df_all))
+PPD_ds = COMPRESSED_POINTS_PER_DAY // PLOT_DOWNSAMPLE   # titik per hari setelah downsample
+norm_ds = norm_all.iloc[::PLOT_DOWNSAMPLE].reset_index(drop=True)
+x = np.arange(len(norm_ds))
 fig, ax = plt.subplots(figsize=(24, 10))
 for col in target_columns:
-    ax.plot(x, norm_all[col], linewidth=0.9, alpha=0.7)
+    ax.plot(x, norm_ds[col], linewidth=0.9, alpha=0.7)
 
-day_bounds = np.arange(0, (total_days + 1) * COMPRESSED_POINTS_PER_DAY, COMPRESSED_POINTS_PER_DAY)
+day_bounds = np.arange(0, (total_days + 1) * PPD_ds, PPD_ds)
 for b in day_bounds[1:-1]:
     ax.axvline(b, color='red', linestyle='--', alpha=0.8)
 mid_points = [(day_bounds[i] + day_bounds[i+1]) // 2 for i in range(total_days)]
@@ -421,7 +424,8 @@ x4        = np.arange(len(df4))
 n3        = 3 * COMPRESSED_POINTS_PER_DAY
 
 # setup_plot — identik Data Lama
-def setup_plot(ax, title):
+# override_last: jika diisi int (0/1/2), hari ke-4 (slot prediksi) pakai status ini
+def setup_plot(ax, title, override_last=None):
     bounds = np.arange(0, 5 * COMPRESSED_POINTS_PER_DAY, COMPRESSED_POINTS_PER_DAY)
     for b in bounds[1:]:
         if b < len(x4):
@@ -429,10 +433,15 @@ def setup_plot(ax, title):
     mids = [(bounds[i] + bounds[i+1]) // 2 for i in range(4)]
     for i, m in enumerate(mids):
         day_idx = total_days - 4 + i
+        # hari ke-4 (i==3): pakai pred_status jika override_last diberikan
+        stat = override_last if (i == 3 and override_last is not None) else health_status[day_idx]
+        label_txt = status_map[stat]
+        if i == 3 and override_last is not None:
+            label_txt = f"Pred: {status_map[stat]}"
         ax.text(m, 1.05, f'Day {day_idx+1}', ha='center', color='red', fontweight='bold',
                 transform=ax.get_xaxis_transform())
-        ax.text(m, 1.15, status_map[health_status[day_idx]], ha='center',
-                color=['green', 'orange', 'red'][health_status[day_idx]], fontweight='bold',
+        ax.text(m, 1.15, label_txt, ha='center',
+                color=['green', 'orange', 'red'][stat], fontweight='bold',
                 transform=ax.get_xaxis_transform())
     ax.set_title(title, fontsize=15)
     ax.grid(alpha=0.3)
@@ -466,7 +475,7 @@ for i, col in enumerate(target_columns):
 for i, col in enumerate(target_columns):
     color = ax.get_lines()[i].get_color()
     ax.plot(x4[n3:], pred_norm[:, i], '--', linewidth=2.8, color=color, alpha=0.95)
-setup_plot(ax, "GAMBAR 2: 3 Hari Input + 1 Hari Prediksi (TCN Pipeline)")
+setup_plot(ax, "GAMBAR 2: 3 Hari Input + 1 Hari Prediksi (TCN Pipeline)", override_last=pred_status)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
 plt.tight_layout()
 plt.savefig(os.path.join(BASE_DIR, "gambar2_input_plus_prediksi_TCN.png"), dpi=300, bbox_inches='tight')
