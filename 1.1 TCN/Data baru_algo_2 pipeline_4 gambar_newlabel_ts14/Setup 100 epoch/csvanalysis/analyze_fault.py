@@ -21,11 +21,11 @@ FAILURE_DATE  = None          # Belum ada failure date untuk Data Baru TS14
 CSV_DIR       = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")  # folder data/ terisolasi
 
 # Parameter crop — identik dengan stage1 & stage2
-START_TIME    = time(6, 0, 0)
+START_TIME    = time(4, 0, 0)
 END_TIME      = time(18, 16, 35)
 N_DROP_FIRST  = 3600
-N_TAKE        = 150_000
-MIN_ROWS      = N_DROP_FIRST + int(N_TAKE * 0.8)   # 123_600
+N_TAKE        = 190_000
+MIN_ROWS      = N_DROP_FIRST + N_TAKE   # 193_600
 
 FAULT_COLUMNS = [
     'SIV_MajorBCFltPres',
@@ -117,11 +117,11 @@ for idx, f in enumerate(files):
     eligible        = rows_after_crop >= MIN_ROWS
     el_str          = "Layak" if eligible else "SKIP"
 
-    # Hitung fault count (dari seluruh file, bukan crop saja)
+    # Hitung fault count dari df_crop (selaras dengan window training)
     counts = {}
     for col in FAULT_COLUMNS:
-        if col in df.columns:
-            s = pd.to_numeric(df[col].astype(str).str.replace(',', '.'), errors='coerce')
+        if col in df_crop.columns:
+            s = pd.to_numeric(df_crop[col].astype(str).str.replace(',', '.'), errors='coerce')
             counts[col] = int((s > 0).sum())
         else:
             counts[col] = "N/A"
@@ -196,7 +196,7 @@ print("=" * len(sep_line))
 print(f"  ALL DATA — TS14 Pipeline  (Total: {n_total} hari)")
 print("=" * len(sep_line))
 print(f"  CSV folder  : {os.path.abspath(CSV_DIR)}")
-print(f"  Min rows    : {MIN_ROWS:,}  (drop {N_DROP_FIRST:,} + take {int(N_TAKE*0.8):,})")
+print(f"  Min rows    : {MIN_ROWS:,}  (drop {N_DROP_FIRST:,} + take {N_TAKE:,})")
 if FAILURE_DATE is not None:
     print(f"  Failure date: {FAILURE_DATE}")
 print()
@@ -267,9 +267,12 @@ else:
 
     fig, ax = plt.subplots(figsize=(26, 10))
 
-    # Plot 21 parameter
+    # Plot 21 parameter — pakai colormap agar semua warna berbeda
+    colors = (list(plt.cm.tab10.colors) +        # 10 warna
+              list(plt.cm.Set2.colors) +          # 8 warna
+              list(plt.cm.Dark2.colors[:3]))      # 3 warna → total 21
     for j, col in enumerate(TARGET_COLUMNS):
-        ax.plot(x, norm_arr[:, j], linewidth=0.8, alpha=0.7, label=col)
+        ax.plot(x, norm_arr[:, j], linewidth=0.8, alpha=0.7, label=col, color=colors[j])
 
     # Garis batas antar hari (merah putus-putus)
     day_bounds = np.arange(0, (n_plot + 1) * PPD, PPD)

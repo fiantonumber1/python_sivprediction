@@ -31,10 +31,10 @@ CHECKPOINT_INTERVAL = 50
 COMPRESSION_FACTOR  = 1
 # ==================================================================
 
-N_TAKE                     = 150_000
+N_TAKE                     = 190_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 FUTURE                     = COMPRESSED_POINTS_PER_DAY
-START_TIME                 = time(6, 0, 0)
+START_TIME                 = time(4, 0, 0)
 END_TIME                   = time(18, 16, 35)
 N_DROP_FIRST               = 3600
 
@@ -85,7 +85,7 @@ def read_and_crop(filepath):
     date0 = df['ts_date'].dt.date.iloc[0]
     df    = df[(df['ts_date'] >= datetime.combine(date0, START_TIME)) &
                (df['ts_date'] <= datetime.combine(date0, END_TIME))]
-    if len(df) < N_DROP_FIRST + N_TAKE * 0.8:
+    if len(df) < N_DROP_FIRST + N_TAKE:
         return pd.DataFrame()
     return df.iloc[N_DROP_FIRST:N_DROP_FIRST + N_TAKE].reset_index(drop=True)[
         ['ts_date'] + target_columns + fault_columns

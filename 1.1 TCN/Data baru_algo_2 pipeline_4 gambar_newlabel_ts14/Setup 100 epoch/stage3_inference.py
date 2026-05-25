@@ -27,11 +27,11 @@ DATA_DIR = os.path.join(BASE_DIR, "data")   # folder CSV terisolasi
 # =========================================================
 COMPRESSION_FACTOR         = 1
 PLOT_DOWNSAMPLE            = 10      # ambil setiap N-th point untuk plot (hemat memori)
-N_TAKE                     = 150_000
+N_TAKE                     = 190_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 FUTURE                     = COMPRESSED_POINTS_PER_DAY
 
-START_TIME   = time(6, 0, 0)
+START_TIME   = time(4, 0, 0)
 END_TIME     = time(18, 16, 35)
 N_DROP_FIRST = 3600
 
@@ -224,7 +224,7 @@ def read_csv_day(filepath):
         (df['ts_date'] <= datetime.combine(date0, END_TIME))
     ]
 
-    min_required = int(N_DROP_FIRST + N_TAKE * 0.8)
+    min_required = N_DROP_FIRST + N_TAKE
     if len(df) < min_required:
         raise ValueError(f"Data terlalu sedikit: {len(df)} rows (min {min_required})")
 
@@ -388,8 +388,11 @@ PPD_ds = COMPRESSED_POINTS_PER_DAY // PLOT_DOWNSAMPLE   # titik per hari setelah
 norm_ds = norm_all.iloc[::PLOT_DOWNSAMPLE].reset_index(drop=True)
 x = np.arange(len(norm_ds))
 fig, ax = plt.subplots(figsize=(24, 10))
-for col in target_columns:
-    ax.plot(x, norm_ds[col], linewidth=0.9, alpha=0.7)
+colors21 = (list(plt.cm.tab10.colors) +
+            list(plt.cm.Set2.colors) +
+            list(plt.cm.Dark2.colors[:3]))
+for j, col in enumerate(target_columns):
+    ax.plot(x, norm_ds[col], linewidth=0.9, alpha=0.7, color=colors21[j])
 
 day_bounds = np.arange(0, (total_days + 1) * PPD_ds, PPD_ds)
 for b in day_bounds[1:-1]:
