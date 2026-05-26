@@ -32,9 +32,9 @@ CHECKPOINT_INTERVAL = 50
 COMPRESSION_FACTOR  = 1
 # ==================================================================
 
-N_TAKE                     = 190_000
+N_TAKE                    = 200_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
-START_TIME                 = time(4, 0, 0)
+START_TIME                 = time(3, 0, 0)
 END_TIME                   = time(18, 16, 35)
 N_DROP_FIRST               = 3600
 

@@ -21,11 +21,11 @@ FAILURE_DATE  = None          # Belum ada failure date untuk Data Baru TS14
 CSV_DIR       = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "data")  # folder data/ terisolasi
 
 # Parameter crop — identik dengan stage1 & stage2
-START_TIME    = time(4, 0, 0)
+START_TIME    = time(3, 0, 0)
 END_TIME      = time(18, 16, 35)
 N_DROP_FIRST  = 3600
-N_TAKE        = 190_000
-MIN_ROWS      = N_DROP_FIRST + N_TAKE   # 193_600
+N_TAKE        = 200_000
+MIN_ROWS      = N_DROP_FIRST + N_TAKE   # 203_600
 
 FAULT_COLUMNS = [
     'SIV_MajorBCFltPres',

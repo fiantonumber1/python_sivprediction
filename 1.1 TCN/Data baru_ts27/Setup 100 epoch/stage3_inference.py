@@ -27,11 +27,11 @@ DATA_DIR = os.path.join(BASE_DIR, "data")   # folder CSV terisolasi
 # =========================================================
 COMPRESSION_FACTOR         = 1
 PLOT_DOWNSAMPLE            = 10      # ambil setiap N-th point untuk plot (hemat memori)
-N_TAKE                     = 190_000
+N_TAKE        = 200_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 FUTURE                     = COMPRESSED_POINTS_PER_DAY
 
-START_TIME   = time(4, 0, 0)
+START_TIME                 = time(3, 0, 0)
 END_TIME     = time(18, 16, 35)
 N_DROP_FIRST = 3600
 
