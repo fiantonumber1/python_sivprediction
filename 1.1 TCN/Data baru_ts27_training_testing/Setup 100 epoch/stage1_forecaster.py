@@ -306,7 +306,7 @@ torch.save(model.state_dict(), os.path.join(SCRIPT_DIR, "model_stage1_forecaster
 log("model_stage1_forecaster.pth disimpan")
 
 # =============================
-# PLOT KURVA LOSS — Jurnal Gambar 7 & 8
+# PLOT KURVA LOSS — Jurnal Gambar 10
 # Parse dari log_stage1.txt agar benar meski di-resume
 # =============================
 epoch_nums_log, mse_vals_log = [], []
@@ -333,7 +333,7 @@ if epoch_nums_log:
     ax.set_xlabel("Epoch", fontsize=12)
     ax.set_ylabel("MSE Loss", fontsize=12)
     ax.set_title(
-        f"Kurva Konvergensi TCN Forecaster (Stage 1) — {max(_ep_sorted)} Epoch\n"
+        f"Gambar 10. Kurva Epoch vs MSE Training — TCN Forecaster ({max(_ep_sorted)} Epoch)\n"
         f"MSE Awal: {_mse_sorted[0]:.4f} → MSE Akhir: {_mse_sorted[-1]:.4f} "
         f"(Penurunan {(1 - _mse_sorted[-1]/_mse_sorted[0])*100:.1f}%)",
         fontsize=13)
@@ -343,7 +343,7 @@ if epoch_nums_log:
     _out = os.path.join(EVIDENCE_DIR, "jurnal_kurva_loss_stage1.png")
     plt.savefig(_out, dpi=300, bbox_inches='tight')
     plt.close()
-    log(f"jurnal_kurva_loss_stage1.png disimpan  ← Jurnal Gambar 7 & 8")
+    log(f"jurnal_kurva_loss_stage1.png disimpan  ← Jurnal Gambar 10")
 else:
     print("[Plot] Log stage1 belum ada data epoch — training perlu dijalankan dahulu")
 

@@ -58,8 +58,8 @@ target_columns = [
 ]
 fault_columns = ['SIV_MajorBCFltPres', 'SIV_MajorInputConvFltPres', 'SIV_MajorInverterFltPres']
 
-status_map   = {0: "Sehat", 1: "Warning", 2: "Not Ready"}
-status_color = {0: "green", 1: "orange", 2: "red"}
+status_map   = {0: "Healthy", 1: "Warning"}
+status_color = {0: "green", 1: "orange"}
 
 # =========================================================
 # CEK FILE MODEL
@@ -160,7 +160,7 @@ class MLPClassifier(nn.Module):
             nn.Linear(input_dim, 256), nn.LayerNorm(256), nn.ReLU(), nn.Dropout(dropout),
             nn.Linear(256, 128),       nn.LayerNorm(128), nn.ReLU(), nn.Dropout(dropout),
             nn.Linear(128, 64),        nn.LayerNorm(64),  nn.ReLU(), nn.Dropout(dropout),
-            nn.Linear(64, 3)
+            nn.Linear(64, 2)
         )
     def forward(self, x):
         return self.net(x)
@@ -253,9 +253,8 @@ def read_csv_day(filepath):
 def label_health_status(df_day):
     n_active = sum(1 for col in fault_columns
                    if col in df_day.columns and (df_day[col] > 0).any())
-    if n_active == 0:   return 0  # Sehat
-    elif n_active == 1: return 1  # Warning
-    else:               return 2  # Not Ready
+    if n_active == 0: return 0  # Healthy
+    else:             return 1  # Warning
 
 # =========================================================
 # LOAD SEMUA CSV
@@ -367,7 +366,7 @@ for i, mid in enumerate([(day_bounds[i] + day_bounds[i+1]) // 2 for i in range(t
     ax.text(mid, 1.05, f'Day {i+1} {tag}', ha='center', color='red', fontweight='bold',
             transform=ax.get_xaxis_transform())
     ax.text(mid, 1.15, status_map[health_status[i]], ha='center',
-            color=['green','orange','red'][health_status[i]], fontweight='bold',
+            color=['green','orange'][health_status[i]], fontweight='bold',
             transform=ax.get_xaxis_transform())
 ax.set_title(f"21 Parameter + Health Status — {total_days} Hari (Train={n_train_days} | Test={n_test_days})", fontsize=15)
 ax.set_ylabel("Normalized [0-1]")
@@ -376,8 +375,182 @@ ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', fontsize='
 plt.tight_layout()
 plt.savefig(os.path.join(EVIDENCE_DIR, "plot_all_parameters_TCN.png"), dpi=300, bbox_inches='tight')
 plt.close()
-print("  → plot_all_parameters_TCN.png")
+print("  → plot_all_parameters_TCN.png  (supplementary)")
 
+# =========================================================
+# GAMBAR 6 — Skema Pembentukan Dataset Forecasting 3 Hari → 1 Hari
+# Visualisasi sliding window: tiap window = 3 hari input → 1 hari target
+# Train windows dan test windows ditampilkan dengan warna berbeda
+# =========================================================
+print("\n[Plot] jurnal_sliding_window.png (Jurnal Gambar 6) ...")
+
+_sw_n_days      = total_days
+_sw_n_train     = n_train_days
+_sw_n_test      = n_test_days
+_sw_win_size    = 3   # jumlah hari input
+_sw_pred_size   = 1   # jumlah hari target
+
+# Kumpulkan semua window: (day_a, day_b, day_c, day_target, set_tag)
+_sw_windows = []
+# Train windows: input sepenuhnya dari data training
+for _wi in range(_sw_n_train - _sw_win_size):
+    _sw_windows.append((_wi, _wi+1, _wi+2, _wi+3, 'Train'))
+# Test windows: input mencakup batas train-test (overlap diizinkan untuk input)
+for _wi in range(_sw_n_test):
+    _a = _sw_n_train - _sw_win_size + _wi
+    _sw_windows.append((_a, _a+1, _a+2, _a+3, 'Test'))
+
+_n_win    = len(_sw_windows)
+_bw       = 0.7    # lebar box hari
+_bh       = 0.4    # tinggi box
+_row_h    = 1.1    # jarak antar baris window
+_fig_h    = max(6, _n_win * _row_h + 2.5)
+fig, ax   = plt.subplots(figsize=(min(18, _sw_n_days * 1.05 + 3), _fig_h))
+
+# Warna per hari (train=biru, test=oranye)
+_day_colors = ['#1565C0' if d < _sw_n_train else '#E65100' for d in range(_sw_n_days + 1)]
+_day_dates  = [os.path.basename(f)[:8] for f in all_csv_files]
+
+# Gambar kotak hari di baris atas (header)
+for _d in range(_sw_n_days):
+    _xc = _d + 0.5
+    rect = plt.Rectangle((_d, _fig_h - 1.35), _bw, _bh,
+                         facecolor=_day_colors[_d], edgecolor='white', linewidth=1.5, zorder=3)
+    ax.add_patch(rect)
+    ax.text(_xc, _fig_h - 1.12, f"D{_d+1}", ha='center', va='center',
+            fontsize=7.5, fontweight='bold', color='white', zorder=4)
+    ax.text(_xc, _fig_h - 1.52, _day_dates[_d], ha='center', va='center',
+            fontsize=5.5, color=_day_colors[_d], zorder=4)
+
+# Garis pemisah train-test di header
+ax.axvline(_sw_n_train, color='#B71C1C', linewidth=2.5, linestyle='--', alpha=0.9, zorder=2)
+ax.text(_sw_n_train, _fig_h - 0.6, '◄ TRAIN  |  TEST ►',
+        ha='center', va='center', fontsize=9, color='#B71C1C', fontweight='bold')
+
+# Gambar tiap baris window
+for _ri, (_a, _b, _c, _tgt, _stag) in enumerate(_sw_windows):
+    _y_top = _fig_h - 2.1 - _ri * _row_h
+    _fc_in  = '#90CAF9' if _stag == 'Train' else '#FFCC80'
+    _fc_tgt = '#1565C0' if _stag == 'Train' else '#E65100'
+    _ec     = '#1565C0' if _stag == 'Train' else '#E65100'
+    # Kotak 3 hari input
+    for _di, _dx in enumerate([_a, _b, _c]):
+        rect_in = plt.Rectangle((_dx, _y_top - _bh), _bw, _bh,
+                                facecolor=_fc_in, edgecolor=_ec, linewidth=1.2, zorder=3)
+        ax.add_patch(rect_in)
+        ax.text(_dx + 0.35, _y_top - _bh/2, f"D{_dx+1}", ha='center', va='center',
+                fontsize=7.5, fontweight='bold', color=_ec, zorder=4)
+    # Bracket { di kiri kotak input
+    _bx_left = _a - 0.05
+    ax.annotate('', xy=(_a, _y_top - _bh/2),
+                xytext=(_bx_left - 0.15, _y_top - _bh/2),
+                arrowprops=dict(arrowstyle='->', color=_ec, lw=1.5), zorder=3)
+    ax.text(_bx_left - 0.18, _y_top - _bh/2, f"W{_ri+1}\n({_stag})",
+            ha='right', va='center', fontsize=6.5, color=_ec, fontweight='bold')
+    # Panah → ke kotak target
+    ax.annotate('', xy=(_tgt + 0.05, _y_top - _bh/2),
+                xytext=(_c + _bw + 0.05, _y_top - _bh/2),
+                arrowprops=dict(arrowstyle='->', color='#333333', lw=2.0), zorder=3)
+    # Kotak target
+    if _tgt < _sw_n_days:
+        rect_tgt = plt.Rectangle((_tgt, _y_top - _bh), _bw, _bh,
+                                  facecolor=_fc_tgt, edgecolor='#333333', linewidth=1.5, zorder=3)
+        ax.add_patch(rect_tgt)
+        ax.text(_tgt + 0.35, _y_top - _bh/2, f"D{_tgt+1}", ha='center', va='center',
+                fontsize=7.5, fontweight='bold', color='white', zorder=4)
+    else:
+        # Target di luar range (future)
+        rect_tgt = plt.Rectangle((_tgt, _y_top - _bh), _bw, _bh,
+                                  facecolor='#CFD8DC', edgecolor='#455A64', linewidth=1.5,
+                                  linestyle='--', zorder=3)
+        ax.add_patch(rect_tgt)
+        ax.text(_tgt + 0.35, _y_top - _bh/2, f"D{_tgt+1}\n(future)", ha='center', va='center',
+                fontsize=6.5, color='#455A64', zorder=4)
+
+# Legend
+from matplotlib.patches import Patch
+_leg_items = [
+    Patch(facecolor='#90CAF9', edgecolor='#1565C0', label=f'Input — Train window ({_sw_n_train-3} window)'),
+    Patch(facecolor='#FFCC80', edgecolor='#E65100', label=f'Input — Test window ({_sw_n_test} window)'),
+    Patch(facecolor='#1565C0', label='Target — Train'),
+    Patch(facecolor='#E65100', label='Target — Test'),
+]
+ax.legend(handles=_leg_items, loc='lower right', fontsize=8, framealpha=0.9)
+
+ax.set_xlim(-2.0, _sw_n_days + 1.2)
+ax.set_ylim(-0.3, _fig_h)
+ax.axis('off')
+ax.set_title(
+    f"Gambar 6. Pembentukan Dataset Forecasting — Skema Sliding Window 3 Hari → 1 Hari\n"
+    f"Total {_n_win} window ({_sw_n_train-3} train window + {_sw_n_test} test window) "
+    f"dari {_sw_n_days} hari data",
+    fontsize=11, fontweight='bold', pad=10
+)
+plt.tight_layout()
+plt.savefig(os.path.join(EVIDENCE_DIR, "jurnal_sliding_window.png"), dpi=300, bbox_inches='tight')
+plt.close()
+print("  → jurnal_sliding_window.png  ← Jurnal Gambar 6")
+
+# =========================================================
+# GAMBAR 5 — Perbandingan Data Sebelum dan Sesudah Normalisasi
+# Ambil 1 hari training (Day 1) sebagai sampel representatif
+# Tampilkan 6 parameter paling representatif (2 suhu, 2 arus, 2 tegangan)
+# =========================================================
+print("\n[Plot] jurnal_normalisasi_comparison.png (Jurnal Gambar 5) ...")
+_sample_df   = compressed_dfs[0]  # Day 1 (training)
+_sample_raw  = _sample_df[target_columns].values.astype(np.float32)
+_sample_norm = scaler.transform(_sample_raw.reshape(-1, N_FEATURES)).reshape(_sample_raw.shape)
+_sample_ds   = slice(None, None, PLOT_DOWNSAMPLE)
+
+# Pilih 6 parameter representatif: 2 suhu, 2 arus, 2 tegangan
+_rep_params = [
+    'SIV_T_HS_InConv_1',   # suhu
+    'SIV_T_Container',     # suhu
+    'SIV_I_L1',            # arus
+    'SIV_I_Battery',       # arus
+    'SIV_U_DC_In',         # tegangan
+    'SIV_U_L1',            # tegangan
+]
+_rep_idx = [target_columns.index(p) for p in _rep_params]
+_rep_colors = ['#e41a1c','#ff7f00','#377eb8','#4daf4a','#984ea3','#a65628']
+
+_xn = np.arange(len(_sample_raw[_sample_ds]))
+fig, axes = plt.subplots(2, 1, figsize=(16, 10), sharex=True)
+
+# Subplot atas — SEBELUM normalisasi (nilai asli)
+ax_raw = axes[0]
+for k, (ci, col) in enumerate(zip(_rep_idx, _rep_params)):
+    ax_raw.plot(_xn, _sample_raw[_sample_ds, ci], linewidth=1.5,
+                color=_rep_colors[k], label=col, alpha=0.85)
+ax_raw.set_title("Sebelum Normalisasi — Nilai Asli (satuan berbeda per parameter)", fontsize=12)
+ax_raw.set_ylabel("Nilai Asli")
+ax_raw.legend(bbox_to_anchor=(1.01, 1), loc='upper left', fontsize=9)
+ax_raw.grid(alpha=0.3)
+
+# Subplot bawah — SESUDAH normalisasi (MinMax → [−0.1, 1.1])
+ax_nrm = axes[1]
+for k, (ci, col) in enumerate(zip(_rep_idx, _rep_params)):
+    ax_nrm.plot(_xn, _sample_norm[_sample_ds, ci], linewidth=1.5,
+                color=_rep_colors[k], label=col, alpha=0.85)
+ax_nrm.axhline(0, color='gray', linestyle=':', linewidth=1, alpha=0.6, label='Min (0)')
+ax_nrm.axhline(1, color='gray', linestyle='--', linewidth=1, alpha=0.6, label='Max (1)')
+ax_nrm.set_title("Sesudah Normalisasi — MinMax Scaler (semua parameter dalam rentang yang sama)", fontsize=12)
+ax_nrm.set_ylabel("Nilai Normalisasi")
+ax_nrm.set_xlabel("Timestep")
+ax_nrm.legend(bbox_to_anchor=(1.01, 1), loc='upper left', fontsize=9)
+ax_nrm.grid(alpha=0.3)
+
+_tgl_day1 = os.path.basename(all_csv_files[0])[:8]
+fig.suptitle(
+    f"Gambar 5. Perbandingan Data Sebelum dan Setelah Normalisasi\n"
+    f"(Day 1 — {_tgl_day1}, 6 parameter representatif dari 21 parameter total)",
+    fontsize=13, fontweight='bold', y=1.01
+)
+plt.tight_layout()
+plt.savefig(os.path.join(EVIDENCE_DIR, "jurnal_normalisasi_comparison.png"),
+            dpi=300, bbox_inches='tight')
+plt.close()
+print("  → jurnal_normalisasi_comparison.png  ← Jurnal Gambar 5")
 
 # =========================================================
 # BAGIAN 1 — TRAINING INFERENCE
@@ -420,9 +593,8 @@ if n_train_days >= 3:
         print(f"    Prediksi Status : {status_map[pred_st_tr]}  ({pred_cf_tr:.2f}% confidence)")
         print(f"    Status Aktual   : {status_map[real_st_gt]}")
         print(f"    Klasifikasi     : {'BENAR ✓' if _clf_match else 'SALAH ✗'}")
-        print(f"    Prob Sehat      : {prob_tr[0]*100:.2f}%")
+        print(f"    Prob Healthy      : {prob_tr[0]*100:.2f}%")
         print(f"    Prob Warning    : {prob_tr[1]*100:.2f}%")
-        print(f"    Prob Not Ready  : {prob_tr[2]*100:.2f}%")
         print(f"\n  [METRIK REGRESI SINYAL (dibandingkan vs ground truth)]")
         print(f"    MSE   = {mse_tr:.8f}")
         print(f"    RMSE  = {rmse_tr:.8f}")
@@ -464,7 +636,7 @@ if n_train_days >= 3:
         ax.text(mid, 1.05, lbl, ha='center', color='red', fontweight='bold',
                 transform=ax.get_xaxis_transform())
         ax.text(mid, 1.15, status_map[stat], ha='center',
-                color=['green','orange','red'][stat], fontweight='bold',
+                color=['green','orange'][stat], fontweight='bold',
                 transform=ax.get_xaxis_transform())
     note = " | Solid tipis=Aktual, Dashed=Pred" if has_gt else " | Dashed=Pred"
     ax.set_title(f"Gambar 9. TRAINING INFERENCE — 3 Hari Input (Train) + Prediksi Day {n_train_days+1}{note}", fontsize=14)
@@ -484,7 +656,7 @@ if n_train_days >= 3:
             line, = ax.plot(x1_only, real_gt_sc[:, j], '-', linewidth=1.8, alpha=0.85, label=col)
             ax.plot(x1_only, pred_tr_sc[:, j], '--', linewidth=2.5, color=line.get_color(), alpha=0.9)
         ax.set_title(
-            f"Gambar 10. TRAINING INFERENCE — Real Day {n_train_days+1} (solid) vs Prediksi (dashed)\n"
+            f"Gambar 11. Kurva Aktual (Y_Testing) vs Prediksi — Day {n_train_days+1}\n"
             f"Aktual: {status_map[real_st_gt]} | Pred: {status_map[pred_st_tr]} | "
             f"MSE={mse_tr:.4f}  RMSE={rmse_tr:.4f}  MAE={mae_tr:.4f}", fontsize=13)
         ax.set_ylabel("Scaled"); ax.grid(alpha=0.3); ax.set_ylim(-0.2, 1.3)
@@ -504,9 +676,8 @@ if n_train_days >= 3:
         'input_day_a': TR_CSV_A, 'input_day_b': TR_CSV_B, 'input_day_c': TR_CSV_C,
         'pred_status': status_map[pred_st_tr], 'pred_status_code': pred_st_tr,
         'confidence_pct': round(pred_cf_tr, 2),
-        'prob_sehat_pct': round(float(prob_tr[0]*100), 2),
+        'prob_healthy_pct': round(float(prob_tr[0]*100), 2),
         'prob_warning_pct': round(float(prob_tr[1]*100), 2),
-        'prob_not_ready_pct': round(float(prob_tr[2]*100), 2),
         'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
     }
     if has_gt:
@@ -546,9 +717,8 @@ pred_status, pred_confidence, prob = run_mlp(pred_signal)
 
 print(f"\n  [HASIL TESTING INFERENCE — prediksi hari ke-{total_days+1} (masa depan)]")
 print(f"    Prediksi Status : {status_map[pred_status]}  ({pred_confidence:.2f}% confidence)")
-print(f"    Prob Sehat      : {prob[0]*100:.2f}%")
+print(f"    Prob Healthy      : {prob[0]*100:.2f}%")
 print(f"    Prob Warning    : {prob[1]*100:.2f}%")
-print(f"    Prob Not Ready  : {prob[2]*100:.2f}%")
 print(f"    Ground Truth    : TIDAK ADA (hari masa depan)")
 print(f"    Metrik MSE/RMSE : TIDAK DAPAT DIHITUNG (tidak ada data aktual)")
 print("="*65)
@@ -577,7 +747,7 @@ def setup_plot(ax, title, ylim_low=-0.1, override_last=None):
         ax.text(m, 1.05, f'Day {day_idx+1}', ha='center', color='red', fontweight='bold',
                 transform=ax.get_xaxis_transform())
         ax.text(m, 1.15, label_txt, ha='center',
-                color=['green','orange','red'][stat], fontweight='bold',
+                color=['green','orange'][stat], fontweight='bold',
                 transform=ax.get_xaxis_transform())
     ax.set_title(title, fontsize=15)
     ax.grid(alpha=0.3)
@@ -596,20 +766,20 @@ plt.close()
 print("  → gambar1_4hari_real_TCN.png")
 
 # Gambar 11 — Testing Inference: 3 hari input + prediksi D+1
-print("[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 11) ...")
+print("[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 15) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, label=col)
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=2.8,
             color=ax.get_lines()[i].get_color(), alpha=0.95)
-setup_plot(ax, "Gambar 11. TESTING INFERENCE — 3 Hari Input (Test) + Prediksi Hari D+1 (Masa Depan)",
+setup_plot(ax, f"Gambar 15. Hasil Forecasting — Input {_idx_a+1} s/d {_idx_c+1} ({CSV_DAY_A}–{CSV_DAY_C}), 3 Hari → Prediksi Label Kelas: {status_map[pred_status]}",
            override_last=pred_status)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
 plt.tight_layout()
 plt.savefig(os.path.join(EVIDENCE_DIR, "gambar2_input_plus_prediksi_TCN.png"), dpi=300, bbox_inches='tight')
 plt.close()
-print("  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 11")
+print("  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 15")
 
 # Supplementary — Testing Inference: real hari terakhir vs prediksi D+1
 print("[Plot] gambar3_real_vs_prediksi_TCN.png (supplementary) ...")
@@ -639,9 +809,8 @@ pd.DataFrame([{
     'input_day_a': CSV_DAY_A, 'input_day_b': CSV_DAY_B, 'input_day_c': CSV_DAY_C,
     'health_status': status_map[pred_status], 'status_code': pred_status,
     'confidence_pct': round(pred_confidence, 2),
-    'prob_sehat_pct': round(float(prob[0]*100), 2),
-    'prob_pre_anomali_pct': round(float(prob[1]*100), 2),
-    'prob_warning_pct': round(float(prob[2]*100), 2),
+    'prob_healthy_pct': round(float(prob[0]*100), 2),
+    'prob_warning_pct': round(float(prob[1]*100), 2),
     'generated_at': datetime.now().strftime('%Y-%m-%d %H:%M:%S'),
 }]).to_csv(os.path.join(EVIDENCE_DIR, "inference_health_status.csv"), index=False)
 
@@ -683,15 +852,17 @@ print(f"        karena prediksi ke hari masa depan yang belum ada datanya.")
 print("="*70)
 
 print("\nSELESAI! Output disimpan ke folder evidence/:")
-print("\n[TRAINING INFERENCE — Gambar 9 & 10 Jurnal]")
+print("\n[TRAINING INFERENCE — Gambar 11 Jurnal]")
 if n_train_days >= 3:
-    print("  gambar_train1_input_prediksi.png   ← Jurnal Gambar 9 (3 hari train input + prediksi)")
+    print("  gambar_train1_input_prediksi.png   (supplementary — 3 hari train input + prediksi)")
     if has_gt:
-        print("  gambar_train2_real_vs_pred.png     ← Jurnal Gambar 10 (real vs pred + MSE/RMSE/MAE)")
+        print("  gambar_train2_real_vs_pred.png     ← Jurnal Gambar 11 (Aktual Y_Testing vs Prediksi)")
     print("  inference_train_prediksi_sensor.csv")
     print("  inference_train_health_status.csv")
-print("\n[TESTING INFERENCE — Gambar 11 Jurnal]")
-print("  plot_all_parameters_TCN.png            ← Jurnal Gambar 6")
+print("\n[TESTING INFERENCE — Gambar 15 Jurnal]")
+print("  jurnal_normalisasi_comparison.png      ← Jurnal Gambar 5")
+print("  jurnal_sliding_window.png              ← Jurnal Gambar 6")
+print("  plot_all_parameters_TCN.png            (supplementary)")
 print("  gambar2_input_plus_prediksi_TCN.png    ← Jurnal Gambar 11 (3 hari test + prediksi D+1)")
 print("  inference_prediksi_sensor.csv")
 print("  inference_health_status.csv")
@@ -752,9 +923,9 @@ draw_flowchart([
     ("2", "Preprocessing: drop warmup, crop waktu, ffill/bfill"),
     ("3", "Train/Test Split kronologis — 80%/20% (10 train | 3 test hari)"),
     ("4", "Feature Extraction: mean+std+max+min per hari → 84 dimensi"),
-    ("5", "Labeling: 0 fault→Sehat | 1 fault→Warning | ≥2 fault→Not Ready"),
+    ("5", "Labeling: 0 fault→Healthy (0) | ≥1 fault→Warning (1)"),
     ("6", "MinMax Scaler [−0,1 ; 1,1] — fit hanya dari data training"),
-    ("7", "MLPClassifier: 84→256→128→64→3, CrossEntropy, 100 epoch"),
+    ("7", "MLPClassifier: 84→256→128→64→2, CrossEntropy, 100 epoch"),
     ("8", "Evaluasi Test Set (Accuracy per hari) → Simpan model + scaler"),
 ], "Gambar 2. Flowchart Pipeline MLP Classifier (Stage 2)",
    os.path.join(EVIDENCE_DIR, "jurnal_flowchart_stage2.png"))
@@ -827,8 +998,8 @@ for _ci, _col in enumerate(target_columns):
         _j3_lines.append(f"  {_col:<28} {_mn:>12.4f} {_mx:>12.4f}")
     except: pass
 
-_j3_stat_count = {0: 0, 1: 0, 2: 0}
-_j3_stat_dates = {0: [], 1: [], 2: []}
+_j3_stat_count = {0: 0, 1: 0}
+_j3_stat_dates = {0: [], 1: []}
 for _idx, (_hs, _f) in enumerate(zip(health_status, all_csv_files)):
     _j3_stat_count[_hs] += 1
     _j3_stat_dates[_hs].append(os.path.basename(_f)[:8])
@@ -836,9 +1007,8 @@ _j3_lines += [
     "",
     "[A4. LABEL KONDISI — untuk Kalimat Jurnal Para 175 & Tabel Distribusi]",
     f"  Total hari dilabel           : {total_days}",
-    f"  Sehat (0)     : {_j3_stat_count[0]} hari → {', '.join(_j3_stat_dates[0])}",
+    f"  Healthy (0)   : {_j3_stat_count[0]} hari → {', '.join(_j3_stat_dates[0])}",
     f"  Warning (1)   : {_j3_stat_count[1]} hari → {', '.join(_j3_stat_dates[1]) or '-'}",
-    f"  Not Ready (2) : {_j3_stat_count[2]} hari → {', '.join(_j3_stat_dates[2]) or '-'}",
 ]
 
 _j3_lines += [
@@ -861,9 +1031,8 @@ if n_train_days >= 3:
         f"    Hari C (Day {n_train_days}  ): {_b_c}  Status: {status_map[health_status[n_train_days-1]]}",
         "",
         f"  Prediksi hari D (Day {n_train_days+1})     : {status_map[pred_st_tr]} ({pred_cf_tr:.2f}% confidence)",
-        f"  Prob Sehat                   : {prob_tr[0]*100:.2f}%",
+        f"  Prob Healthy                   : {prob_tr[0]*100:.2f}%",
         f"  Prob Warning                 : {prob_tr[1]*100:.2f}%",
-        f"  Prob Not Ready               : {prob_tr[2]*100:.2f}%",
     ]
     if has_gt:
         _j3_lines += [
@@ -905,9 +1074,8 @@ _j3_lines += [
     "",
     f"  Prediksi hari ke-{total_days+1} (masa depan) : {status_map[pred_status]}",
     f"  Confidence                   : {pred_confidence:.2f}%",
-    f"  Prob Sehat                   : {prob[0]*100:.2f}%",
+    f"  Prob Healthy                   : {prob[0]*100:.2f}%",
     f"  Prob Warning                 : {prob[1]*100:.2f}%",
-    f"  Prob Not Ready               : {prob[2]*100:.2f}%",
     f"  Ground Truth                 : TIDAK ADA",
     f"  Metrik MSE/RMSE/MAE          : TIDAK DAPAT DIHITUNG",
     "",
@@ -962,11 +1130,14 @@ _j3_lines += [
     f"  Gambar 3  : MANUAL — screenshot LeadMind",
     f"  Gambar 4  : MANUAL — laporan gangguan sarana",
     f"  Gambar 5  : MANUAL — detail insiden SIV TS27",
-    f"  Gambar 6  : plot_all_parameters_TCN.png     (21 param semua hari)",
-    f"  Gambar 7-8: jurnal_kurva_loss_stage1.png    (kurva MSE Stage 1)",
-    f"  Gambar 9  : gambar_train1_input_prediksi.png  [TRAINING INFERENCE] 3 hari train input + pred",
-    f"  Gambar 10 : gambar_train2_real_vs_pred.png    [TRAINING INFERENCE] real vs pred + MSE/RMSE/MAE",
-    f"  Gambar 11 : gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE] 3 hari test + pred D+1",
+    f"  Gambar 5  : jurnal_normalisasi_comparison.png (sebelum vs sesudah normalisasi)",
+    f"  Gambar 6  : jurnal_sliding_window.png        (skema sliding window 3 hari → 1 hari)",
+    f"  Suppl.    : plot_all_parameters_TCN.png      (21 param semua hari — supplementary)",
+    f"  Gambar 10 : jurnal_kurva_loss_stage1.png     (Kurva Epoch vs MSE Training TCN)",
+    f"  Gambar 10 : jurnal_kurva_loss_stage1.png      (Kurva Epoch vs MSE Training)",
+    f"  Gambar 11 : gambar_train2_real_vs_pred.png    [TRAINING INFERENCE] Aktual Y_Testing vs Prediksi",
+    f"  Gambar 15 : gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE] Hasil Forecasting + Label Kelas",
+    f"  Suppl.    : gambar_train1_input_prediksi.png  (3 hari train input + prediksi — Training Inference)",
     f"  Gambar 12 : jurnal_kurva_loss_acc_stage2.png  CE Loss + Accuracy MLP",
     f"  Suppl.    : gambar1_4hari_real_TCN.png        (konteks 4 hari real testing)",
     f"  Suppl.    : gambar3_real_vs_prediksi_TCN.png  (overlay real vs pred testing)",
