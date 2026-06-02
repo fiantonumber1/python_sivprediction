@@ -11,7 +11,7 @@ import os
 import glob
 from datetime import datetime, time
 from sklearn.preprocessing import MinMaxScaler
-from sklearn.metrics import confusion_matrix, classification_report
+from sklearn.metrics import confusion_matrix, classification_report, precision_score, recall_score, f1_score
 import joblib
 import re
 import warnings
@@ -380,14 +380,20 @@ if X_test_cls:
         torch.LongTensor(_j2_y_te).to(device)).item())
     _j2_y_test_np = _j2_y_te
 
-def _plot_cm(cm, title, filename, acc_val):
-    fig, ax = plt.subplots(figsize=(6, 5))
+def _plot_cm(cm, title, filename, y_true, y_pred):
+    # Hitung 4 metrik
+    _acc  = float(np.mean(np.array(y_pred) == np.array(y_true))) * 100
+    _prec = precision_score(y_true, y_pred, average='weighted', zero_division=0) * 100
+    _rec  = recall_score(y_true, y_pred, average='weighted', zero_division=0) * 100
+    _f1   = f1_score(y_true, y_pred, average='weighted', zero_division=0) * 100
+
+    fig, ax = plt.subplots(figsize=(7, 6))
     im = ax.imshow(cm, interpolation='nearest', cmap='Blues')
     plt.colorbar(im, ax=ax)
     ax.set(xticks=np.arange(3), yticks=np.arange(3),
            xticklabels=_cls_names, yticklabels=_cls_names,
-           title=f"{title}\nAccuracy: {acc_val:.2f}%",
            ylabel='Label Aktual', xlabel='Label Prediksi')
+    ax.set_title(title, fontsize=12, fontweight='bold', pad=10)
     _thresh = cm.max() / 2.0
     for _i in range(3):
         for _j in range(3):
@@ -395,16 +401,29 @@ def _plot_cm(cm, title, filename, acc_val):
                     fontsize=16, fontweight='bold',
                     color='white' if cm[_i, _j] > _thresh else 'black')
     plt.setp(ax.get_xticklabels(), rotation=30, ha='right', rotation_mode='anchor')
+    # Tampilkan 4 metrik di bawah plot
+    metrics_text = (f"Accuracy: {_acc:.2f}%    Precision: {_prec:.2f}%    "
+                    f"Recall: {_rec:.2f}%    F1-Score: {_f1:.2f}%")
+    fig.text(0.5, 0.01, metrics_text, ha='center', va='bottom', fontsize=10,
+             fontweight='bold', color='#1565C0',
+             bbox=dict(boxstyle='round,pad=0.4', facecolor='#E3F2FD', edgecolor='#1565C0'))
     plt.tight_layout()
+    plt.subplots_adjust(bottom=0.12)
     plt.savefig(filename, dpi=300, bbox_inches='tight')
     plt.close()
-    log(f"{os.path.basename(filename)} disimpan")
+    log(f"{os.path.basename(filename)} — Acc={_acc:.2f}% Prec={_prec:.2f}% Rec={_rec:.2f}% F1={_f1:.2f}%")
+    return _acc, _prec, _rec, _f1
 
-_plot_cm(_j2_cm_train, "Confusion Matrix — Training Set",
-         os.path.join(EVIDENCE_DIR, "jurnal_confusion_matrix_train.png"), _j2_acc_train)
+_j2_acc_tr, _j2_prec_tr, _j2_rec_tr, _j2_f1_tr = _plot_cm(
+    _j2_cm_train, "Confusion Matrix — Training Set",
+    os.path.join(EVIDENCE_DIR, "jurnal_confusion_matrix_train.png"),
+    y_train_cls, _j2_preds_tr)
+_j2_acc_ts = _j2_prec_ts = _j2_rec_ts = _j2_f1_ts = None
 if _j2_cm_test is not None:
-    _plot_cm(_j2_cm_test, "Confusion Matrix — Test Set",
-             os.path.join(EVIDENCE_DIR, "jurnal_confusion_matrix_test.png"), _j2_acc_test)
+    _j2_acc_ts, _j2_prec_ts, _j2_rec_ts, _j2_f1_ts = _plot_cm(
+        _j2_cm_test, "Confusion Matrix — Test Set",
+        os.path.join(EVIDENCE_DIR, "jurnal_confusion_matrix_test.png"),
+        _j2_y_test_np, _j2_preds_test)
 
 # =============================
 # FEATURE STATISTICS CSV — Tabel 15 Jurnal
@@ -508,7 +527,10 @@ _j2_lines += [
     "",
     f"[EVALUASI TRAINING SET]",
     f"  CE Loss Training             : {_j2_ce_train:.6f}",
-    f"  Accuracy Training            : {_j2_acc_train:.2f}%",
+    f"  Accuracy   (weighted)        : {_j2_acc_tr:.2f}%",
+    f"  Precision  (weighted)        : {_j2_prec_tr:.2f}%",
+    f"  Recall     (weighted)        : {_j2_rec_tr:.2f}%",
+    f"  F1-Score   (weighted)        : {_j2_f1_tr:.2f}%",
     "",
     "[CONFUSION MATRIX — TRAINING SET]",
     f"  {'':15} {'Pred Sehat':>12} {'Pred Warning':>12} {'Pred Not Rdy':>12}",
@@ -527,7 +549,10 @@ if _j2_acc_test is not None:
     _j2_lines += [
         f"  Test Days                    : {len(_j2_y_test_np)}",
         f"  CE Loss Test                 : {_j2_ce_test:.6f}",
-        f"  Accuracy Test                : {_j2_acc_test:.2f}%",
+        f"  Accuracy   (weighted)        : {_j2_acc_ts:.2f}%",
+        f"  Precision  (weighted)        : {_j2_prec_ts:.2f}%",
+        f"  Recall     (weighted)        : {_j2_rec_ts:.2f}%",
+        f"  F1-Score   (weighted)        : {_j2_f1_ts:.2f}%",
     ]
     if _j2_selisih_ce is not None:
         _j2_lines.append(f"  Selisih CE Loss (Train-Test)  : {_j2_selisih_ce:.6f}  → relatif kecil")
