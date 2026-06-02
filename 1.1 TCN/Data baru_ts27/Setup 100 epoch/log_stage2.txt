@@ -1,0 +1,111 @@
+
+============================================================
+STAGE 2 MLP CLASSIFIER | 2026-06-01 15:26:50
+Sampel: 13 hari | Epoch: 100 | Batch: 3
+Distribusi: Sehat=11 Warning=2 Not Ready=0
+============================================================
+Epoch    1/100 | CE: 1.499406 | Acc:  16.67% | LR: 1.00e-03
+Epoch    2/100 | CE: 0.826576 | Acc:  83.33% | LR: 1.00e-03
+Epoch    3/100 | CE: 0.685785 | Acc:  83.33% | LR: 1.00e-03
+Epoch    4/100 | CE: 0.559482 | Acc:  83.33% | LR: 1.00e-03
+Epoch    5/100 | CE: 0.702870 | Acc:  83.33% | LR: 1.00e-03
+Epoch    6/100 | CE: 0.795204 | Acc:  83.33% | LR: 1.00e-03
+Epoch    7/100 | CE: 0.900396 | Acc:  83.33% | LR: 1.00e-03
+Epoch    8/100 | CE: 0.749418 | Acc:  83.33% | LR: 1.00e-03
+Epoch    9/100 | CE: 0.937889 | Acc:  83.33% | LR: 1.00e-03
+Epoch   10/100 | CE: 0.718437 | Acc:  83.33% | LR: 1.00e-03
+Epoch   11/100 | CE: 0.671136 | Acc:  83.33% | LR: 1.00e-03
+Epoch   12/100 | CE: 0.690862 | Acc:  83.33% | LR: 1.00e-03
+Epoch   13/100 | CE: 0.357014 | Acc:  83.33% | LR: 1.00e-03
+Epoch   14/100 | CE: 0.229676 | Acc:  91.67% | LR: 1.00e-03
+Epoch   15/100 | CE: 0.379746 | Acc:  91.67% | LR: 1.00e-03
+Epoch   16/100 | CE: 0.227218 | Acc: 100.00% | LR: 1.00e-03
+Epoch   17/100 | CE: 0.208661 | Acc: 100.00% | LR: 1.00e-03
+Epoch   18/100 | CE: 0.103629 | Acc: 100.00% | LR: 1.00e-03
+Epoch   19/100 | CE: 0.061128 | Acc: 100.00% | LR: 1.00e-03
+Epoch   20/100 | CE: 0.084486 | Acc: 100.00% | LR: 1.00e-03
+Epoch   21/100 | CE: 0.125187 | Acc: 100.00% | LR: 1.00e-03
+Epoch   22/100 | CE: 0.080414 | Acc: 100.00% | LR: 1.00e-03
+Epoch   23/100 | CE: 0.046459 | Acc: 100.00% | LR: 1.00e-03
+Epoch   24/100 | CE: 0.066875 | Acc: 100.00% | LR: 1.00e-03
+Epoch   25/100 | CE: 0.030331 | Acc: 100.00% | LR: 1.00e-03
+Epoch   26/100 | CE: 0.035999 | Acc: 100.00% | LR: 1.00e-03
+Epoch   27/100 | CE: 0.030559 | Acc: 100.00% | LR: 1.00e-03
+Epoch   28/100 | CE: 0.023103 | Acc: 100.00% | LR: 1.00e-03
+Epoch   29/100 | CE: 0.015875 | Acc: 100.00% | LR: 1.00e-03
+Epoch   30/100 | CE: 0.085208 | Acc: 100.00% | LR: 1.00e-03
+Epoch   31/100 | CE: 0.012451 | Acc: 100.00% | LR: 1.00e-03
+Epoch   32/100 | CE: 0.060462 | Acc: 100.00% | LR: 1.00e-03
+Epoch   33/100 | CE: 0.015502 | Acc: 100.00% | LR: 1.00e-03
+Epoch   34/100 | CE: 0.012652 | Acc: 100.00% | LR: 1.00e-03
+Epoch   35/100 | CE: 0.006472 | Acc: 100.00% | LR: 1.00e-03
+Epoch   36/100 | CE: 0.007005 | Acc: 100.00% | LR: 1.00e-03
+Epoch   37/100 | CE: 0.006458 | Acc: 100.00% | LR: 1.00e-03
+Epoch   38/100 | CE: 0.009385 | Acc: 100.00% | LR: 1.00e-03
+Epoch   39/100 | CE: 0.009090 | Acc: 100.00% | LR: 1.00e-03
+Epoch   40/100 | CE: 0.020107 | Acc: 100.00% | LR: 1.00e-03
+Epoch   41/100 | CE: 0.006330 | Acc: 100.00% | LR: 1.00e-03
+Epoch   42/100 | CE: 0.003059 | Acc: 100.00% | LR: 1.00e-03
+Epoch   43/100 | CE: 0.005632 | Acc: 100.00% | LR: 1.00e-03
+Epoch   44/100 | CE: 0.002918 | Acc: 100.00% | LR: 1.00e-03
+Epoch   45/100 | CE: 0.004270 | Acc: 100.00% | LR: 1.00e-03
+Epoch   46/100 | CE: 0.030507 | Acc: 100.00% | LR: 1.00e-03
+Epoch   47/100 | CE: 0.007829 | Acc: 100.00% | LR: 1.00e-03
+Epoch   48/100 | CE: 0.006044 | Acc: 100.00% | LR: 1.00e-03
+Epoch   49/100 | CE: 0.004515 | Acc: 100.00% | LR: 1.00e-03
+Epoch   50/100 | CE: 0.010867 | Acc: 100.00% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_50.pth
+Epoch   51/100 | CE: 0.010759 | Acc: 100.00% | LR: 1.00e-03
+Epoch   52/100 | CE: 0.006467 | Acc: 100.00% | LR: 1.00e-03
+Epoch   53/100 | CE: 0.004625 | Acc: 100.00% | LR: 1.00e-03
+Epoch   54/100 | CE: 0.004243 | Acc: 100.00% | LR: 1.00e-03
+Epoch   55/100 | CE: 0.003364 | Acc: 100.00% | LR: 1.00e-03
+Epoch   56/100 | CE: 0.004094 | Acc: 100.00% | LR: 1.00e-03
+Epoch   57/100 | CE: 0.006348 | Acc: 100.00% | LR: 1.00e-03
+Epoch   58/100 | CE: 0.003432 | Acc: 100.00% | LR: 1.00e-03
+Epoch   59/100 | CE: 0.004569 | Acc: 100.00% | LR: 1.00e-03
+Epoch   60/100 | CE: 0.003029 | Acc: 100.00% | LR: 1.00e-03
+Epoch   61/100 | CE: 0.003862 | Acc: 100.00% | LR: 1.00e-03
+Epoch   62/100 | CE: 0.004507 | Acc: 100.00% | LR: 1.00e-03
+Epoch   63/100 | CE: 0.002359 | Acc: 100.00% | LR: 1.00e-03
+Epoch   64/100 | CE: 0.003031 | Acc: 100.00% | LR: 1.00e-03
+Epoch   65/100 | CE: 0.003052 | Acc: 100.00% | LR: 1.00e-03
+Epoch   66/100 | CE: 0.001791 | Acc: 100.00% | LR: 1.00e-03
+Epoch   67/100 | CE: 0.005464 | Acc: 100.00% | LR: 1.00e-03
+Epoch   68/100 | CE: 0.001609 | Acc: 100.00% | LR: 1.00e-03
+Epoch   69/100 | CE: 0.003979 | Acc: 100.00% | LR: 1.00e-03
+Epoch   70/100 | CE: 0.002654 | Acc: 100.00% | LR: 1.00e-03
+Epoch   71/100 | CE: 0.001526 | Acc: 100.00% | LR: 1.00e-03
+Epoch   72/100 | CE: 0.004549 | Acc: 100.00% | LR: 1.00e-03
+Epoch   73/100 | CE: 0.002605 | Acc: 100.00% | LR: 1.00e-03
+Epoch   74/100 | CE: 0.002411 | Acc: 100.00% | LR: 1.00e-03
+Epoch   75/100 | CE: 0.001004 | Acc: 100.00% | LR: 1.00e-03
+Epoch   76/100 | CE: 0.001283 | Acc: 100.00% | LR: 1.00e-03
+Epoch   77/100 | CE: 0.001860 | Acc: 100.00% | LR: 1.00e-03
+Epoch   78/100 | CE: 0.002233 | Acc: 100.00% | LR: 1.00e-03
+Epoch   79/100 | CE: 0.003159 | Acc: 100.00% | LR: 1.00e-03
+Epoch   80/100 | CE: 0.004915 | Acc: 100.00% | LR: 1.00e-03
+Epoch   81/100 | CE: 0.003312 | Acc: 100.00% | LR: 1.00e-03
+Epoch   82/100 | CE: 0.002990 | Acc: 100.00% | LR: 1.00e-03
+Epoch   83/100 | CE: 0.004047 | Acc: 100.00% | LR: 1.00e-03
+Epoch   84/100 | CE: 0.001204 | Acc: 100.00% | LR: 1.00e-03
+Epoch   85/100 | CE: 0.000643 | Acc: 100.00% | LR: 1.00e-03
+Epoch   86/100 | CE: 0.000913 | Acc: 100.00% | LR: 1.00e-03
+Epoch   87/100 | CE: 0.002573 | Acc: 100.00% | LR: 1.00e-03
+Epoch   88/100 | CE: 0.008145 | Acc: 100.00% | LR: 1.00e-03
+Epoch   89/100 | CE: 0.001903 | Acc: 100.00% | LR: 1.00e-03
+Epoch   90/100 | CE: 0.002224 | Acc: 100.00% | LR: 1.00e-03
+Epoch   91/100 | CE: 0.010934 | Acc: 100.00% | LR: 1.00e-03
+Epoch   92/100 | CE: 0.001919 | Acc: 100.00% | LR: 1.00e-03
+Epoch   93/100 | CE: 0.004318 | Acc: 100.00% | LR: 1.00e-03
+Epoch   94/100 | CE: 0.002062 | Acc: 100.00% | LR: 1.00e-03
+Epoch   95/100 | CE: 0.001876 | Acc: 100.00% | LR: 1.00e-03
+Epoch   96/100 | CE: 0.000454 | Acc: 100.00% | LR: 1.00e-03
+Epoch   97/100 | CE: 0.003090 | Acc: 100.00% | LR: 1.00e-03
+Epoch   98/100 | CE: 0.000764 | Acc: 100.00% | LR: 1.00e-03
+Epoch   99/100 | CE: 0.001234 | Acc: 100.00% | LR: 1.00e-03
+Epoch  100/100 | CE: 0.001953 | Acc: 100.00% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_100.pth
+=== STAGE 2 SELESAI ===
+
+model_stage2_classifier.pth disimpan
