@@ -467,7 +467,7 @@ if n_train_days >= 3:
                 color=['green','orange','red'][stat], fontweight='bold',
                 transform=ax.get_xaxis_transform())
     note = " | Solid tipis=Aktual, Dashed=Pred" if has_gt else " | Dashed=Pred"
-    ax.set_title(f"TRAINING INFERENCE — 3 Hari Input (Train) + Prediksi Day {n_train_days+1}{note}", fontsize=14)
+    ax.set_title(f"Gambar 9. TRAINING INFERENCE — 3 Hari Input (Train) + Prediksi Day {n_train_days+1}{note}", fontsize=14)
     ax.set_ylabel("Scaled"); ax.grid(alpha=0.3); ax.set_ylim(-0.2, 1.3)
     ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
     plt.tight_layout()
@@ -484,7 +484,7 @@ if n_train_days >= 3:
             line, = ax.plot(x1_only, real_gt_sc[:, j], '-', linewidth=1.8, alpha=0.85, label=col)
             ax.plot(x1_only, pred_tr_sc[:, j], '--', linewidth=2.5, color=line.get_color(), alpha=0.9)
         ax.set_title(
-            f"TRAINING INFERENCE — Real Day {n_train_days+1} (solid) vs Prediksi (dashed)\n"
+            f"Gambar 10. TRAINING INFERENCE — Real Day {n_train_days+1} (solid) vs Prediksi (dashed)\n"
             f"Aktual: {status_map[real_st_gt]} | Pred: {status_map[pred_st_tr]} | "
             f"MSE={mse_tr:.4f}  RMSE={rmse_tr:.4f}  MAE={mae_tr:.4f}", fontsize=13)
         ax.set_ylabel("Scaled"); ax.grid(alpha=0.3); ax.set_ylim(-0.2, 1.3)
@@ -583,35 +583,36 @@ def setup_plot(ax, title, ylim_low=-0.1, override_last=None):
     ax.grid(alpha=0.3)
     ax.set_ylim(ylim_low, 1.3)
 
-# Gambar 1 — 4 hari real (testing context)
-print("[Plot] gambar1_4hari_real_TCN.png ...")
+# Supplementary — 4 hari real (konteks testing, bukan gambar jurnal bernomor)
+print("[Plot] gambar1_4hari_real_TCN.png (supplementary) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds, norm4_g1_ds[:, i], linewidth=1, alpha=0.8)
-setup_plot(ax, "GAMBAR 1 (Testing): 4 Hari Real Data + Health Status", ylim_low=0)
+setup_plot(ax, "[Supplementary] Testing Inference — 4 Hari Real Data + Health Status", ylim_low=0)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2)
 plt.tight_layout()
 plt.savefig(os.path.join(EVIDENCE_DIR, "gambar1_4hari_real_TCN.png"), dpi=300, bbox_inches='tight')
 plt.close()
 print("  → gambar1_4hari_real_TCN.png")
 
-# Gambar 2 — 3 hari input + 1 hari prediksi
-print("[Plot] gambar2_input_plus_prediksi_TCN.png ...")
+# Gambar 11 — Testing Inference: 3 hari input + prediksi D+1
+print("[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 11) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, label=col)
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=2.8,
             color=ax.get_lines()[i].get_color(), alpha=0.95)
-setup_plot(ax, "GAMBAR 2 (Testing): 3 Hari Input + 1 Hari Prediksi", override_last=pred_status)
+setup_plot(ax, "Gambar 11. TESTING INFERENCE — 3 Hari Input (Test) + Prediksi Hari D+1 (Masa Depan)",
+           override_last=pred_status)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
 plt.tight_layout()
 plt.savefig(os.path.join(EVIDENCE_DIR, "gambar2_input_plus_prediksi_TCN.png"), dpi=300, bbox_inches='tight')
 plt.close()
-print("  → gambar2_input_plus_prediksi_TCN.png")
+print("  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 11")
 
-# Gambar 3 — real hari terakhir vs prediksi hari D+1
-print("[Plot] gambar3_real_vs_prediksi_TCN.png ...")
+# Supplementary — Testing Inference: real hari terakhir vs prediksi D+1
+print("[Plot] gambar3_real_vs_prediksi_TCN.png (supplementary) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2)
@@ -621,7 +622,7 @@ for i, col in enumerate(target_columns):
     ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=3,
             color=ax.get_lines()[i].get_color(), alpha=0.95,
             label='Pred' if i == 0 else None)
-setup_plot(ax, "GAMBAR 3 (Testing): Real Hari Terakhir vs Prediksi Hari D+1")
+setup_plot(ax, "[Supplementary] Testing Inference — Real Hari Terakhir vs Prediksi Hari D+1")
 ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
 plt.tight_layout()
 plt.savefig(os.path.join(EVIDENCE_DIR, "gambar3_real_vs_prediksi_TCN.png"), dpi=300, bbox_inches='tight')
@@ -682,20 +683,21 @@ print(f"        karena prediksi ke hari masa depan yang belum ada datanya.")
 print("="*70)
 
 print("\nSELESAI! Output disimpan ke folder evidence/:")
-print("\n[TRAINING INFERENCE]")
+print("\n[TRAINING INFERENCE — Gambar 9 & 10 Jurnal]")
 if n_train_days >= 3:
-    print("  gambar_train1_input_prediksi.png   ← Jurnal: bukti training inference")
+    print("  gambar_train1_input_prediksi.png   ← Jurnal Gambar 9 (3 hari train input + prediksi)")
     if has_gt:
-        print("  gambar_train2_real_vs_pred.png     ← Jurnal: real vs pred + metrik MSE/RMSE/MAE")
+        print("  gambar_train2_real_vs_pred.png     ← Jurnal Gambar 10 (real vs pred + MSE/RMSE/MAE)")
     print("  inference_train_prediksi_sensor.csv")
     print("  inference_train_health_status.csv")
-print("\n[TESTING INFERENCE]")
+print("\n[TESTING INFERENCE — Gambar 11 Jurnal]")
 print("  plot_all_parameters_TCN.png            ← Jurnal Gambar 6")
-print("  gambar1_4hari_real_TCN.png             ← Jurnal Gambar 9")
-print("  gambar2_input_plus_prediksi_TCN.png    ← Jurnal Gambar 10")
-print("  gambar3_real_vs_prediksi_TCN.png       ← Jurnal Gambar 11")
+print("  gambar2_input_plus_prediksi_TCN.png    ← Jurnal Gambar 11 (3 hari test + prediksi D+1)")
 print("  inference_prediksi_sensor.csv")
 print("  inference_health_status.csv")
+print("\n[SUPPLEMENTARY — tidak bernomor gambar jurnal]")
+print("  gambar1_4hari_real_TCN.png             (konteks 4 hari real testing)")
+print("  gambar3_real_vs_prediksi_TCN.png       (overlay real vs pred testing)")
 print("="*70)
 
 # =========================================================
@@ -962,14 +964,14 @@ _j3_lines += [
     f"  Gambar 5  : MANUAL — detail insiden SIV TS27",
     f"  Gambar 6  : plot_all_parameters_TCN.png     (21 param semua hari)",
     f"  Gambar 7-8: jurnal_kurva_loss_stage1.png    (kurva MSE Stage 1)",
-    f"  Gambar 9  : gambar1_4hari_real_TCN.png      (4 hari data real)",
-    f"  Gambar 10 : gambar2_input_plus_prediksi_TCN.png",
-    f"  Gambar 11 : gambar3_real_vs_prediksi_TCN.png",
-    f"  Gambar 12 : jurnal_kurva_loss_acc_stage2.png (CE Loss + Accuracy)",
-    f"  Tambahan  : gambar_train1_input_prediksi.png (training inference)",
-    f"  Tambahan  : gambar_train2_real_vs_pred.png  (real vs pred + metrik)",
-    f"  Tambahan  : jurnal_confusion_matrix_train.png",
-    f"  Tambahan  : jurnal_confusion_matrix_test.png",
+    f"  Gambar 9  : gambar_train1_input_prediksi.png  [TRAINING INFERENCE] 3 hari train input + pred",
+    f"  Gambar 10 : gambar_train2_real_vs_pred.png    [TRAINING INFERENCE] real vs pred + MSE/RMSE/MAE",
+    f"  Gambar 11 : gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE] 3 hari test + pred D+1",
+    f"  Gambar 12 : jurnal_kurva_loss_acc_stage2.png  CE Loss + Accuracy MLP",
+    f"  Suppl.    : gambar1_4hari_real_TCN.png        (konteks 4 hari real testing)",
+    f"  Suppl.    : gambar3_real_vs_prediksi_TCN.png  (overlay real vs pred testing)",
+    f"  Suppl.    : jurnal_confusion_matrix_train.png  (4 metrik: Acc/Prec/Rec/F1 — train)",
+    f"  Suppl.    : jurnal_confusion_matrix_test.png   (4 metrik: Acc/Prec/Rec/F1 — test)",
     "",
     "[DATA NUMERIK]",
     f"  jurnal_info_stage1.txt       (Hyperpar, MSE train/test, sequence table)",

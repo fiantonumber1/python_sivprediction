@@ -14,243 +14,185 @@ Label kondisi:
   2 = Not Ready   (≥2 fault aktif)
 
 ================================================================================
-A. GAMBAR / FIGURE (12 gambar jurnal)
+A. GAMBAR JURNAL BERNOMOR (Gambar 1–12)
 ================================================================================
 
-[1] jurnal_flowchart_stage1.png
+[Gambar 1] jurnal_flowchart_stage1.png
     Dihasilkan  : stage3_inference.py
-    Isi         : Flowchart 8-langkah pipeline TCN Forecaster (Stage 1)
-                  1. Baca CSV 13 hari → 2. Preprocessing → 3. Train/Test Split 80/20
-                  → 4. Sliding Window 3→1 hari → 5. MinMax Scaler (fit dari train saja)
-                  → 6. Arsitektur TCN (7 Residual Block, dilation [1,2,4,8,16,32,64])
-                  → 7. Training 100 epoch → 8. Evaluasi Test Set (MSE/RMSE/MAE)
+    Isi         : Flowchart 8-langkah pipeline TCN Forecaster
+                  Baca CSV → Preprocessing → Train/Test Split 80/20 →
+                  Sliding Window → MinMax Scaler → Arsitektur TCN →
+                  Training 100 epoch → Evaluasi (MSE/RMSE/MAE)
     Jurnal      : Gambar 1. Flowchart Metode TCN Forecasting
 
-[2] jurnal_flowchart_stage2.png
+[Gambar 2] jurnal_flowchart_stage2.png
     Dihasilkan  : stage3_inference.py
-    Isi         : Flowchart 8-langkah pipeline MLP Classifier (Stage 2)
-                  1. Baca CSV → 2. Preprocessing → 3. Train/Test Split 80/20
-                  → 4. Feature Extraction (mean+std+max+min per hari → 84 dim)
-                  → 5. Labeling (0 fault→Sehat | 1→Warning | ≥2→Not Ready)
-                  → 6. MinMax Scaler → 7. MLP 84→256→128→64→3 → 8. Evaluasi
+    Isi         : Flowchart 8-langkah pipeline MLP Classifier
+                  Baca CSV → Preprocessing → Train/Test Split 80/20 →
+                  Feature Extraction (84 dim) → Labeling → MinMax Scaler →
+                  MLP 84→256→128→64→3 → Evaluasi (4 metrik)
     Jurnal      : Gambar 2. Flowchart Metode MLP Classifier
 
-[3] (Gambar 3 — arsitektur TCN, dibuat MANUAL di jurnal)
+[Gambar 3] MANUAL
     Referensi   : jurnal_info_stage1.txt → bagian [ARSITEKTUR TCN]
                   7 Residual Block, dilation [1,2,4,8,16,32,64], n_ch=96, kernel=3
     Jurnal      : Gambar 3. Arsitektur TCN Forecaster
 
-[4] (Gambar 4 — arsitektur MLP, dibuat MANUAL di jurnal)
+[Gambar 4] MANUAL
     Referensi   : jurnal_info_stage2.txt → bagian [ARSITEKTUR MLP]
                   84 → 256 → 128 → 64 → 3 (LayerNorm + ReLU + Dropout tiap layer)
     Jurnal      : Gambar 4. Arsitektur MLP Classifier
 
-[5] (Gambar 5 — contoh data sensor raw, dibuat MANUAL)
+[Gambar 5] MANUAL
     Referensi   : Screenshot dari file CSV di folder data/
     Jurnal      : Gambar 5. Contoh Data Sensor SIV
 
-[6] plot_all_parameters_TCN.png
+[Gambar 6] plot_all_parameters_TCN.png
     Dihasilkan  : stage3_inference.py
-    Isi         : Plot semua 21 parameter sensor untuk seluruh hari data historis.
-                  Hari training diberi tag [Tr], hari testing diberi tag [Te].
-                  Di atas tiap hari dicantumkan label status kesehatan.
-                  Garis merah vertikal memisahkan batas antar hari.
+    Isi         : Plot semua 21 parameter sensor untuk seluruh hari historis.
+                  Tag [Tr] untuk hari training, [Te] untuk hari testing.
+                  Label status kesehatan (Sehat/Warning/Not Ready) di atas tiap hari.
     Jurnal      : Gambar 6. Visualisasi Seluruh Parameter Sensor
 
-[7] jurnal_kurva_loss_stage1.png
+[Gambar 7] jurnal_kurva_loss_stage1.png
     Dihasilkan  : stage1_forecaster.py
-    Isi         : Kurva MSE Loss per epoch (100 epoch) selama training TCN Forecaster.
-                  Menampilkan penurunan MSE dari epoch pertama hingga epoch terakhir.
+    Isi         : Kurva MSE Loss per epoch (100 epoch) training TCN Forecaster.
     Jurnal      : Gambar 7. Kurva Loss Training TCN Forecaster
 
-[8] (Gambar 8 — kurva loss validation TCN)
-    Referensi   : jurnal_kurva_loss_stage1.png (subplot kedua jika tersedia)
-                  atau gunakan gambar yang sama dengan keterangan berbeda
+[Gambar 8] MANUAL / subplot dari jurnal_kurva_loss_stage1.png
+    Referensi   : jurnal_info_stage1.txt → MSE train vs test
     Jurnal      : Gambar 8. Kurva Loss Validasi TCN
 
-[9] gambar1_4hari_real_TCN.png
-    Dihasilkan  : stage3_inference.py  [TESTING INFERENCE]
-    Isi         : Plot 4 hari terakhir data real (3 hari testing input + 1 hari context).
-                  Menampilkan sinyal asli 21 parameter + label status kesehatan per hari.
-                  Digunakan sebagai konteks sebelum prediksi hari masa depan.
-    Jurnal      : Gambar 9. Data Real 4 Hari Terakhir (Testing Inference)
+--- INFERENCE (2 jenis) ---
 
-[10] gambar2_input_plus_prediksi_TCN.png
-     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE]
-     Isi         : Plot 3 hari input (solid) + 1 hari prediksi masa depan (dashed).
-                   Label status prediksi ditampilkan di atas panel prediksi.
-                   Warna konsisten antar panel untuk setiap parameter.
-     Jurnal      : Gambar 10. Input 3 Hari + Prediksi Hari D+1 (Testing Inference)
+[Gambar 9] gambar_train1_input_prediksi.png        ← TRAINING INFERENCE
+    Dihasilkan  : stage3_inference.py
+    Konsep      : Input = 3 hari TERAKHIR data TRAINING
+                  Target = hari PERTAMA data TESTING (ada ground truth)
+    Isi         : Plot 3 hari training terakhir (solid) + prediksi hari D+1 (dashed)
+                  + overlay sinyal aktual hari D+1 (solid tipis) jika tersedia.
+                  Label status per panel (aktual untuk input, prediksi untuk target).
+    Jurnal      : Gambar 9. Training Inference — Input 3 Hari Train + Prediksi
 
-[11] gambar3_real_vs_prediksi_TCN.png
-     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE]
-     Isi         : Plot 3 hari input + overlay hari terakhir real vs prediksi D+1.
-                   Solid = data real hari terakhir, Dashed = prediksi hari D+1.
-                   Label status ditampilkan per panel.
-     Jurnal      : Gambar 11. Real vs Prediksi D+1 (Testing Inference)
+[Gambar 10] gambar_train2_real_vs_pred.png         ← TRAINING INFERENCE
+    Dihasilkan  : stage3_inference.py
+    Konsep      : Membandingkan prediksi TCN vs data aktual (ground truth tersedia)
+    Isi         : Plot 1 hari fokus — Real hari D+1 (solid) vs Prediksi (dashed).
+                  Judul menyertakan: status aktual, status prediksi,
+                  MSE / RMSE / MAE, dan keterangan BENAR/SALAH klasifikasi.
+    Jurnal      : Gambar 10. Training Inference — Real vs Prediksi + Metrik Evaluasi
 
-[12] jurnal_kurva_loss_acc_stage2.png
+[Gambar 11] gambar2_input_plus_prediksi_TCN.png    ← TESTING INFERENCE
+    Dihasilkan  : stage3_inference.py
+    Konsep      : Input = 3 hari TERAKHIR data TESTING
+                  Target = hari MASA DEPAN (tidak ada ground truth)
+    Isi         : Plot 3 hari test input (solid) + prediksi hari D+1 masa depan (dashed).
+                  Label status prediksi ditampilkan di atas panel prediksi.
+    Jurnal      : Gambar 11. Testing Inference — Input 3 Hari Test + Prediksi Masa Depan
+
+[Gambar 12] jurnal_kurva_loss_acc_stage2.png
+    Dihasilkan  : stage2_classifier.py
+    Isi         : Dua subplot — (kiri) CE Loss/epoch, (kanan) Accuracy/epoch (100 epoch)
+    Jurnal      : Gambar 12. Kurva Loss dan Akurasi MLP Classifier
+
+================================================================================
+B. CONFUSION MATRIX + 4 METRIK (supplementary — tidak bernomor gambar)
+================================================================================
+
+[S1] jurnal_confusion_matrix_train.png
      Dihasilkan  : stage2_classifier.py
-     Isi         : Dua subplot berdampingan:
-                   (kiri)  CE Loss per epoch — penurunan dari epoch 1 hingga 100
-                   (kanan) Accuracy (%) per epoch — peningkatan dari epoch 1 hingga 100
-     Jurnal      : Gambar 12. Kurva Loss dan Akurasi MLP Classifier
+     Isi         : Confusion matrix 3×3 pada DATA TRAINING.
+                   Kelas: Sehat (0) | Warning (1) | Not Ready (2)
+                   Kotak biru di bawah: Accuracy | Precision | Recall | F1-Score (weighted)
+     Jurnal      : Bukti evaluasi klasifikasi training set
 
-================================================================================
-B. CONFUSION MATRIX + 4 METRIK EVALUASI KLASIFIKASI
-================================================================================
-
-[13] jurnal_confusion_matrix_train.png
+[S2] jurnal_confusion_matrix_test.png
      Dihasilkan  : stage2_classifier.py
-     Isi         : Confusion matrix MLP Classifier pada DATA TRAINING.
-                   - Matriks 3×3: baris=Label Aktual, kolom=Label Prediksi
-                   - Kelas: Sehat (0) | Warning (1) | Not Ready (2)
-                   - Angka di tiap sel = jumlah sampel (hari)
-                   - Kotak biru di bawah gambar menampilkan 4 metrik (weighted):
-                       Accuracy | Precision | Recall | F1-Score
-     Jurnal      : Bukti evaluasi klasifikasi — data training
-
-[14] jurnal_confusion_matrix_test.png
-     Dihasilkan  : stage2_classifier.py
-     Isi         : Confusion matrix MLP Classifier pada DATA TESTING.
-                   - Matriks 3×3: baris=Label Aktual, kolom=Label Prediksi
-                   - Kelas: Sehat (0) | Warning (1) | Not Ready (2)
-                   - Angka di tiap sel = jumlah sampel (hari)
-                   - Kotak biru di bawah gambar menampilkan 4 metrik (weighted):
-                       Accuracy | Precision | Recall | F1-Score
-     Jurnal      : Bukti evaluasi klasifikasi — data testing
+     Isi         : Confusion matrix 3×3 pada DATA TESTING.
+                   Kelas: Sehat (0) | Warning (1) | Not Ready (2)
+                   Kotak biru di bawah: Accuracy | Precision | Recall | F1-Score (weighted)
+     Jurnal      : Bukti evaluasi klasifikasi test set
 
 ================================================================================
-C. TRAINING INFERENCE — prediksi dengan ground truth tersedia
+C. GAMBAR SUPPLEMENTARY TESTING INFERENCE (tidak bernomor gambar jurnal)
 ================================================================================
 
-Konsep: 3 hari terakhir DATA TRAINING digunakan sebagai input TCN.
-        Hari yang diprediksi adalah hari PERTAMA DATA TESTING → ground truth ada.
-        Sehingga MSE/RMSE/MAE dan klasifikasi BENAR/SALAH dapat dihitung.
+[S3] gambar1_4hari_real_TCN.png
+     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE — supplementary]
+     Isi         : Plot 4 hari terakhir data real + label status per hari.
+                   Digunakan sebagai konteks sebelum prediksi masa depan.
 
-[15] gambar_train1_input_prediksi.png
-     Dihasilkan  : stage3_inference.py  [TRAINING INFERENCE]
-     Isi         : Plot 3 hari training terakhir (input) + prediksi hari pertama test.
-                   Solid tipis = sinyal aktual hari pertama test (ground truth overlay).
-                   Dashed = sinyal prediksi dari TCN.
-                   Label status per panel (actual untuk 3 input, prediksi untuk target).
-     Jurnal      : Bukti Training Inference — visualisasi prediksi vs ground truth
-
-[16] gambar_train2_real_vs_pred.png
-     Dihasilkan  : stage3_inference.py  [TRAINING INFERENCE]
-     Isi         : Plot fokus 1 hari — Real hari pertama test (solid) vs Prediksi (dashed).
-                   Judul menyertakan: status aktual, status prediksi, MSE, RMSE, MAE.
-                   Digunakan untuk menilai kualitas prediksi sinyal secara visual.
-     Jurnal      : Bukti perbandingan sinyal — Training Inference Evaluation
+[S4] gambar3_real_vs_prediksi_TCN.png
+     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE — supplementary]
+     Isi         : Overlay 3 hari input + real hari terakhir vs prediksi D+1.
+                   Solid = data real, Dashed = prediksi.
 
 ================================================================================
 D. FILE CSV — data numerik hasil inference
 ================================================================================
 
-[17] inference_train_prediksi_sensor.csv
-     Dihasilkan  : stage3_inference.py  [TRAINING INFERENCE]
-     Isi         : Nilai prediksi sinyal 21 parameter untuk hari pertama testing.
+[CSV-1] inference_train_prediksi_sensor.csv        ← TRAINING INFERENCE
+     Dihasilkan  : stage3_inference.py
+     Isi         : Nilai prediksi sinyal 21 parameter untuk hari pertama test (D+1).
                    Kolom: timestep + 21 nama parameter sensor.
-                   Dapat dibandingkan langsung dengan data CSV hari pertama test.
-     Jurnal      : Data numerik training inference (lampiran/tabel)
+                   Dapat dibandingkan langsung dengan CSV hari pertama test.
 
-[18] inference_train_health_status.csv
-     Dihasilkan  : stage3_inference.py  [TRAINING INFERENCE]
+[CSV-2] inference_train_health_status.csv          ← TRAINING INFERENCE
+     Dihasilkan  : stage3_inference.py
      Isi         : Status kesehatan prediksi hari pertama test.
                    Kolom: mode, input_day_a/b/c, ground_truth_csv,
-                          pred_status, pred_status_code, confidence_pct,
-                          prob_sehat_pct, prob_warning_pct, prob_not_ready_pct,
-                          actual_status, mse, rmse, mae, generated_at.
-     Jurnal      : Bukti kuantitatif training inference (MSE/RMSE/MAE)
+                          pred_status, actual_status, confidence_pct,
+                          prob_sehat/warning/not_ready_pct, mse, rmse, mae, generated_at.
 
-[19] inference_prediksi_sensor.csv
-     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE]
+[CSV-3] inference_prediksi_sensor.csv              ← TESTING INFERENCE
+     Dihasilkan  : stage3_inference.py
      Isi         : Nilai prediksi sinyal 21 parameter untuk hari masa depan (D+1).
                    Kolom: timestep + 21 nama parameter sensor.
-     Jurnal      : Data numerik testing inference (lampiran/tabel)
 
-[20] inference_health_status.csv
-     Dihasilkan  : stage3_inference.py  [TESTING INFERENCE]
+[CSV-4] inference_health_status.csv                ← TESTING INFERENCE
+     Dihasilkan  : stage3_inference.py
      Isi         : Status kesehatan prediksi hari masa depan.
                    Kolom: mode, input_day_a/b/c, health_status, status_code,
-                          confidence_pct, prob_sehat_pct, prob_pre_anomali_pct,
-                          prob_warning_pct, generated_at.
-                   Catatan: tidak ada kolom mse/rmse/mae karena tidak ada ground truth.
-     Jurnal      : Bukti kuantitatif testing inference (confidence + probabilitas)
+                          confidence_pct, prob per kelas, generated_at.
+                   Catatan: tidak ada kolom mse/rmse/mae (tidak ada ground truth).
 
-[21] jurnal_fitur_statistik.csv
+[CSV-5] jurnal_fitur_statistik.csv
      Dihasilkan  : stage2_classifier.py
-     Isi         : Tabel statistik fitur per hari untuk semua hari data historis.
-                   Kolom: Day, Tanggal, Set (TRAIN/TEST),
-                          lalu 21 parameter × 4 statistik = 84 kolom fitur.
-                   Total: 87 kolom. Encoding: UTF-8 BOM. Separator: semicolon (;).
-                   Kompatibel langsung dengan Microsoft Excel.
-     Jurnal      : Tabel fitur input MLP Classifier
+     Isi         : Statistik per hari: Day, Tanggal, Set (TRAIN/TEST),
+                   21 parameter × 4 statistik (mean/std/max/min) = 87 kolom total.
+                   Encoding: UTF-8 BOM, separator: semicolon. Kompatibel Excel.
 
 ================================================================================
 E. FILE TXT — informasi numerik untuk penulisan jurnal
 ================================================================================
 
-[22] jurnal_info_stage1.txt
+[TXT-1] jurnal_info_stage1.txt
      Dihasilkan  : stage1_forecaster.py
-     Isi         :
-       - Statistik preprocessing (jumlah baris per hari setelah warmup drop)
-       - Rentang normalisasi per parameter (data_min / data_max dari scaler)
-       - Hyperparameter TCN: epoch=100, batch=3, AdamW, lr=0.001, clip=1.0
-       - Arsitektur: 7 Residual Block, dilation [1,2,4,8,16,32,64], n_ch=96
-       - Hasil training: MSE epoch 1, MSE epoch akhir, % penurunan
-       - Hasil evaluasi test: MSE / RMSE / MAE
-       - Selisih MSE train vs test (indikator generalisasi model)
-       - Tabel sequence lengkap: No | Tanggal | Window Input → Target | Set
-     Jurnal      : Data numerik Bab Hasil & Pembahasan — TCN Forecaster (Stage 1)
+     Isi         : Rentang normalisasi per parameter (min/max dari scaler),
+                   hyperparameter TCN, arsitektur, hasil training (MSE epoch 1 & akhir,
+                   % penurunan), evaluasi test (MSE/RMSE/MAE), tabel sequence lengkap.
 
-[23] jurnal_info_stage2.txt
+[TXT-2] jurnal_info_stage2.txt
      Dihasilkan  : stage2_classifier.py
-     Isi         :
-       - Distribusi label: jumlah hari per kelas + tanggal masing-masing
-       - Hyperparameter MLP: epoch=100, batch, lr=0.001, AdamW, weight decay=1e-5
-       - Arsitektur MLP: 84→256→128→64→3, LayerNorm+ReLU+Dropout tiap layer
-       - Class weights: [Sehat=0.5, Warning=2.5, Not Ready=4.0]
-       - Hasil training: CE Loss epoch 1 & akhir, % penurunan, Accuracy akhir
-       - Evaluasi TRAINING SET — 4 metrik (weighted):
-           Accuracy | Precision | Recall | F1-Score
-       - Confusion matrix training (3×3 teks)
-       - Classification report training: precision/recall/F1 per kelas
-       - Evaluasi TEST SET — 4 metrik (weighted):
-           Accuracy | Precision | Recall | F1-Score
-       - Confusion matrix testing (3×3 teks)
-       - Classification report testing: precision/recall/F1 per kelas
-       - Detail prediksi per hari: Aktual | Prediksi | Benar/Salah
-       - CE loss test + selisih CE train-test
-     Jurnal      : Data numerik Bab Hasil & Pembahasan — MLP Classifier (Stage 2)
+     Isi         : Distribusi label + tanggal per kelas, hyperparameter MLP, arsitektur,
+                   class weights, hasil training (CE + Accuracy), evaluasi training set
+                   (4 metrik: Acc/Prec/Rec/F1), confusion matrix training (teks),
+                   evaluasi test set (4 metrik), confusion matrix test (teks),
+                   classification report per kelas, detail prediksi per hari test.
 
-[24] jurnal_informasi_lengkap.txt
+[TXT-3] jurnal_informasi_lengkap.txt                ← REFERENSI UTAMA
      Dihasilkan  : stage3_inference.py
      Isi         :
-       BAGIAN A — Data Umum:
-         - Total hari, pembagian train/test
-         - Tabel detail per hari: Day | Tanggal | Set (TRAIN/TEST) | Status Kesehatan
-         - Range tanggal TRAINING dan range tanggal TESTING
-         - Rentang normalisasi per parameter (dari scaler Stage 1)
-         - Distribusi label: jumlah hari + tanggal per kelas
-       BAGIAN B — Training Inference:
-         - Detail 3 hari input (dari data training) + status masing-masing
-         - Prediksi status Day N+1 + confidence + probabilitas per kelas
-         - Ground truth Day N+1 (hari pertama test)
-         - Klasifikasi BENAR/SALAH
-         - MSE / RMSE / MAE prediksi vs aktual
-         - Template kalimat untuk paragraf jurnal
-       BAGIAN C — Testing Inference:
-         - Detail 3 hari input (dari data testing) + status masing-masing
-         - Prediksi status hari masa depan + confidence + probabilitas per kelas
-         - Keterangan: ground truth = TIDAK ADA, metrik = TIDAK DAPAT DIHITUNG
-         - Template caption untuk paragraf jurnal (Para 224)
-       BAGIAN D — Perbandingan Training Inference vs Testing Inference:
-         - Tabel side-by-side: Input Days | Target | Prediksi | Ground Truth |
-           Klasifikasi Benar? | MSE | RMSE | MAE
-         - Kesimpulan naratif perbedaan kedua konsep inference
-       BAGIAN E — Daftar semua file output dipetakan ke nomor Gambar jurnal
-     Jurnal      : Referensi utama untuk SEMUA data angka dalam jurnal
+       Bagian A — Tabel detail hari per hari (Day|Tanggal|TRAIN/TEST|Status),
+                  rentang normalisasi per parameter, distribusi label + tanggal.
+       Bagian B — Training Inference: 3 hari input, prediksi, ground truth,
+                  klasifikasi BENAR/SALAH, MSE/RMSE/MAE, template kalimat jurnal.
+       Bagian C — Testing Inference: 3 hari input, prediksi masa depan,
+                  confidence, probabilitas per kelas, template kalimat jurnal.
+       Bagian D — Tabel perbandingan Training vs Testing Inference (side-by-side):
+                  Input Days | Target | Prediksi | Ground Truth |
+                  Klasifikasi Benar? | MSE | RMSE | MAE + kesimpulan naratif.
+       Bagian E — Daftar semua file output dipetakan ke nomor Gambar jurnal.
 
 ================================================================================
 F. RINGKASAN PEMETAAN KE JURNAL JITEKH
@@ -263,71 +205,44 @@ F. RINGKASAN PEMETAAN KE JURNAL JITEKH
   Gambar 5  → MANUAL (screenshot CSV)
   Gambar 6  → plot_all_parameters_TCN.png
   Gambar 7  → jurnal_kurva_loss_stage1.png
-  Gambar 8  → jurnal_kurva_loss_stage1.png (atau subplot validation)
-  Gambar 9  → gambar1_4hari_real_TCN.png
-  Gambar 10 → gambar2_input_plus_prediksi_TCN.png
-  Gambar 11 → gambar3_real_vs_prediksi_TCN.png
+  Gambar 8  → MANUAL / subplot kurva validasi
+  Gambar 9  → gambar_train1_input_prediksi.png    [TRAINING INFERENCE]
+  Gambar 10 → gambar_train2_real_vs_pred.png      [TRAINING INFERENCE] + MSE/RMSE/MAE
+  Gambar 11 → gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE]
   Gambar 12 → jurnal_kurva_loss_acc_stage2.png
 
-  Evaluasi Klasifikasi (4 metrik) →
-      jurnal_confusion_matrix_train.png  (Accuracy, Precision, Recall, F1 — train)
-      jurnal_confusion_matrix_test.png   (Accuracy, Precision, Recall, F1 — test)
-      jurnal_info_stage2.txt             (classification report per kelas)
-
-  Training Inference (dengan ground truth) →
-      gambar_train1_input_prediksi.png
-      gambar_train2_real_vs_pred.png
-      inference_train_health_status.csv  (MSE/RMSE/MAE + klasifikasi benar/salah)
-
-  Testing Inference (tanpa ground truth) →
-      gambar1_4hari_real_TCN.png
-      gambar2_input_plus_prediksi_TCN.png
-      gambar3_real_vs_prediksi_TCN.png
-      inference_health_status.csv        (confidence + probabilitas per kelas)
-
-  Semua nilai numerik jurnal →
-      jurnal_informasi_lengkap.txt       ← BACA INI PERTAMA (referensi utama)
-      jurnal_info_stage1.txt
-      jurnal_info_stage2.txt
+  NOTE: Gambar 9 & 10 = Training Inference (ground truth tersedia → metrik terukur)
+        Gambar 11      = Testing Inference (masa depan → hanya confidence/probabilitas)
+        Ini membuktikan sistem mampu melakukan DUA jenis inference.
 
 ================================================================================
 G. URUTAN MENJALANKAN PIPELINE
 ================================================================================
 
   1. python stage1_forecaster.py
-       Output : jurnal_info_stage1.txt
-                jurnal_kurva_loss_stage1.png      (Gambar 7)
-                model_stage1_forecaster.pth
-                scaler_stage1.pkl
+       Output : jurnal_info_stage1.txt, jurnal_kurva_loss_stage1.png (Gambar 7)
+                model_stage1_forecaster.pth, scaler_stage1.pkl
 
   2. python stage2_classifier.py
-       Output : jurnal_info_stage2.txt
-                jurnal_kurva_loss_acc_stage2.png  (Gambar 12)
-                jurnal_confusion_matrix_train.png  (4 metrik: Acc/Prec/Rec/F1)
-                jurnal_confusion_matrix_test.png   (4 metrik: Acc/Prec/Rec/F1)
-                jurnal_fitur_statistik.csv
-                model_stage2_classifier.pth
-                scaler_stage2.pkl
+       Output : jurnal_info_stage2.txt, jurnal_kurva_loss_acc_stage2.png (Gambar 12)
+                jurnal_confusion_matrix_train.png (S1), jurnal_confusion_matrix_test.png (S2)
+                jurnal_fitur_statistik.csv, model_stage2_classifier.pth, scaler_stage2.pkl
 
   3. python stage3_inference.py
-       Output : [Training Inference]
-                  gambar_train1_input_prediksi.png
-                  gambar_train2_real_vs_pred.png
-                  inference_train_prediksi_sensor.csv
-                  inference_train_health_status.csv
-                [Testing Inference]
-                  plot_all_parameters_TCN.png       (Gambar 6)
-                  gambar1_4hari_real_TCN.png         (Gambar 9)
-                  gambar2_input_plus_prediksi_TCN.png (Gambar 10)
-                  gambar3_real_vs_prediksi_TCN.png   (Gambar 11)
-                  inference_prediksi_sensor.csv
-                  inference_health_status.csv
-                [Flowchart]
-                  jurnal_flowchart_stage1.png        (Gambar 1)
-                  jurnal_flowchart_stage2.png        (Gambar 2)
-                [Ringkasan]
-                  jurnal_informasi_lengkap.txt       ← referensi utama
+       Output : [Jurnal Gambar 1]  jurnal_flowchart_stage1.png
+                [Jurnal Gambar 2]  jurnal_flowchart_stage2.png
+                [Jurnal Gambar 6]  plot_all_parameters_TCN.png
+                [Jurnal Gambar 9]  gambar_train1_input_prediksi.png   ← TRAINING INFERENCE
+                [Jurnal Gambar 10] gambar_train2_real_vs_pred.png     ← TRAINING INFERENCE
+                [Jurnal Gambar 11] gambar2_input_plus_prediksi_TCN.png ← TESTING INFERENCE
+                [Supplementary]    gambar1_4hari_real_TCN.png
+                [Supplementary]    gambar3_real_vs_prediksi_TCN.png
+                [CSV]              inference_train_prediksi_sensor.csv
+                [CSV]              inference_train_health_status.csv
+                [CSV]              inference_prediksi_sensor.csv
+                [CSV]              inference_health_status.csv
+                [TXT Utama]        jurnal_informasi_lengkap.txt  ← BACA INI PERTAMA
 
-  TOTAL FILE AUTO-GENERATED : 21 file
+  TOTAL FILE AUTO-GENERATED : 20 file
   TOTAL FILE MANUAL          : 3 file (Gambar 3, 4, 5)
 ================================================================================
