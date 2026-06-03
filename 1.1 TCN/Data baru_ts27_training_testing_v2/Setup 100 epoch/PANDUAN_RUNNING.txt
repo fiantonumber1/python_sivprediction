@@ -1,0 +1,113 @@
+============================================================
+  PANDUAN RUNNING — TS14 TCN Pipeline (Data Baru)
+  Setup: 100 Epoch | Batch Size: 3
+============================================================
+
+STRUKTUR FOLDER
+---------------
+Setup 100 epoch/
+  data/                        <- semua file CSV & .gz di sini
+  checkpoints_stage1/          <- otomatis dibuat saat stage1 jalan
+  checkpoints_stage2/          <- otomatis dibuat saat stage2 jalan
+  csvanalysis/                 <- analisis & plot (analyze_fault.py)
+  extract_csv.py               <- LANGKAH 0: ekstrak .gz -> CSV
+  stage1_forecaster.py         <- LANGKAH 1: latih TCN forecaster
+  stage2_classifier.py         <- LANGKAH 2: latih MLP classifier
+  stage3_inference.py          <- LANGKAH 3: prediksi + plot hasil
+
+------------------------------------------------------------
+LANGKAH 0 — Ekstrak file .gz ke CSV (jalankan SEKALI saja)
+------------------------------------------------------------
+  python extract_csv.py
+
+  - Input  : data/TS14_DD Mon YYYY.csv.gz
+  - Output : data/DDMMYYYY.csv
+  - Jika CSV sudah ada, file akan di-skip otomatis
+
+------------------------------------------------------------
+LANGKAH 1 — Latih TCN Forecaster (Stage 1)
+------------------------------------------------------------
+  python stage1_forecaster.py
+
+  - Input  : data/*.csv  (12 hari)
+  - Window : 3 hari -> prediksi 1 hari (sliding), total 9 window
+  - Batch  : 3  |  Epoch: 100
+  - Output :
+      model_stage1_forecaster.pth
+      scaler_stage1.pkl
+      checkpoints_stage1/checkpoint_epoch_50.pth
+      checkpoints_stage1/checkpoint_epoch_100.pth
+      log_stage1.txt
+  - Resume : otomatis lanjut dari checkpoint terakhir jika ada
+
+------------------------------------------------------------
+LANGKAH 2 — Latih MLP Classifier (Stage 2)
+------------------------------------------------------------
+  python stage2_classifier.py
+
+  - Input  : data/*.csv  (12 hari)
+  - Sampel : 12 hari, per hari 1 vektor fitur (mean+std+max+min x 21)
+  - Batch  : 3  |  Epoch: 100
+  - Label  :
+      0 = Sehat      (0 fault aktif dari 3 kolom fault)
+      1 = Warning    (1 fault aktif)
+      2 = Not Ready  (2 atau 3 fault aktif)
+  - Output :
+      model_stage2_classifier.pth
+      scaler_stage2.pkl
+      checkpoints_stage2/checkpoint_epoch_50.pth
+      checkpoints_stage2/checkpoint_epoch_100.pth
+      log_stage2.txt
+  - Resume : otomatis lanjut dari checkpoint terakhir jika ada
+
+------------------------------------------------------------
+LANGKAH 3 — Inferensi + Plot Hasil (Stage 3)
+------------------------------------------------------------
+  python stage3_inference.py
+
+  - Input  :
+      model_stage1_forecaster.pth
+      model_stage2_classifier.pth
+      scaler_stage1.pkl
+      scaler_stage2.pkl
+      data/*.csv
+  - Output (gambar & CSV prediksi di folder data/):
+      plot_all_parameters_TCN.png    <- semua hari + health status
+      plot_per_hari_TCN_*.png        <- plot per hari
+      data/hasil_prediksi_D.csv      <- prediksi hari D
+  - Konsol menampilkan:
+      Status prediksi hari D
+      Prob Sehat / Warning / Not Ready
+
+------------------------------------------------------------
+ANALISIS DATA (opsional, bisa dijalankan kapan saja)
+------------------------------------------------------------
+  python csvanalysis/analyze_fault.py
+
+  - Tidak membutuhkan model terlatih
+  - Output :
+      Tabel per hari: tanggal, jumlah baris, eligible, health status,
+                      fault count (BC / InputConv / Inverter)
+      csvanalysis/plot_all_data.png  <- visualisasi 21 parameter
+
+------------------------------------------------------------
+CATATAN
+------------------------------------------------------------
+  - Kolom fault yang dipantau:
+      SIV_MajorBCFltPres
+      SIV_MajorInputConvFltPres
+      SIV_MajorInverterFltPres
+
+  - Parameter sensor (21 kolom):
+      SIV_T_HS_InConv_1/2, SIV_T_HS_Inv_1/2, SIV_T_Container
+      SIV_I_L1/L2/L3, SIV_I_Battery, SIV_I_DC_In
+      SIV_U_Battery, SIV_U_DC_In/Out, SIV_U_L1/L2/L3
+      SIV_InConv_InEnergy, SIV_Output_Energy
+      PLC_OpenACOutputCont, PLC_OpenInputCont, SIV_DevIsAlive
+
+  - Crop waktu per hari : 06:00:00 - 18:16:35
+  - Drop awal           : 3600 baris pertama (warmup)
+  - Take                : 150.000 baris
+  - Min rows eligible   : 123.600 baris
+
+============================================================
