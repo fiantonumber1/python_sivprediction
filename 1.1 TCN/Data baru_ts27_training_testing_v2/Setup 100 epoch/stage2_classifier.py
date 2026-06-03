@@ -272,20 +272,49 @@ if start_epoch <= N_EPOCHS:
     log("=== STAGE 2 TRAINING SELESAI ===\n")
 
 # =============================
+# EVALUASI TRAINING SET
+# =============================
+log("=== EVALUASI TRAINING SET (Stage 2) ===")
+model.eval()
+with torch.no_grad():
+    logits_tr  = model(X_tensor)
+    preds_tr   = logits_tr.argmax(1).cpu().numpy()
+y_tr_arr   = np.array(y_train_cls, dtype=np.int64)
+_ce_tr     = float(criterion(logits_tr, torch.LongTensor(y_tr_arr).to(device)).item())
+_acc_tr    = 100.0 * float(np.mean(preds_tr == y_tr_arr))
+_prec_tr   = precision_score(y_tr_arr, preds_tr, average='weighted', zero_division=0) * 100
+_rec_tr    = recall_score(y_tr_arr, preds_tr, average='weighted', zero_division=0) * 100
+_f1_tr     = f1_score(y_tr_arr, preds_tr, average='weighted', zero_division=0) * 100
+log(f"Train Days   : {len(y_tr_arr)}")
+log(f"Train CE     : {_ce_tr:.6f}")
+log(f"Train Acc    : {_acc_tr:.2f}%")
+log(f"Train Prec   : {_prec_tr:.2f}%")
+log(f"Train Recall : {_rec_tr:.2f}%")
+log(f"Train F1     : {_f1_tr:.2f}%")
+log("=" * 40 + "\n")
+
+# =============================
 # EVALUASI TEST SET
 # =============================
 if X_test_cls:
     log("=== EVALUASI TEST SET (Stage 2) ===")
-    model.eval()
     X_test_scaled_arr = scaler_cls.transform(np.array(X_test_cls, dtype=np.float32))
     X_test_tensor     = torch.FloatTensor(X_test_scaled_arr).to(device)
     with torch.no_grad():
         logits_test = model(X_test_tensor)
         preds_test  = logits_test.argmax(1).cpu().numpy()
     y_test_arr = np.array(y_test_cls, dtype=np.int64)
-    acc = 100.0 * float(np.mean(preds_test == y_test_arr))
+    _ce_te     = float(criterion(logits_test, torch.LongTensor(y_test_arr).to(device)).item())
+    _acc_te    = 100.0 * float(np.mean(preds_test == y_test_arr))
+    _prec_te   = precision_score(y_test_arr, preds_test, average='weighted', zero_division=0) * 100
+    _rec_te    = recall_score(y_test_arr, preds_test, average='weighted', zero_division=0) * 100
+    _f1_te     = f1_score(y_test_arr, preds_test, average='weighted', zero_division=0) * 100
     log(f"Test Days    : {len(y_test_arr)}")
-    log(f"Test Accuracy: {acc:.2f}%")
+    log(f"Test CE      : {_ce_te:.6f}")
+    log(f"Test Acc     : {_acc_te:.2f}%")
+    log(f"Test Prec    : {_prec_te:.2f}%")
+    log(f"Test Recall  : {_rec_te:.2f}%")
+    log(f"Test F1      : {_f1_te:.2f}%")
     for day_i, (true_lbl, pred_lbl) in enumerate(zip(y_test_arr, preds_test)):
         match = "✓" if true_lbl == pred_lbl else "✗"
         log(f"  Day {n_train_days + day_i + 1:2d}: True={status_map[true_lbl]:9s} | Pred={status_map[pred_lbl]:9s} {match}")

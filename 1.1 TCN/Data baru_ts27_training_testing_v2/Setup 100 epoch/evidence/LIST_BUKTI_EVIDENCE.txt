@@ -2,7 +2,7 @@
 LIST BUKTI EVIDENCE — SISTEM PREDIKSI KESEHATAN SIV (STATIC INVERTER)
 LRT Jabodebek | Trainset TS27 | TCN + MLP Pipeline
 Dihasilkan oleh: stage1_forecaster.py, stage2_classifier.py, stage3_inference.py
-Terakhir diperbarui: 2026-06-02
+Terakhir diperbarui: 2026-06-03
 ================================================================================
 
 Folder ini berisi SEMUA file bukti yang dihasilkan secara otomatis oleh pipeline.
@@ -21,7 +21,8 @@ A. GAMBAR JURNAL BERNOMOR (Gambar 1–12)
     Isi         : Flowchart 8-langkah pipeline TCN Forecaster
                   Baca CSV → Preprocessing → Train/Test Split 80/20 →
                   Sliding Window → MinMax Scaler → Arsitektur TCN →
-                  Training 100 epoch → Evaluasi (MSE/RMSE/MAE)
+                  Training 100 epoch → Evaluasi Training & Test
+                  (MSE/RMSE/MAE/MAPE — semua di skala normalized)
     Jurnal      : Gambar 1. Flowchart Metode TCN Forecasting
 
 [Gambar 2] jurnal_flowchart_stage2.png
@@ -81,9 +82,11 @@ A. GAMBAR JURNAL BERNOMOR (Gambar 1–12)
 [Gambar 10] jurnal_kurva_loss_stage1.png
     Dihasilkan  : stage1_forecaster.py
     Isi         : Kurva Epoch vs MSE Training — TCN Forecaster (100 epoch).
-                  Sumbu X = Epoch, Sumbu Y = MSE Loss.
+                  Sumbu X = Epoch, Sumbu Y = MSE Loss (skala normalized).
                   Judul mencantumkan MSE epoch 1, MSE epoch akhir, % penurunan.
                   Menampilkan konvergensi model selama proses training.
+                  Setelah training: evaluasi training set & test set masing-masing
+                  melaporkan MSE / RMSE / MAE / MAPE (semua normalized).
     Jurnal      : Gambar 10. Kurva Epoch vs MSE Training
 
 --- INFERENCE (2 jenis) ---
@@ -95,7 +98,7 @@ A. GAMBAR JURNAL BERNOMOR (Gambar 1–12)
     Isi         : Kurva sinyal aktual Y_Testing (solid) vs sinyal prediksi (dashed)
                   untuk seluruh 21 parameter pada hari pertama data testing.
                   Judul mencantumkan: status aktual, status prediksi,
-                  MSE / RMSE / MAE, dan BENAR/SALAH klasifikasi status.
+                  MSE / RMSE / MAE / MAPE (normalized), dan BENAR/SALAH klasifikasi.
     Jurnal      : Gambar 11. Kurva Aktual (Y_Testing) vs Prediksi
 
 [Gambar 12] gambar2_input_plus_prediksi_TCN.png    ← TESTING INFERENCE
@@ -189,7 +192,8 @@ D. FILE CSV — data numerik hasil inference
      Isi         : Status kesehatan prediksi hari pertama test.
                    Kolom: mode, input_day_a/b/c, ground_truth_csv,
                           pred_status, actual_status, confidence_pct,
-                          prob_sehat_pct, prob_warning_pct, mse, rmse, mae, generated_at.
+                          prob_sehat_pct, prob_warning_pct,
+                          mse, rmse, mae, mape_pct (semua normalized), generated_at.
 
 [CSV-3] inference_prediksi_sensor.csv              ← TESTING INFERENCE
      Dihasilkan  : stage3_inference.py
@@ -217,7 +221,8 @@ E. FILE TXT — informasi numerik untuk penulisan jurnal
      Dihasilkan  : stage1_forecaster.py
      Isi         : Rentang normalisasi per parameter (min/max dari scaler),
                    hyperparameter TCN, arsitektur, hasil training (MSE epoch 1 & akhir,
-                   % penurunan), evaluasi test (MSE/RMSE/MAE), tabel sequence lengkap.
+                   % penurunan), evaluasi training set & test set
+                   (MSE/RMSE/MAE/MAPE — semua di skala normalized), tabel sequence lengkap.
 
 [TXT-2] jurnal_info_stage2.txt
      Dihasilkan  : stage2_classifier.py
@@ -233,12 +238,14 @@ E. FILE TXT — informasi numerik untuk penulisan jurnal
        Bagian A — Tabel detail hari per hari (Day|Tanggal|TRAIN/TEST|Status),
                   rentang normalisasi per parameter, distribusi label + tanggal.
        Bagian B — Training Inference: 3 hari input, prediksi, ground truth,
-                  klasifikasi BENAR/SALAH, MSE/RMSE/MAE, template kalimat jurnal.
+                  klasifikasi BENAR/SALAH, MSE/RMSE/MAE/MAPE (normalized),
+                  template kalimat jurnal.
        Bagian C — Testing Inference: 3 hari input, prediksi masa depan,
                   confidence, probabilitas per kelas, template kalimat jurnal.
        Bagian D — Tabel perbandingan Training vs Testing Inference (side-by-side):
                   Input Days | Target | Prediksi | Ground Truth |
-                  Klasifikasi Benar? | MSE | RMSE | MAE + kesimpulan naratif.
+                  Klasifikasi Benar? | MSE | RMSE | MAE | MAPE (normalized)
+                  + kesimpulan naratif.
        Bagian E — Daftar semua file output dipetakan ke nomor Gambar jurnal.
 
 ================================================================================
@@ -282,6 +289,7 @@ G. URUTAN MENJALANKAN PIPELINE
        Output : jurnal_info_stage2.txt, jurnal_kurva_loss_acc_stage2.png (Supplementary)
                 jurnal_confusion_matrix_train.png (S1), jurnal_confusion_matrix_test.png (S2)
                 jurnal_fitur_statistik.csv, model_stage2_classifier.pth, scaler_stage2.pkl
+       Log    : Evaluasi Training Set & Test Set (CE / Acc / Prec / Recall / F1)
 
   3. python stage3_inference.py
        Output : [Jurnal Gambar 1]  jurnal_flowchart_stage1.png

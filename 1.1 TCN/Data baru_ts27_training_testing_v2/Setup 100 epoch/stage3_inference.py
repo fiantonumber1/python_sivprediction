@@ -583,9 +583,16 @@ if n_train_days >= 3:
         df_gt       = test_dfs[0]
         real_sig_gt = df_gt[target_columns].values.astype(np.float32)
         real_st_gt  = label_health_status(df_gt)
-        mse_tr      = float(np.mean((pred_sig_tr - real_sig_gt) ** 2))
-        mae_tr      = float(np.mean(np.abs(pred_sig_tr - real_sig_gt)))
-        rmse_tr     = float(np.sqrt(mse_tr))
+        # Metrik di normalized space (konsisten dengan training MSE stage1)
+        pred_sig_tr_sc = scale_arr(pred_sig_tr)
+        real_sig_gt_sc = scale_arr(real_sig_gt)
+        mse_tr   = float(np.mean((pred_sig_tr_sc - real_sig_gt_sc) ** 2))
+        rmse_tr  = float(np.sqrt(mse_tr))
+        mae_tr   = float(np.mean(np.abs(pred_sig_tr_sc - real_sig_gt_sc)))
+        _mask_gt = real_sig_gt_sc != 0
+        mape_tr  = float(np.mean(np.abs(
+            (pred_sig_tr_sc[_mask_gt] - real_sig_gt_sc[_mask_gt]) / real_sig_gt_sc[_mask_gt]
+        )) * 100) if _mask_gt.any() else float('nan')
         _clf_match  = pred_st_tr == real_st_gt
         print(f"\n  [TARGET — hari pertama data TESTING (ground truth tersedia)]")
         print(f"    Hari D (Day {n_train_days+1}): {GT_CSV}  Status Aktual: {status_map[real_st_gt]}")
@@ -593,12 +600,13 @@ if n_train_days >= 3:
         print(f"    Prediksi Status : {status_map[pred_st_tr]}  ({pred_cf_tr:.2f}% confidence)")
         print(f"    Status Aktual   : {status_map[real_st_gt]}")
         print(f"    Klasifikasi     : {'BENAR ✓' if _clf_match else 'SALAH ✗'}")
-        print(f"    Prob Healthy      : {prob_tr[0]*100:.2f}%")
+        print(f"    Prob Healthy    : {prob_tr[0]*100:.2f}%")
         print(f"    Prob Warning    : {prob_tr[1]*100:.2f}%")
-        print(f"\n  [METRIK REGRESI SINYAL (dibandingkan vs ground truth)]")
+        print(f"\n  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]")
         print(f"    MSE   = {mse_tr:.8f}")
         print(f"    RMSE  = {rmse_tr:.8f}")
         print(f"    MAE   = {mae_tr:.8f}")
+        print(f"    MAPE  = {mape_tr:.2f}%")
     else:
         print(f"\n  [HASIL TRAINING INFERENCE — tanpa ground truth]")
         print(f"    Prediksi hari ke-{n_train_days+1}: {status_map[pred_st_tr]} ({pred_cf_tr:.2f}%)")
@@ -658,7 +666,7 @@ if n_train_days >= 3:
         ax.set_title(
             f"Gambar 11. Kurva Aktual (Y_Testing) vs Prediksi — Day {n_train_days+1}\n"
             f"Aktual: {status_map[real_st_gt]} | Pred: {status_map[pred_st_tr]} | "
-            f"MSE={mse_tr:.4f}  RMSE={rmse_tr:.4f}  MAE={mae_tr:.4f}", fontsize=13)
+            f"MSE={mse_tr:.4f}  RMSE={rmse_tr:.4f}  MAE={mae_tr:.4f}  MAPE={mape_tr:.2f}%", fontsize=13)
         ax.set_ylabel("Scaled"); ax.grid(alpha=0.3); ax.set_ylim(-0.2, 1.3)
         ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
         plt.tight_layout()
@@ -682,7 +690,8 @@ if n_train_days >= 3:
     }
     if has_gt:
         row_tr.update({'ground_truth_csv': GT_CSV, 'actual_status': status_map[real_st_gt],
-                       'mse': round(mse_tr, 6), 'rmse': round(rmse_tr, 6), 'mae': round(mae_tr, 6)})
+                       'mse': round(mse_tr, 6), 'rmse': round(rmse_tr, 6),
+                       'mae': round(mae_tr, 6), 'mape_pct': round(mape_tr, 4)})
     pd.DataFrame([row_tr]).to_csv(os.path.join(EVIDENCE_DIR, "inference_train_health_status.csv"), index=False)
 else:
     print("  [Skip] Training days < 3")

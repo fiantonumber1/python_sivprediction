@@ -279,25 +279,53 @@ if start_epoch <= N_EPOCHS:
     log("=== STAGE 1 TRAINING SELESAI ===\n")
 
 # =============================
+# EVALUASI TRAINING SET
+# =============================
+log("=== EVALUASI TRAINING SET (Stage 1) — skala normalized [-0.1, 1.1] ===")
+model.eval()
+with torch.no_grad():
+    pred_train, _ = model(X_tensor)
+    pred_train    = pred_train.cpu().numpy()
+y_scaled_np   = y_scaled  # sudah normalized
+tr_mse  = float(np.mean((pred_train - y_scaled_np) ** 2))
+tr_rmse = float(np.sqrt(tr_mse))
+tr_mae  = float(np.mean(np.abs(pred_train - y_scaled_np)))
+_mask_tr = y_scaled_np != 0
+tr_mape = float(np.mean(np.abs(
+    (pred_train[_mask_tr] - y_scaled_np[_mask_tr]) / y_scaled_np[_mask_tr]
+)) * 100) if _mask_tr.any() else float('nan')
+log(f"Train Windows : {len(X_seq)}")
+log(f"Train MSE     : {tr_mse:.6f}")
+log(f"Train RMSE    : {tr_rmse:.6f}")
+log(f"Train MAE     : {tr_mae:.6f}")
+log(f"Train MAPE    : {tr_mape:.2f}%")
+log("=" * 40 + "\n")
+
+# =============================
 # EVALUASI TEST SET
 # =============================
 if X_scaled_test is not None:
-    log("=== EVALUASI TEST SET (Stage 1) ===")
+    log("=== EVALUASI TEST SET (Stage 1) — skala normalized [-0.1, 1.1] ===")
     model.eval()
     with torch.no_grad():
         X_test_tensor = torch.FloatTensor(X_scaled_test).to(device)
         pred_test, _  = model(X_test_tensor)
         pred_test     = pred_test.cpu().numpy()
-    pred_orig = scaler.inverse_transform(
-        pred_test.reshape(-1, n_features)
-    ).reshape(pred_test.shape)
-    mse  = float(np.mean((pred_orig - y_signal_test_orig) ** 2))
-    mae  = float(np.mean(np.abs(pred_orig - y_signal_test_orig)))
+    y_scaled_test = scaler.transform(
+        y_signal_test_orig.reshape(-1, n_features)
+    ).reshape(y_signal_test_orig.shape)
+    mse  = float(np.mean((pred_test - y_scaled_test) ** 2))
     rmse = float(np.sqrt(mse))
+    mae  = float(np.mean(np.abs(pred_test - y_scaled_test)))
+    _mask = y_scaled_test != 0
+    mape = float(np.mean(np.abs(
+        (pred_test[_mask] - y_scaled_test[_mask]) / y_scaled_test[_mask]
+    )) * 100) if _mask.any() else float('nan')
     log(f"Test Windows : {len(X_seq_test_list)}")
-    log(f"Test MSE     : {mse:.6f}")
+    log(f"Test MSE     : {mse:.6f}  (sebanding dengan training MSE)")
     log(f"Test RMSE    : {rmse:.6f}")
     log(f"Test MAE     : {mae:.6f}")
+    log(f"Test MAPE    : {mape:.2f}%")
     log("=" * 40)
 else:
     log("[Stage 1] Tidak ada test windows — tambah lebih banyak hari CSV")
@@ -366,17 +394,21 @@ if epoch_nums_log:
                 if _lm: _j1_lr = _lm.group(1)
     except: pass
 
-# Re-compute test metrics agar selalu tersedia
-_j1_mse = _j1_rmse = _j1_mae = None
+# Re-compute test metrics agar selalu tersedia (normalized space)
+_j1_mse = _j1_rmse = _j1_mae = _j1_mape = None
 if X_scaled_test is not None:
     model.eval()
     with torch.no_grad():
         _j1_pred, _ = model(torch.FloatTensor(X_scaled_test).to(device))
         _j1_pred    = _j1_pred.cpu().numpy()
-    _j1_po   = scaler.inverse_transform(_j1_pred.reshape(-1, n_features)).reshape(_j1_pred.shape)
-    _j1_mse  = float(np.mean((_j1_po - y_signal_test_orig) ** 2))
+    _j1_ys   = scaler.transform(y_signal_test_orig.reshape(-1, n_features)).reshape(y_signal_test_orig.shape)
+    _j1_mse  = float(np.mean((_j1_pred - _j1_ys) ** 2))
     _j1_rmse = float(np.sqrt(_j1_mse))
-    _j1_mae  = float(np.mean(np.abs(_j1_po - y_signal_test_orig)))
+    _j1_mae  = float(np.mean(np.abs(_j1_pred - _j1_ys)))
+    _j1_mask = _j1_ys != 0
+    _j1_mape = float(np.mean(np.abs(
+        (_j1_pred[_j1_mask] - _j1_ys[_j1_mask]) / _j1_ys[_j1_mask]
+    )) * 100) if _j1_mask.any() else float('nan')
 
 _j1_dates = [os.path.basename(f)[:8] for f in csv_files]
 _j1_lines = [
