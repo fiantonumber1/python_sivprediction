@@ -241,7 +241,9 @@ E. FILE TXT — informasi numerik untuk penulisan jurnal
                   klasifikasi BENAR/SALAH, MSE/RMSE/MAE/MAPE (normalized),
                   template kalimat jurnal.
        Bagian C — Testing Inference: 3 hari input, prediksi masa depan,
-                  confidence, probabilitas per kelas, template kalimat jurnal.
+                  confidence, probabilitas per kelas,
+                  MSE/RMSE/MAE/MAPE = TIDAK DAPAT DIHITUNG (no ground truth),
+                  template kalimat jurnal.
        Bagian D — Tabel perbandingan Training vs Testing Inference (side-by-side):
                   Input Days | Target | Prediksi | Ground Truth |
                   Klasifikasi Benar? | MSE | RMSE | MAE | MAPE (normalized)
@@ -266,7 +268,7 @@ F. RINGKASAN PEMETAAN KE JURNAL JITEKH
   Gambar 12 → (belum dikonfirmasi dari template)
   Gambar 15 → gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE] Hasil Forecasting + Label Kelas
 
-  NOTE: Gambar 11 = Training Inference — Y_Testing vs Prediksi (MSE/RMSE/MAE terukur)
+  NOTE: Gambar 11 = Training Inference — Y_Testing vs Prediksi (MSE/RMSE/MAE/MAPE normalized terukur)
         Gambar 12 = Testing Inference — prediksi masa depan (hanya confidence/probabilitas)
         Gambar 7, 8, 9 masih perlu dikonfirmasi dari template jurnal.
 

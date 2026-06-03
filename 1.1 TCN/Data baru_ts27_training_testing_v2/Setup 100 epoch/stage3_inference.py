@@ -729,7 +729,11 @@ print(f"    Prediksi Status : {status_map[pred_status]}  ({pred_confidence:.2f}%
 print(f"    Prob Healthy      : {prob[0]*100:.2f}%")
 print(f"    Prob Warning    : {prob[1]*100:.2f}%")
 print(f"    Ground Truth    : TIDAK ADA (hari masa depan)")
-print(f"    Metrik MSE/RMSE : TIDAK DAPAT DIHITUNG (tidak ada data aktual)")
+print(f"\n  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]")
+print(f"    MSE   = TIDAK DAPAT DIHITUNG (tidak ada ground truth)")
+print(f"    RMSE  = TIDAK DAPAT DIHITUNG")
+print(f"    MAE   = TIDAK DAPAT DIHITUNG")
+print(f"    MAPE  = TIDAK DAPAT DIHITUNG")
 print("="*65)
 
 # Persiapan array plot testing (4 hari terakhir real + prediksi)
@@ -833,16 +837,18 @@ if n_train_days >= 3:
     _ti_target = f"Day {n_train_days+1} (1st Test)"
     _ti_status = f"{status_map[pred_st_tr]} ({pred_cf_tr:.1f}%)"
     if has_gt:
-        _ti_gt = status_map[real_st_gt]
+        _ti_gt    = status_map[real_st_gt]
         _ti_match = "BENAR ✓" if pred_st_tr == real_st_gt else "SALAH ✗"
-        _ti_mse = f"{mse_tr:.6f}"
-        _ti_rmse = f"{rmse_tr:.6f}"
-        _ti_mae = f"{mae_tr:.6f}"
+        _ti_mse   = f"{mse_tr:.6f}"
+        _ti_rmse  = f"{rmse_tr:.6f}"
+        _ti_mae   = f"{mae_tr:.6f}"
+        _ti_mape  = f"{mape_tr:.2f}%"
     else:
-        _ti_gt = "N/A"; _ti_match = "N/A"; _ti_mse = "N/A"; _ti_rmse = "N/A"; _ti_mae = "N/A"
+        _ti_gt = "N/A"; _ti_match = "N/A"
+        _ti_mse = "N/A"; _ti_rmse = "N/A"; _ti_mae = "N/A"; _ti_mape = "N/A"
 else:
     _ti_input="N/A"; _ti_target="N/A"; _ti_status="N/A"; _ti_gt="N/A"; _ti_match="N/A"
-    _ti_mse="N/A"; _ti_rmse="N/A"; _ti_mae="N/A"
+    _ti_mse="N/A"; _ti_rmse="N/A"; _ti_mae="N/A"; _ti_mape="N/A"
 _te_input  = f"Day {total_days-2}–{total_days} (Test)"
 _te_target = f"Day {total_days+1} (Future)"
 _te_status = f"{status_map[pred_status]} ({pred_confidence:.1f}%)"
@@ -851,11 +857,12 @@ print(f"  {'Target':<28} {_ti_target:>20}  {_te_target:>18}")
 print(f"  {'Prediksi Status':<28} {_ti_status:>20}  {_te_status:>18}")
 print(f"  {'Ground Truth':<28} {_ti_gt:>20}  {'TIDAK ADA':>18}")
 print(f"  {'Klasifikasi Benar?':<28} {_ti_match:>20}  {'Tidak dpt diukur':>18}")
-print(f"  {'MSE':<28} {_ti_mse:>20}  {'Tidak dpt diukur':>18}")
-print(f"  {'RMSE':<28} {_ti_rmse:>20}  {'Tidak dpt diukur':>18}")
-print(f"  {'MAE':<28} {_ti_mae:>20}  {'Tidak dpt diukur':>18}")
+print(f"  {'MSE (normalized)':<28} {_ti_mse:>20}  {'Tidak dpt diukur':>18}")
+print(f"  {'RMSE (normalized)':<28} {_ti_rmse:>20}  {'Tidak dpt diukur':>18}")
+print(f"  {'MAE (normalized)':<28} {_ti_mae:>20}  {'Tidak dpt diukur':>18}")
+print(f"  {'MAPE':<28} {_ti_mape:>20}  {'Tidak dpt diukur':>18}")
 print(f"  {'-'*70}")
-print(f"\n  NOTE: Training inference BISA diukur akurasi/MSE karena ground truth")
+print(f"\n  NOTE: Training inference BISA diukur MSE/RMSE/MAE/MAPE karena ground truth")
 print(f"        hari D+1 (data test) tersedia. Testing inference TIDAK BISA diukur")
 print(f"        karena prediksi ke hari masa depan yang belum ada datanya.")
 print("="*70)
