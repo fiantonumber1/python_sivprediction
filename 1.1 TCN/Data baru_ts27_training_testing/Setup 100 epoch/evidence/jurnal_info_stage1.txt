@@ -1,0 +1,106 @@
+====================================================================
+INFORMASI JURNAL — TCN FORECASTER (STAGE 1)
+Generated: 2026-06-03 02:03:02
+====================================================================
+
+[DATASET & SPLIT — untuk Tabel Jurnal]
+  Total hari CSV               : 13
+  Train days (TRAIN_RATIO=0.8) : 10
+  Test days                    : 3
+  Window training (3->1 hari)  : 7
+  Window testing               : 3
+  Timestep per hari (N_TAKE)   : 200,000
+  Compression Factor           : 1
+  Jumlah parameter (fitur)     : 21
+
+[PREPROCESSING — untuk Tabel Data Cleaning Jurnal]
+  Jumlah data sebelum crop/hari: 203,600 baris
+  Warmup baris di-drop         : 3,600 baris
+  Jumlah data digunakan/hari   : 200,000 baris (98.2%)
+  Jumlah data total (13 hari)  : 2,600,000 baris
+  Jumlah parameter digunakan   : 21 parameter
+  Timestamp per hari           : 200,000
+  Missing value handling        : forward-fill (ffill) + backward-fill (bfill)
+  Start time (setelah warmup)  : 03:00 WIB
+  End time                     : 18:16 WIB
+
+[NORMALISASI — untuk Tabel Normalisasi Jurnal]
+  Metode Normalisasi           : Min-Max Scaler
+  Rentang output normalisasi   : [-0.1, 1.1]
+  Jumlah parameter dinorm.     : 21
+  Fit hanya pada               : 10 hari training
+  Transform pada               : training + test (tanpa data leakage)
+
+[RENTANG DATA PER PARAMETER (dari scaler training)]
+  Parameter                        Min Data     Max Data
+  -------------------------------------------------------
+  SIV_T_HS_InConv_1                 30.0000      50.0000
+  SIV_T_HS_InConv_2                 31.0000      50.0000
+  SIV_T_HS_Inv_1                     0.0000      54.0000
+  SIV_T_HS_Inv_2                     0.0000      49.0000
+  SIV_T_Container                   43.0000      60.0000
+  SIV_I_L1                           0.0000     127.0000
+  SIV_I_L2                           0.0000     123.0000
+  SIV_I_L3                           0.0000    8198.0000
+  SIV_I_Battery                    -26.0000   28928.0000
+  SIV_I_DC_In                        0.0000     800.0000
+  SIV_U_Battery                     96.0000     114.0000
+  SIV_U_DC_In                        0.0000     908.0000
+  SIV_U_DC_Out                       4.0000     638.0000
+  SIV_U_L1                           0.0000     221.0000
+  SIV_U_L2                           0.0000     221.0000
+  SIV_U_L3                           0.0000     221.0000
+  SIV_InConv_InEnergy                1.0000     637.0000
+  SIV_Output_Energy                  0.0000     565.0000
+  PLC_OpenACOutputCont               0.0000       0.0000
+  PLC_OpenInputCont                  0.0000       0.0000
+  SIV_DevIsAlive                     0.0000   65535.0000
+
+[HYPERPARAMETER TCN — untuk Tabel Jurnal]
+  Optimizer                    : AdamW
+  Learning Rate (awal)         : 0.001
+  Learning Rate (akhir)        : 1.00e-03
+  Batch Size                   : 3
+  Epoch                        : 100
+  Loss Function                : Mean Squared Error (MSE)
+  Gradient Clipping            : 1.0
+  Dropout                      : 0.3
+  Weight Decay                 : 1e-5
+  Scheduler                    : ReduceLROnPlateau (factor=0.5, patience=30)
+
+[ARSITEKTUR TCN — untuk Tabel Jurnal]
+  Jumlah Residual Block        : 7
+  Dilation Factors             : [1, 2, 4, 8, 16, 32, 64]
+  Hidden Channel (n_ch)        : 96
+  Kernel Size                  : 3
+  Input Window                 : 3 hari = 600,000 timestep
+  Output Horizon               : H+1 = 200,000 timestep (1 hari)
+  Input Shape                  : (batch, 600000, 21)
+  Output Shape                 : (batch, 200000, 21)
+
+[HASIL TRAINING — untuk Para 168 Jurnal]
+  MSE Epoch 1                  : 0.8997170  (89.9717%)
+  MSE Epoch 100 (akhir)        : 0.0247493  (2.4749%)
+  Penurunan MSE total          : 97.2%
+  MSE akhir (persen)           : ~2.47%
+
+[EVALUASI TEST SET — untuk Para 170 Jurnal]
+  Test Windows                 : 3
+  MSE Test                     : 1945364.6250000  (194536462.5000%)
+  RMSE Test                    : 1394.7632864
+  MAE Test                     : 285.6085510
+  Selisih MSE (Train - Test)   : 1945364.6002507  → relatif kecil
+
+[PEMBENTUKAN SEQUENCE — untuk Tabel 11 Jurnal]
+  Seq     Input A     Input B     Input C  Target H+1  Set
+  ----------------------------------------------------------
+    1    04052026    05052026    06052026    07052026  Training
+    2    05052026    06052026    07052026    08052026  Training
+    3    06052026    07052026    08052026    09052026  Training
+    4    07052026    08052026    09052026    14052026  Training
+    5    08052026    09052026    14052026    15052026  Training
+    6    09052026    14052026    15052026    16052026  Training
+    7    14052026    15052026    16052026    17052026  Training
+    8    15052026    16052026    17052026    20052026  Testing
+    9    16052026    17052026    20052026    22052026  Testing
+   10    17052026    20052026    22052026    23052026  Testing
