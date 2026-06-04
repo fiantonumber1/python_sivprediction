@@ -457,6 +457,7 @@ if _j2_cm_test is not None:
 # GAMBAR 15 — Kurva Aktual (Y_Testing) vs Prediksi — MLP Classifier
 # Bar chart per hari test: status aktual vs status prediksi
 # =============================
+_j2_dates = [os.path.basename(f)[:8] for f in csv_files]
 if _j2_cm_test is not None and _j2_y_test_np is not None:
     _n_test_cls  = len(_j2_y_test_np)
     _test_days   = list(range(n_train_days + 1, n_train_days + _n_test_cls + 1))
@@ -489,7 +490,7 @@ if _j2_cm_test is not None and _j2_y_test_np is not None:
         # Tanda benar/salah di atas
         _sym = '✓' if _match else '✗'
         _sc  = '#2E7D32' if _match else '#B71C1C'
-        ax.text(_xp, max(_true, _pred) + 1.35, _sym, ha='center', va='bottom',
+        ax.text(_xp, max(_j2_y_test_np[_i], _pred) + 1.35, _sym, ha='center', va='bottom',
                 fontsize=14, color=_sc, fontweight='bold')
 
     ax.set_xticks(_x_pos)
