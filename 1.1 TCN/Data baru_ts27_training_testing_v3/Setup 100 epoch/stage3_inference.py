@@ -35,7 +35,14 @@ FUTURE                     = COMPRESSED_POINTS_PER_DAY
 
 START_TIME                 = time(3, 0, 0)
 END_TIME     = time(18, 16, 35)
-N_DROP_FIRST = 3600
+# N_DROP_FIRST = 0 → tidak ada warmup drop.
+# Alasan: beberapa hari memiliki fault (SIV_MajorInverterFltPres) yang terjadi
+# di menit-menit pertama operasi (row 32–166 setelah filter waktu). Dengan
+# N_DROP_FIRST=3600, fault tersebut seluruhnya terbuang sehingga label Warning
+# tidak terdeteksi. Dengan N_DROP_FIRST=0, data diambil langsung dari awal
+# operasi sehingga semua event fault masuk ke dalam window yang digunakan,
+# dan label health status konsisten antara signal maupun ground truth.
+N_DROP_FIRST = 0
 
 N_FEATURES  = 21
 N_CH        = 96
@@ -227,38 +234,16 @@ def read_csv_day(filepath):
             df[col] = np.nan
     df[target_columns + fault_columns] = df[target_columns + fault_columns].ffill().bfill()
 
-    # DEBUG: cek fault sebelum filter waktu
-    for fc in fault_columns:
-        if fc in df.columns:
-            n_raw = (df[fc] > 0).sum()
-            if n_raw > 0:
-                print(f"    [PRE-FILTER] {fc}: {n_raw} fault rows sebelum filter waktu/warmup")
-
     date0 = df['ts_date'].dt.date.iloc[0]
     df = df[
         (df['ts_date'] >= datetime.combine(date0, START_TIME)) &
         (df['ts_date'] <= datetime.combine(date0, END_TIME))
     ]
 
-    # DEBUG: cek fault setelah filter waktu, sebelum warmup drop
-    for fc in fault_columns:
-        if fc in df.columns:
-            n_after_time = (df[fc] > 0).sum()
-            if n_after_time > 0:
-                print(f"    [POST-TIME-FILTER] {fc}: {n_after_time} fault rows tersisa")
+    if len(df) < N_TAKE:
+        raise ValueError(f"Data terlalu sedikit: {len(df)} rows (min {N_TAKE})")
 
-    min_required = N_DROP_FIRST + N_TAKE
-    if len(df) < min_required:
-        raise ValueError(f"Data terlalu sedikit: {len(df)} rows (min {min_required})")
-
-    df = df.iloc[N_DROP_FIRST:N_DROP_FIRST + N_TAKE].reset_index(drop=True)
-
-    # DEBUG: cek fault setelah warmup drop
-    for fc in fault_columns:
-        if fc in df.columns:
-            n_after_drop = (df[fc] > 0).sum()
-            if n_after_drop > 0:
-                print(f"    [POST-WARMUP-DROP] {fc}: {n_after_drop} fault rows tersisa (akan terhitung)")
+    df = df.iloc[:N_TAKE].reset_index(drop=True)
 
     chunks, ts_mid = [], []
     n_pts = min(COMPRESSED_POINTS_PER_DAY, len(df) // max(COMPRESSION_FACTOR, 1))
@@ -275,23 +260,12 @@ def read_csv_day(filepath):
     return df_c
 
 # =========================================================
-# HEALTH STATUS LABELING (sama persis Data Lama)
+# HEALTH STATUS LABELING
 # =========================================================
-def label_health_status(df_day, fname=""):
-    details = []
-    for col in fault_columns:
-        if col in df_day.columns:
-            n_fault = (df_day[col] > 0).sum()
-            mx = df_day[col].max()
-            if n_fault > 0:
-                details.append(f"{col}: {n_fault} pts, max={mx:.4f}")
-    n_active = len(details)
-    status = 0 if n_active == 0 else 1
-    if details:
-        print(f"    [FAULT DETECTED] {fname} → {details}")
-    else:
-        print(f"    [No fault] {fname}")
-    return status
+def label_health_status(df_day):
+    n_active = sum(1 for col in fault_columns
+                   if col in df_day.columns and (df_day[col] > 0).any())
+    return 0 if n_active == 0 else 1
 
 # =========================================================
 # LOAD SEMUA CSV
@@ -311,10 +285,10 @@ print(f"\n[Inference] Total hari valid: {total_days}")
 if total_days < 4:
     raise ValueError("Minimal 4 hari data valid!")
 
-# Health status tiap hari (sama persis Data Lama)
+# Health status tiap hari
 health_status = []
-for i, (df, f) in enumerate(zip(compressed_dfs, all_csv_files)):
-    stat = label_health_status(df, os.path.basename(f))
+for i, df in enumerate(compressed_dfs):
+    stat = label_health_status(df)
     health_status.append(stat)
     print(f"  Day {i+1:2d} → {status_map[stat]}")
 
@@ -960,7 +934,7 @@ print("\n[Plot] Membuat flowchart jurnal ...")
 
 draw_flowchart([
     ("1", "Baca CSV 13 hari (200.000 baris/hari, 21 parameter + 3 fault kolom)"),
-    ("2", "Preprocessing: drop 3.600 warmup, crop 04:00–18:16, ffill/bfill"),
+    ("2", "Preprocessing: crop 03:00–18:16 (tanpa warmup drop), ffill/bfill — 200.000 baris/hari"),
     ("3", "Train/Test Split kronologis — 80%/20% (10 train | 3 test hari)"),
     ("4", "Sliding Window 3→1 hari: 7 window train + 3 window test"),
     ("5", "MinMax Scaler [−0,1 ; 1,1] — fit hanya dari data training"),
@@ -972,7 +946,7 @@ draw_flowchart([
 
 draw_flowchart([
     ("1", "Baca CSV 13 hari (sama seperti Stage 1)"),
-    ("2", "Preprocessing: drop warmup, crop waktu, ffill/bfill"),
+    ("2", "Preprocessing: crop 03:00–18:16 (tanpa warmup drop), ffill/bfill — 200.000 baris/hari"),
     ("3", "Train/Test Split kronologis — 80%/20% (10 train | 3 test hari)"),
     ("4", "Feature Extraction: mean+std+max+min per hari → 84 dimensi"),
     ("5", "Labeling: 0 fault→Healthy (0) | ≥1 fault→Warning (1)"),

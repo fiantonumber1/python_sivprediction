@@ -42,7 +42,14 @@ COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 FUTURE                     = COMPRESSED_POINTS_PER_DAY
 START_TIME                 = time(3, 0, 0)
 END_TIME                   = time(18, 16, 35)
-N_DROP_FIRST               = 3600
+# N_DROP_FIRST = 0 → tidak ada warmup drop.
+# Alasan: beberapa hari memiliki fault (SIV_MajorInverterFltPres) yang terjadi
+# di menit-menit pertama operasi (row 32–166 setelah filter waktu). Dengan
+# N_DROP_FIRST=3600, fault tersebut seluruhnya terbuang sehingga label Warning
+# tidak terdeteksi. Dengan N_DROP_FIRST=0, data diambil langsung dari awal
+# operasi sehingga semua event fault masuk ke dalam window yang digunakan,
+# dan label health status konsisten antara signal maupun ground truth.
+N_DROP_FIRST               = 0
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"[Stage 1] Device: {device}")
@@ -92,9 +99,9 @@ def read_and_crop(filepath):
     date0 = df['ts_date'].dt.date.iloc[0]
     df    = df[(df['ts_date'] >= datetime.combine(date0, START_TIME)) &
                (df['ts_date'] <= datetime.combine(date0, END_TIME))]
-    if len(df) < N_DROP_FIRST + N_TAKE:
+    if len(df) < N_TAKE:
         return pd.DataFrame()
-    return df.iloc[N_DROP_FIRST:N_DROP_FIRST + N_TAKE].reset_index(drop=True)[
+    return df.iloc[:N_TAKE].reset_index(drop=True)[
         ['ts_date'] + target_columns + fault_columns
     ]
 
@@ -428,14 +435,14 @@ _j1_lines = [
     f"  Jumlah parameter (fitur)     : {n_features}",
     "",
     "[PREPROCESSING — untuk Tabel Data Cleaning Jurnal]",
-    f"  Jumlah data sebelum crop/hari: {N_DROP_FIRST + N_TAKE:,} baris",
-    f"  Warmup baris di-drop         : {N_DROP_FIRST:,} baris",
-    f"  Jumlah data digunakan/hari   : {N_TAKE:,} baris ({N_TAKE/(N_DROP_FIRST+N_TAKE)*100:.1f}%)",
+    f"  Jumlah data per hari         : {N_TAKE:,} baris",
+    f"  Warmup baris di-drop         : {N_DROP_FIRST:,} baris (tidak ada warmup drop)",
+    f"  Jumlah data digunakan/hari   : {N_TAKE:,} baris (100%)",
     f"  Jumlah data total (13 hari)  : {N_TAKE * len(compressed_dfs):,} baris",
     f"  Jumlah parameter digunakan   : {n_features} parameter",
     f"  Timestamp per hari           : {N_TAKE:,}",
     f"  Missing value handling        : forward-fill (ffill) + backward-fill (bfill)",
-    f"  Start time (setelah warmup)  : 03:00 WIB",
+    f"  Start time                   : awal operasi harian (~03:00–03:27 WIB, tanpa warmup drop)",
     f"  End time                     : 18:16 WIB",
     "",
     "[NORMALISASI — untuk Tabel Normalisasi Jurnal]",

@@ -43,7 +43,14 @@ N_TAKE                    = 200_000
 COMPRESSED_POINTS_PER_DAY = N_TAKE // COMPRESSION_FACTOR
 START_TIME                 = time(3, 0, 0)
 END_TIME                   = time(18, 16, 35)
-N_DROP_FIRST               = 3600
+# N_DROP_FIRST = 0 → tidak ada warmup drop.
+# Alasan: beberapa hari memiliki fault (SIV_MajorInverterFltPres) yang terjadi
+# di menit-menit pertama operasi (row 32–166 setelah filter waktu). Dengan
+# N_DROP_FIRST=3600, fault tersebut seluruhnya terbuang sehingga label Warning
+# tidak terdeteksi. Dengan N_DROP_FIRST=0, data diambil langsung dari awal
+# operasi sehingga semua event fault masuk ke dalam window yang digunakan,
+# dan label health status konsisten antara signal maupun ground truth.
+N_DROP_FIRST               = 0
 
 device = torch.device('cuda' if torch.cuda.is_available() else 'cpu')
 print(f"[Stage 2] Device: {device}")
@@ -97,9 +104,9 @@ def read_and_crop(filepath):
     date0 = df['ts_date'].dt.date.iloc[0]
     df    = df[(df['ts_date'] >= datetime.combine(date0, START_TIME)) &
                (df['ts_date'] <= datetime.combine(date0, END_TIME))]
-    if len(df) < N_DROP_FIRST + N_TAKE:
+    if len(df) < N_TAKE:
         return pd.DataFrame()
-    return df.iloc[N_DROP_FIRST:N_DROP_FIRST + N_TAKE].reset_index(drop=True)[
+    return df.iloc[:N_TAKE].reset_index(drop=True)[
         ['ts_date'] + target_columns + fault_columns
     ]
 

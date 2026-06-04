@@ -23,9 +23,14 @@ CSV_DIR       = os.path.join(os.path.dirname(os.path.abspath(__file__)), "..", "
 # Parameter crop — identik dengan stage1 & stage2
 START_TIME    = time(3, 0, 0)
 END_TIME      = time(18, 16, 35)
-N_DROP_FIRST  = 3600
+# N_DROP_FIRST = 0 → tidak ada warmup drop (konsisten dengan stage1/2/3).
+# Alasan: fault SIV_MajorInverterFltPres terjadi di menit pertama operasi
+# (row 32–166 setelah filter waktu). Dengan N_DROP_FIRST=3600 fault terbuang
+# dan 3 hari Warning tidak terdeteksi. Tanpa warmup drop, semua 5 hari Warning
+# terdeteksi dan label konsisten dengan signal data yang digunakan model.
+N_DROP_FIRST  = 0
 N_TAKE        = 200_000
-MIN_ROWS      = N_DROP_FIRST + N_TAKE   # 203_600
+MIN_ROWS      = N_TAKE   # 200_000
 
 FAULT_COLUMNS = [
     'SIV_MajorBCFltPres',
@@ -113,7 +118,7 @@ for idx, f in enumerate(files):
         (df['_ts'] <= datetime.combine(date0, END_TIME))
     ]
     rows_after_crop = len(df_crop)
-    rows_after_drop = max(0, rows_after_crop - N_DROP_FIRST)
+    rows_after_drop = rows_after_crop   # N_DROP_FIRST = 0, tidak ada drop
     eligible        = rows_after_crop >= MIN_ROWS
     el_str          = "Layak" if eligible else "SKIP"
 
