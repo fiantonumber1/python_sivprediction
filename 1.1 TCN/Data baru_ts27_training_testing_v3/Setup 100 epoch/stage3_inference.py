@@ -61,6 +61,12 @@ fault_columns = ['SIV_MajorBCFltPres', 'SIV_MajorInputConvFltPres', 'SIV_MajorIn
 status_map   = {0: "Healthy", 1: "Warning"}
 status_color = {0: "green", 1: "orange"}
 
+# Warna konsisten untuk 21 parameter — dipakai di SEMUA plot agar bisa dibandingkan
+import matplotlib
+colors21 = (list(matplotlib.cm.tab10.colors) +
+            list(matplotlib.cm.Set2.colors) +
+            list(matplotlib.cm.Dark2.colors[:3]))
+
 # =========================================================
 # CEK FILE MODEL
 # =========================================================
@@ -221,17 +227,38 @@ def read_csv_day(filepath):
             df[col] = np.nan
     df[target_columns + fault_columns] = df[target_columns + fault_columns].ffill().bfill()
 
+    # DEBUG: cek fault sebelum filter waktu
+    for fc in fault_columns:
+        if fc in df.columns:
+            n_raw = (df[fc] > 0).sum()
+            if n_raw > 0:
+                print(f"    [PRE-FILTER] {fc}: {n_raw} fault rows sebelum filter waktu/warmup")
+
     date0 = df['ts_date'].dt.date.iloc[0]
     df = df[
         (df['ts_date'] >= datetime.combine(date0, START_TIME)) &
         (df['ts_date'] <= datetime.combine(date0, END_TIME))
     ]
 
+    # DEBUG: cek fault setelah filter waktu, sebelum warmup drop
+    for fc in fault_columns:
+        if fc in df.columns:
+            n_after_time = (df[fc] > 0).sum()
+            if n_after_time > 0:
+                print(f"    [POST-TIME-FILTER] {fc}: {n_after_time} fault rows tersisa")
+
     min_required = N_DROP_FIRST + N_TAKE
     if len(df) < min_required:
         raise ValueError(f"Data terlalu sedikit: {len(df)} rows (min {min_required})")
 
     df = df.iloc[N_DROP_FIRST:N_DROP_FIRST + N_TAKE].reset_index(drop=True)
+
+    # DEBUG: cek fault setelah warmup drop
+    for fc in fault_columns:
+        if fc in df.columns:
+            n_after_drop = (df[fc] > 0).sum()
+            if n_after_drop > 0:
+                print(f"    [POST-WARMUP-DROP] {fc}: {n_after_drop} fault rows tersisa (akan terhitung)")
 
     chunks, ts_mid = [], []
     n_pts = min(COMPRESSED_POINTS_PER_DAY, len(df) // max(COMPRESSION_FACTOR, 1))
@@ -250,11 +277,21 @@ def read_csv_day(filepath):
 # =========================================================
 # HEALTH STATUS LABELING (sama persis Data Lama)
 # =========================================================
-def label_health_status(df_day):
-    n_active = sum(1 for col in fault_columns
-                   if col in df_day.columns and (df_day[col] > 0).any())
-    if n_active == 0: return 0  # Healthy
-    else:             return 1  # Warning
+def label_health_status(df_day, fname=""):
+    details = []
+    for col in fault_columns:
+        if col in df_day.columns:
+            n_fault = (df_day[col] > 0).sum()
+            mx = df_day[col].max()
+            if n_fault > 0:
+                details.append(f"{col}: {n_fault} pts, max={mx:.4f}")
+    n_active = len(details)
+    status = 0 if n_active == 0 else 1
+    if details:
+        print(f"    [FAULT DETECTED] {fname} → {details}")
+    else:
+        print(f"    [No fault] {fname}")
+    return status
 
 # =========================================================
 # LOAD SEMUA CSV
@@ -276,8 +313,8 @@ if total_days < 4:
 
 # Health status tiap hari (sama persis Data Lama)
 health_status = []
-for i, df in enumerate(compressed_dfs):
-    stat = label_health_status(df)
+for i, (df, f) in enumerate(zip(compressed_dfs, all_csv_files)):
+    stat = label_health_status(df, os.path.basename(f))
     health_status.append(stat)
     print(f"  Day {i+1:2d} → {status_map[stat]}")
 
@@ -355,7 +392,6 @@ print("\n[Plot] plot_all_parameters_TCN.png ...")
 norm_ds  = norm_all.iloc[::PLOT_DOWNSAMPLE].reset_index(drop=True)
 x        = np.arange(len(norm_ds))
 fig, ax  = plt.subplots(figsize=(24, 10))
-colors21 = list(plt.cm.tab10.colors) + list(plt.cm.Set2.colors) + list(plt.cm.Dark2.colors[:3])
 for j, col in enumerate(target_columns):
     ax.plot(x, norm_ds[col], linewidth=0.9, alpha=0.7, color=colors21[j])
 day_bounds = np.arange(0, (total_days + 1) * PPD_ds, PPD_ds)
@@ -627,10 +663,10 @@ if n_train_days >= 3:
     print("[Plot] gambar_train1_input_prediksi.png ...")
     fig, ax = plt.subplots(figsize=(24, 10))
     for j, col in enumerate(target_columns):
-        line, = ax.plot(x3, input3_tr_sc[:, j], linewidth=1.2)
-        ax.plot(x1, pred_tr_sc[:, j], '--', linewidth=2.5, color=line.get_color(), alpha=0.9)
+        ax.plot(x3, input3_tr_sc[:, j], linewidth=1.2, color=colors21[j])
+        ax.plot(x1, pred_tr_sc[:, j], '--', linewidth=2.5, color=colors21[j], alpha=0.9)
         if has_gt:
-            ax.plot(x1, real_gt_sc[:, j], '-', linewidth=1.5, color=line.get_color(), alpha=0.4)
+            ax.plot(x1, real_gt_sc[:, j], '-', linewidth=1.5, color=colors21[j], alpha=0.4)
     for b in [PPD_ds, 2*PPD_ds, 3*PPD_ds]:
         ax.axvline(b, color='red', linestyle='--', alpha=0.8)
     tr_labels = [
@@ -661,8 +697,8 @@ if n_train_days >= 3:
         fig, ax = plt.subplots(figsize=(18, 8))
         x1_only = np.arange(PPD_ds)
         for j, col in enumerate(target_columns):
-            line, = ax.plot(x1_only, real_gt_sc[:, j], '-', linewidth=1.8, alpha=0.85, label=col)
-            ax.plot(x1_only, pred_tr_sc[:, j], '--', linewidth=2.5, color=line.get_color(), alpha=0.9)
+            ax.plot(x1_only, real_gt_sc[:, j], '-', linewidth=1.8, alpha=0.85, label=col, color=colors21[j])
+            ax.plot(x1_only, pred_tr_sc[:, j], '--', linewidth=2.5, color=colors21[j], alpha=0.9)
         ax.set_title(
             f"Gambar 11. Kurva Aktual (Y_Testing) vs Prediksi — Day {n_train_days+1}\n"
             f"Aktual: {status_map[real_st_gt]} | Pred: {status_map[pred_st_tr]} | "
@@ -770,7 +806,7 @@ def setup_plot(ax, title, ylim_low=-0.1, override_last=None):
 print("[Plot] gambar1_4hari_real_TCN.png (supplementary) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
-    ax.plot(x4_ds, norm4_g1_ds[:, i], linewidth=1, alpha=0.8)
+    ax.plot(x4_ds, norm4_g1_ds[:, i], linewidth=1, alpha=0.8, color=colors21[i])
 setup_plot(ax, "[Supplementary] Testing Inference — 4 Hari Real Data + Health Status", ylim_low=0)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2)
 plt.tight_layout()
@@ -782,10 +818,10 @@ print("  → gambar1_4hari_real_TCN.png")
 print("[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 15) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
-    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, label=col)
+    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, label=col, color=colors21[i])
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=2.8,
-            color=ax.get_lines()[i].get_color(), alpha=0.95)
+            color=colors21[i], alpha=0.95)
 setup_plot(ax, f"Gambar 15. Hasil Forecasting — Input {_idx_a+1} s/d {_idx_c+1} ({CSV_DAY_A}–{CSV_DAY_C}), 3 Hari → Prediksi Label Kelas: {status_map[pred_status]}",
            override_last=pred_status)
 ax.legend(target_columns, bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
@@ -798,12 +834,12 @@ print("  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 15")
 print("[Plot] gambar3_real_vs_prediksi_TCN.png (supplementary) ...")
 fig, ax = plt.subplots(figsize=(24, 10))
 for i, col in enumerate(target_columns):
-    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2)
+    ax.plot(x4_ds[:n3_ds], norm4_sc_ds[:n3_ds, i], linewidth=1.2, color=colors21[i])
 for i, col in enumerate(target_columns):
-    ax.plot(x4_ds[n3_ds:], norm4_sc_ds[n3_ds:, i], linewidth=1.8, alpha=0.9)
+    ax.plot(x4_ds[n3_ds:], norm4_sc_ds[n3_ds:, i], linewidth=1.8, alpha=0.9, color=colors21[i])
 for i, col in enumerate(target_columns):
     ax.plot(x4_ds[n3_ds:], pred_norm_ds[:, i], '--', linewidth=3,
-            color=ax.get_lines()[i].get_color(), alpha=0.95,
+            color=colors21[i], alpha=0.95,
             label='Pred' if i == 0 else None)
 setup_plot(ax, "[Supplementary] Testing Inference — Real Hari Terakhir vs Prediksi Hari D+1")
 ax.legend(bbox_to_anchor=(1.02, 1), loc='upper left', ncol=2, fontsize='small')
