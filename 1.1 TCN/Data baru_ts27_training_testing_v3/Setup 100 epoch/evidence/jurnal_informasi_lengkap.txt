@@ -1,6 +1,6 @@
 ====================================================================
 INFORMASI LENGKAP UNTUK PENULISAN JURNAL — TCN SIV TS27
-Generated: 2026-06-04 15:03:31
+Generated: 2026-06-05 23:41:37
 ====================================================================
 
 FILE INI BERISI SEMUA DATA NUMERIK YANG DIBUTUHKAN JURNAL.
@@ -29,12 +29,12 @@ BAGIAN A — DATA UMUM
      4    07052026    TRAIN         Healthy
      5    08052026    TRAIN         Healthy
      6    09052026    TRAIN         Healthy
-     7    14052026    TRAIN         Healthy
+     7    14052026    TRAIN         Warning
      8    15052026    TRAIN         Healthy
      9    16052026    TRAIN         Healthy
     10    17052026    TRAIN         Healthy
-    11    20052026     TEST         Healthy
-    12    22052026     TEST         Healthy
+    11    20052026     TEST         Warning
+    12    22052026     TEST         Warning
     13    23052026     TEST         Healthy
   ------------------------------------------
   Data TRAINING → Day 1 s/d Day 10  (04052026 – 17052026)
@@ -52,28 +52,28 @@ BAGIAN A — DATA UMUM
   SIV_T_HS_InConv_2                 31.0000      50.0000
   SIV_T_HS_Inv_1                     0.0000      54.0000
   SIV_T_HS_Inv_2                     0.0000      49.0000
-  SIV_T_Container                   43.0000      60.0000
+  SIV_T_Container                   32.0000      60.0000
   SIV_I_L1                           0.0000     127.0000
   SIV_I_L2                           0.0000     123.0000
   SIV_I_L3                           0.0000    8198.0000
   SIV_I_Battery                    -26.0000   28928.0000
   SIV_I_DC_In                        0.0000     800.0000
   SIV_U_Battery                     96.0000     114.0000
-  SIV_U_DC_In                        0.0000     908.0000
+  SIV_U_DC_In                        0.0000     975.0000
   SIV_U_DC_Out                       4.0000     638.0000
   SIV_U_L1                           0.0000     221.0000
   SIV_U_L2                           0.0000     221.0000
   SIV_U_L3                           0.0000     221.0000
-  SIV_InConv_InEnergy                1.0000     637.0000
-  SIV_Output_Energy                  0.0000     565.0000
+  SIV_InConv_InEnergy                0.0000     627.0000
+  SIV_Output_Energy                  0.0000     556.0000
   PLC_OpenACOutputCont               0.0000       0.0000
   PLC_OpenInputCont                  0.0000       0.0000
   SIV_DevIsAlive                     0.0000   65535.0000
 
 [A4. LABEL KONDISI — untuk Kalimat Jurnal Para 175 & Tabel Distribusi]
   Total hari dilabel           : 13
-  Healthy (0)   : 11 hari → 04052026, 07052026, 08052026, 09052026, 14052026, 15052026, 16052026, 17052026, 20052026, 22052026, 23052026
-  Warning (1)   : 2 hari → 05052026, 06052026
+  Healthy (0)   : 8 hari → 04052026, 07052026, 08052026, 09052026, 15052026, 16052026, 17052026, 23052026
+  Warning (1)   : 5 hari → 05052026, 06052026, 14052026, 20052026, 22052026
 
 ====================================================================
 BAGIAN B — TRAINING INFERENCE
@@ -86,25 +86,25 @@ Konsep: 3 hari terakhir DATA TRAINING → prediksi hari pertama DATA TESTING
     Hari B (Day 9): 16052026  Status: Healthy
     Hari C (Day 10  ): 17052026  Status: Healthy
 
-  Prediksi hari D (Day 11)     : Healthy (99.81% confidence)
-  Prob Healthy                   : 99.81%
-  Prob Warning                 : 0.19%
+  Prediksi hari D (Day 11)     : Healthy (97.88% confidence)
+  Prob Healthy                   : 97.88%
+  Prob Warning                 : 2.12%
 
   [GROUND TRUTH — hari pertama data TESTING]
-    Hari D (Day 11): 20052026  Status Aktual: Healthy
+    Hari D (Day 11): 20052026  Status Aktual: Warning
 
   Status Prediksi              : Healthy
-  Status Aktual                : Healthy
-  Klasifikasi                  : BENAR ✓
+  Status Aktual                : Warning
+  Klasifikasi                  : SALAH ✗
 
   [METRIK REGRESI SINYAL]
-  MSE Prediksi vs Aktual       : 0.02076460  (2.0765%)
-  RMSE                         : 0.14409927
-  MAE                          : 0.09392738
+  MSE Prediksi vs Aktual       : 0.02580484  (2.5805%)
+  RMSE                         : 0.16063886
+  MAE                          : 0.10604176
 
   → Untuk Para 170 Jurnal:
-    'Training inference menghasilkan MSE=0.020765, RMSE=0.144099, MAE=0.093927'
-    'Prediksi status kesehatan: Healthy — sesuai ground truth (Healthy)'
+    'Training inference menghasilkan MSE=0.025805, RMSE=0.160639, MAE=0.106042'
+    'Prediksi status kesehatan: Healthy — tidak sesuai ground truth (Warning)'
 
 ====================================================================
 BAGIAN C — TESTING INFERENCE
@@ -113,14 +113,14 @@ Konsep: 3 hari terakhir DATA TESTING → prediksi hari MASA DEPAN
 ====================================================================
 
   [INPUT — dari data TESTING (hari terakhir dataset)]
-    Hari A (Day 11): 20052026.csv  Status: Healthy
-    Hari B (Day 12): 22052026.csv  Status: Healthy
+    Hari A (Day 11): 20052026.csv  Status: Warning
+    Hari B (Day 12): 22052026.csv  Status: Warning
     Hari C (Day 13  ): 23052026.csv  Status: Healthy
 
   Prediksi hari ke-14 (masa depan) : Healthy
-  Confidence                   : 98.92%
-  Prob Healthy                   : 98.92%
-  Prob Warning                 : 1.08%
+  Confidence                   : 94.16%
+  Prob Healthy                   : 94.16%
+  Prob Warning                 : 5.84%
   Ground Truth                 : TIDAK ADA
   Metrik MSE/RMSE/MAE          : TIDAK DAPAT DIHITUNG
 
@@ -136,12 +136,12 @@ BAGIAN D — PERBANDINGAN TRAINING INFERENCE vs TESTING INFERENCE
   ------------------------------------------------------------------------
   Input Days                         Day 8–10 (Train)    Day 11–13 (Test)
   Target                            Day 11 (1st Test)     Day 14 (Future)
-  Prediksi Status                     Healthy (99.8%)     Healthy (98.9%)
-  Ground Truth                                Healthy           TIDAK ADA
-  Klasifikasi Benar?                          BENAR ✓      Tdk dpt diukur
-  MSE                                        0.020765      Tdk dpt diukur
-  RMSE                                       0.144099      Tdk dpt diukur
-  MAE                                        0.093927      Tdk dpt diukur
+  Prediksi Status                     Healthy (97.9%)     Healthy (94.2%)
+  Ground Truth                                Warning           TIDAK ADA
+  Klasifikasi Benar?                          SALAH ✗      Tdk dpt diukur
+  MSE                                        0.025805      Tdk dpt diukur
+  RMSE                                       0.160639      Tdk dpt diukur
+  MAE                                        0.106042      Tdk dpt diukur
   ------------------------------------------------------------------------
 
   KESIMPULAN:
