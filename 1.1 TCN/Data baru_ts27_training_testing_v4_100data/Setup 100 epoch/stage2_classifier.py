@@ -195,8 +195,7 @@ class ClassDataset(Dataset):
     def __getitem__(self, i): return self.X[i], self.y[i]
 
 dataloader = DataLoader(ClassDataset(X_tensor, y_tensor),
-                        batch_size=BATCH_SIZE, shuffle=True, drop_last=True,
-                        pin_memory=(device.type == 'cuda'))
+                        batch_size=BATCH_SIZE, shuffle=True, drop_last=True)
 
 # =============================
 # MODEL MLP CLASSIFIER

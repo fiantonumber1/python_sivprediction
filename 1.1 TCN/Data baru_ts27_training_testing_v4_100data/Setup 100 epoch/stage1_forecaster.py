@@ -174,8 +174,7 @@ class ForecastDataset(Dataset):
     def __getitem__(self, i): return self.X[i], self.y[i]
 
 dataloader = DataLoader(ForecastDataset(X_tensor, y_sig_tensor),
-                        batch_size=BATCH_SIZE, shuffle=True, drop_last=False,
-                        pin_memory=(device.type == 'cuda'))
+                        batch_size=BATCH_SIZE, shuffle=True, drop_last=False)
 
 # =============================
 # MODEL TCN
