@@ -1,0 +1,94 @@
+====================================================================
+INFORMASI JURNAL — MLP CLASSIFIER (STAGE 2)
+Generated: 2026-07-14 11:42:23
+====================================================================
+
+[DATASET & SPLIT]
+  Total hari                   : 13
+  Train days (TRAIN_RATIO=0.8) : 10
+  Test days                    : 3
+  Input dimensi fitur          : 21 param x 4 statistik = 84 dim
+
+[DISTRIBUSI LABEL — untuk Tabel Jurnal (dengan tanggal)]
+  Healthy (0)   : 8 hari
+    Tanggal     : 04052026, 07052026, 08052026, 09052026, 15052026, 16052026, 17052026, 23052026
+  Warning (1)   : 5 hari
+    Tanggal     : 05052026, 06052026, 14052026, 20052026, 22052026
+
+[HYPERPARAMETER MLP — untuk Tabel Jurnal]
+  Optimizer                    : AdamW
+  Learning Rate (awal)         : 0.001
+  Batch Size                   : 3
+  Epoch                        : 100
+  Loss Function                : Cross-Entropy Loss
+  Class Weight                 : [Healthy=0.5, Warning=2.5]
+  Dropout                      : 0.3
+  Weight Decay                 : 1e-5
+  Scheduler                    : ReduceLROnPlateau (factor=0.5, patience=30)
+
+[ARSITEKTUR MLP — untuk Tabel Jurnal]
+  Input Layer                  : 84 neuron (84 fitur statistik)
+  Hidden Layer 1               : 256 neuron + LayerNorm + ReLU + Dropout
+  Hidden Layer 2               : 128 neuron + LayerNorm + ReLU + Dropout
+  Hidden Layer 3               : 64 neuron  + LayerNorm + ReLU + Dropout
+  Output Layer                 : 2 neuron (Softmax) — Healthy/Warning
+
+[HASIL TRAINING — untuk Para 213 Jurnal]
+  CE Loss Epoch 1              : 0.900954
+  CE Loss Epoch 100 (akhir)   : 0.001037
+  Penurunan CE Loss            : 99.9%
+  Accuracy Epoch 1             : 55.56%
+  Accuracy Epoch 100 (akhir)  : 100.00%
+
+[EVALUASI TRAINING SET]
+  CE Loss Training             : 0.000552
+  Accuracy   (weighted)        : 100.00%
+  Precision  (weighted)        : 100.00%
+  Recall     (weighted)        : 100.00%
+  F1-Score   (weighted)        : 100.00%
+
+[CONFUSION MATRIX — TRAINING SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy             7            0
+  Aktual Warning             0            3
+
+[CLASSIFICATION REPORT — TRAINING SET]
+                precision    recall  f1-score   support
+  
+       Healthy       1.00      1.00      1.00         7
+       Warning       1.00      1.00      1.00         3
+  
+      accuracy                           1.00        10
+     macro avg       1.00      1.00      1.00        10
+  weighted avg       1.00      1.00      1.00        10
+
+[EVALUASI TEST SET — untuk Para 215 Jurnal]
+  Test Days                    : 3
+  CE Loss Test                 : 5.628613
+  Accuracy   (weighted)        : 33.33%
+  Precision  (weighted)        : 11.11%
+  Recall     (weighted)        : 33.33%
+  F1-Score   (weighted)        : 16.67%
+  Selisih CE Loss (Train-Test)  : 5.627576  → relatif kecil
+
+[CONFUSION MATRIX — TEST SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy             1            0
+  Aktual Warning             2            0
+
+[CLASSIFICATION REPORT — TEST SET]
+                precision    recall  f1-score   support
+  
+       Healthy       0.33      1.00      0.50         1
+       Warning       0.00      0.00      0.00         2
+  
+      accuracy                           0.33         3
+     macro avg       0.17      0.50      0.25         3
+  weighted avg       0.11      0.33      0.17         3
+
+[DETAIL PREDIKSI PER HARI — TEST SET]
+    Day     Tanggal        Aktual      Prediksi   Benar?
+  ----------------------------------------------------
+     11    20052026       Warning       Healthy        ✗
+     12    22052026       Warning       Healthy        ✗
+     13    23052026       Healthy       Healthy        ✓
