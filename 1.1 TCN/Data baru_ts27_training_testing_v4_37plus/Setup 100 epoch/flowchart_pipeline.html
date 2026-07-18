@@ -1,0 +1,1434 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TCN + MLP — Flowchart Pipeline</title>
+<style>
+*,*::before,*::after{margin:0;padding:0;box-sizing:border-box}
+body{background:#f1f5f9;color:#1e293b;font-family:'Segoe UI',system-ui,sans-serif;overflow-x:hidden}
+nav{position:sticky;top:0;z-index:100;background:rgba(255,255,255,.98);backdrop-filter:blur(12px);
+  border-bottom:2px solid #e2e8f0;display:flex;align-items:center;padding:0 14px;overflow-x:auto;scrollbar-width:none}
+nav::-webkit-scrollbar{display:none}
+.nb{font-size:.75rem;font-weight:900;color:#2563eb;white-space:nowrap;padding:11px 16px 11px 4px;
+  border-right:2px solid #e2e8f0;margin-right:6px;letter-spacing:.05em}
+.nt{display:flex;align-items:center;gap:6px;padding:11px 16px;cursor:pointer;white-space:nowrap;
+  font-size:.74rem;font-weight:600;color:#64748b;border-bottom:3px solid transparent;transition:all .18s;user-select:none}
+.nt:hover{color:#1e293b;background:#f8fafc}
+.nt.active{color:var(--tc);border-bottom-color:var(--tc);background:#f8fafc}
+.nd{width:7px;height:7px;border-radius:50%;background:var(--tc);box-shadow:0 0 7px var(--tc)}
+.page{display:none}.page.active{display:block}
+
+/* CTRL BAR */
+.ctrl{background:#ffffff;border-bottom:2px solid #e2e8f0;padding:10px 20px;
+  display:flex;flex-wrap:wrap;align-items:center;gap:16px;
+  box-shadow:0 2px 6px rgba(0,0,0,.06)}
+.ep-box{display:flex;flex-direction:column}
+.ep-lbl{font-size:.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.ep-val{font-size:1.2rem;font-weight:900;font-variant-numeric:tabular-nums;color:#0f172a}
+.prog-wrap{flex:1;min-width:120px}
+.prog-lbl{font-size:.58rem;color:#64748b;margin-bottom:4px;font-weight:700;letter-spacing:.08em;text-transform:uppercase}
+.prog-track{height:6px;background:#e2e8f0;border-radius:4px;overflow:hidden}
+.prog-fill{height:100%;border-radius:4px;transition:width .25s;width:0%}
+.met-row{display:flex;gap:14px;flex-wrap:wrap}
+.mbox{display:flex;flex-direction:column;gap:1px}
+.mlbl{font-size:.58rem;color:#64748b;text-transform:uppercase;letter-spacing:.09em;font-weight:700}
+.mval{font-size:.84rem;font-weight:800;font-variant-numeric:tabular-nums}
+.cbtns{display:flex;gap:8px;align-items:center;margin-left:auto}
+.btn{padding:6px 18px;border-radius:8px;font-size:.73rem;font-weight:800;cursor:pointer;
+  border:2px solid;transition:all .15s;background:#ffffff;letter-spacing:.02em}
+.btn:hover{opacity:.75;background:#f8fafc}
+.spd{background:#f8fafc;color:#334155;border:1.5px solid #cbd5e1;border-radius:6px;
+  padding:5px 10px;font-size:.72rem;cursor:pointer;font-weight:600}
+.phase-pill{padding:4px 14px;border-radius:6px;font-size:.67rem;font-weight:900;
+  letter-spacing:.07em;border:2px solid;text-transform:uppercase;transition:all .3s;background:#ffffff}
+
+/* CANVAS SCROLL */
+.canvas-scroll{overflow-y:auto;overflow-x:hidden;
+  max-height:calc(100vh - 96px);
+  background:#f1f5f9;scrollbar-width:thin;scrollbar-color:#cbd5e1 #f1f5f9}
+.canvas-scroll::-webkit-scrollbar{width:7px}
+.canvas-scroll::-webkit-scrollbar-track{background:#f1f5f9}
+.canvas-scroll::-webkit-scrollbar-thumb{background:#cbd5e1;border-radius:4px}
+canvas.fc{display:block;margin:0 auto}
+
+/* Legend */
+.legend{display:flex;flex-wrap:wrap;gap:16px;padding:9px 22px;
+  background:#ffffff;border-bottom:2px solid #e2e8f0;font-size:.65rem}
+.leg-item{display:flex;align-items:center;gap:7px;color:#475569;font-weight:600}
+.leg-dot{width:12px;height:12px;border-radius:4px;flex-shrink:0;border:1px solid rgba(0,0,0,.06)}
+</style>
+</head>
+<body>
+
+<nav>
+  <div class="nb">SIV · Flowchart</div>
+  <div class="nt active" style="--tc:#38bdf8" onclick="showPage('p1',this)">
+    <div class="nd"></div>TCN Forecast Training
+  </div>
+  <div class="nt" style="--tc:#34d399" onclick="showPage('p2',this)">
+    <div class="nd"></div>TCN Forecast Inference
+  </div>
+  <div class="nt" style="--tc:#f59e0b" onclick="showPage('p3',this)">
+    <div class="nd"></div>MLP Klasifikasi Training
+  </div>
+  <div class="nt" style="--tc:#f472b6" onclick="showPage('p4',this)">
+    <div class="nd"></div>MLP Klasifikasi Inference
+  </div>
+</nav>
+
+<!-- PAGE 1 -->
+<div id="p1" class="page active">
+  <div class="ctrl">
+    <div class="ep-box">
+      <div class="ep-lbl">Epoch</div>
+      <div class="ep-val" id="ev1" style="color:#38bdf8">0 / 100</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-lbl">Training Progress</div>
+      <div class="prog-track"><div class="prog-fill" id="pf1" style="background:#38bdf8"></div></div>
+    </div>
+    <div class="met-row">
+      <div class="mbox"><div class="mlbl">MSE</div><div class="mval" id="mm1" style="color:#f87171">—</div></div>
+      <div class="mbox"><div class="mlbl">RMSE</div><div class="mval" id="mr1" style="color:#fb923c">—</div></div>
+      <div class="mbox"><div class="mlbl">MAE</div><div class="mval" id="ma1" style="color:#a78bfa">—</div></div>
+    </div>
+    <div class="phase-pill" id="pp1" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
+    <div class="cbtns">
+      <button class="btn" id="btn1" style="color:#38bdf8;border-color:#38bdf8" onclick="tog(1)">▶ Play</button>
+      <button class="btn" style="color:#64748b;border-color:#cbd5e1" onclick="rst(1)">↺ Reset</button>
+      <select class="spd" id="sp1" onchange="setSp(1,this.value)">
+        <option value="1">1×</option><option value="2">2×</option>
+        <option value="5" selected>5×</option><option value="10">10×</option><option value="20">20×</option>
+      </select>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>Input / Pre-proc</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#a78bfa"></div>TCN Block 1–7</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#c4b5fd"></div>Conv1d ×2 · BN ×2 — <b>∇W</b></div>
+    <div class="leg-item"><div class="leg-dot" style="background:#86efac"></div>ReLU / Dropout — no params, no ∇W</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#22d3ee"></div>Pool / Context</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#34d399"></div>Decoder</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f87171"></div>Loss</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#38bdf8"></div>→ Forward pass</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#fb923c"></div>← Backprop · ∇W update</div>
+  </div>
+  <div class="canvas-scroll"><canvas id="fc1" class="fc"></canvas></div>
+</div>
+
+<!-- PAGE 2 -->
+<div id="p2" class="page">
+  <div class="ctrl">
+    <div class="phase-pill" id="pp2" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
+    <div class="cbtns" style="margin-left:0">
+      <button class="btn" id="btn2" style="color:#34d399;border-color:#34d399" onclick="tog(2)">▶ Play Inference</button>
+      <button class="btn" style="color:#64748b;border-color:#cbd5e1" onclick="rst(2)">↺ Reset</button>
+      <select class="spd" id="sp2" onchange="setSp(2,this.value)">
+        <option value="1">1×</option><option value="2" selected>2×</option><option value="5">5×</option>
+      </select>
+    </div>
+    <div class="met-row">
+      <div class="mbox"><div class="mlbl">Mode</div><div class="mval" style="color:#34d399">model.eval()</div></div>
+      <div class="mbox"><div class="mlbl">Gradient</div><div class="mval" style="color:#f87171">no_grad()</div></div>
+      <div class="mbox"><div class="mlbl">MSE</div><div class="mval" id="mm2" style="color:#34d399">—</div></div>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>Input</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#34d399"></div>TCN Forward</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#22d3ee"></div>Pool/Decode</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#38bdf8"></div>Output</div>
+    <div class="leg-item" style="color:#64748b;font-style:italic">Tidak ada Backprop pada Inference</div>
+  </div>
+  <div class="canvas-scroll"><canvas id="fc2" class="fc"></canvas></div>
+</div>
+
+<!-- PAGE 3 -->
+<div id="p3" class="page">
+  <div class="ctrl">
+    <div class="ep-box">
+      <div class="ep-lbl">Epoch</div>
+      <div class="ep-val" id="ev3" style="color:#f59e0b">0 / 100</div>
+    </div>
+    <div class="prog-wrap">
+      <div class="prog-lbl">Training Progress</div>
+      <div class="prog-track"><div class="prog-fill" id="pf3" style="background:#f59e0b"></div></div>
+    </div>
+    <div class="met-row">
+      <div class="mbox"><div class="mlbl">CE Loss</div><div class="mval" id="mm3" style="color:#f87171">—</div></div>
+      <div class="mbox"><div class="mlbl">Accuracy</div><div class="mval" id="mr3" style="color:#34d399">—</div></div>
+      <div class="mbox"><div class="mlbl">F1</div><div class="mval" id="ma3" style="color:#a78bfa">—</div></div>
+    </div>
+    <div class="phase-pill" id="pp3" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
+    <div class="cbtns">
+      <button class="btn" id="btn3" style="color:#f59e0b;border-color:#f59e0b" onclick="tog(3)">▶ Play</button>
+      <button class="btn" style="color:#64748b;border-color:#cbd5e1" onclick="rst(3)">↺ Reset</button>
+      <select class="spd" id="sp3" onchange="setSp(3,this.value)">
+        <option value="1">1×</option><option value="2">2×</option>
+        <option value="5" selected>5×</option><option value="10">10×</option><option value="20">20×</option>
+      </select>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>Input/Stats</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>MLP Hidden</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f472b6"></div>Output</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f87171"></div>Loss</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#fb923c"></div>Backprop ←</div>
+  </div>
+  <div class="canvas-scroll"><canvas id="fc3" class="fc"></canvas></div>
+</div>
+
+<!-- PAGE 4 -->
+<div id="p4" class="page">
+  <div class="ctrl">
+    <div class="phase-pill" id="pp4" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
+    <div class="cbtns" style="margin-left:0">
+      <button class="btn" id="btn4" style="color:#f472b6;border-color:#f472b6" onclick="tog(4)">▶ Play Inference</button>
+      <button class="btn" style="color:#64748b;border-color:#cbd5e1" onclick="rst(4)">↺ Reset</button>
+      <select class="spd" id="sp4" onchange="setSp(4,this.value)">
+        <option value="1">1×</option><option value="2" selected>2×</option><option value="5">5×</option>
+      </select>
+    </div>
+    <div class="met-row">
+      <div class="mbox"><div class="mlbl">Label</div><div class="mval" id="mm4" style="color:#fbbf24">—</div></div>
+      <div class="mbox"><div class="mlbl">P(Healthy)</div><div class="mval" id="mr4" style="color:#34d399">—</div></div>
+      <div class="mbox"><div class="mlbl">P(Warning)</div><div class="mval" id="ma4" style="color:#f87171">—</div></div>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>Input</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>MLP Forward</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#fbbf24"></div>Softmax/Label</div>
+    <div class="leg-item" style="color:#64748b;font-style:italic">Tidak ada Backprop pada Inference</div>
+  </div>
+  <div class="canvas-scroll"><canvas id="fc4" class="fc"></canvas></div>
+</div>
+
+<script>
+'use strict';
+const DPR = window.devicePixelRatio || 1;
+
+// ── Color helper ──────────────────────────────────
+function hexA(h,a){
+  const r=parseInt(h.slice(1,3),16),g=parseInt(h.slice(3,5),16),b=parseInt(h.slice(5,7),16);
+  return `rgba(${r},${g},${b},${a})`;
+}
+function lerpC(c1,c2,t){
+  const p1=[parseInt(c1.slice(1,3),16),parseInt(c1.slice(3,5),16),parseInt(c1.slice(5,7),16)];
+  const p2=[parseInt(c2.slice(1,3),16),parseInt(c2.slice(3,5),16),parseInt(c2.slice(5,7),16)];
+  return `rgb(${Math.round(p1[0]+(p2[0]-p1[0])*t)},${Math.round(p1[1]+(p2[1]-p1[1])*t)},${Math.round(p1[2]+(p2[2]-p1[2])*t)})`;
+}
+
+// ── Node definitions ──────────────────────────────
+// Each node: { title, operation, dim_in, dim_out, desc, col, phase, hasWeight }
+// phase: 'input'|'pre'|'tcn'|'pool'|'dec'|'loss'|'bp'|'upd'|'inf'|'mlp'|'out'|'sm'
+// hasWeight: true → this layer's weights are updated in backprop
+
+const NODES = {
+  p1: [
+    { title:'INPUT DATA',          op:'CSV Sensor SIV',
+      dim_in:'— (raw CSV)',         dim_out:'[3, 600.000, 21]',
+      desc:'Batch=3 · 3 hari × 200.000 baris · 21 fitur sensor',
+      col:'#475569', phase:'input', hasWeight:false },
+    { title:'NORMALISASI',         op:'MinMaxScaler.transform()',
+      dim_in:'[3, 600.000, 21]',   dim_out:'[3, 600.000, 21]',
+      desc:'Range [-0.1, 1.1] · Fit hanya pada train set · scaler_stage1.pkl',
+      col:'#7c3aed', phase:'pre',  hasWeight:false },
+    { title:'TRANSPOSE',           op:'x.transpose(1, 2)',
+      dim_in:'[3, 600.000, 21]',   dim_out:'[3, 21, 600.000]',
+      desc:'Format (Batch, C_in, Length) yang dibutuhkan Conv1d',
+      col:'#6d28d9', phase:'pre',  hasWeight:false },
+    { title:'RESIDUAL BLOCK 1',    op:'CausalConv1d(21→96, k=3, d=1)  ×2',
+      dim_in:'[3, 21, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip(1×1) · ∇W: Conv×2, BN×2',
+      col:'#a78bfa', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 2',    op:'CausalConv1d(96→96, k=3, d=2)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip(Identity) · Dilation=2',
+      col:'#818cf8', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 3',    op:'CausalConv1d(96→96, k=3, d=4)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=4 · RF naik',
+      col:'#6366f1', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 4',    op:'CausalConv1d(96→96, k=3, d=8)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=8',
+      col:'#60a5fa', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 5',    op:'CausalConv1d(96→96, k=3, d=16)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=16',
+      col:'#34d399', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 6',    op:'CausalConv1d(96→96, k=3, d=32)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=32',
+      col:'#22d3ee', phase:'tcn',  hasWeight:true },
+    { title:'RESIDUAL BLOCK 7',    op:'CausalConv1d(96→96, k=3, d=64)  ×2',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
+      desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=64 · RF=381',
+      col:'#38bdf8', phase:'tcn',  hasWeight:true },
+    { title:'ADAPTIVE AVG POOL',   op:'AdaptiveAvgPool1d(output_size=1)',
+      dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 1]',
+      desc:'Pool seluruh sequence → 1 nilai per channel',
+      col:'#0891b2', phase:'pool', hasWeight:false },
+    { title:'SQUEEZE',             op:'.squeeze(-1)',
+      dim_in:'[3, 96, 1]',         dim_out:'[3, 96]',
+      desc:'Hapus dimensi terakhir → context vektor 96-dim per sampel',
+      col:'#0e7490', phase:'pool', hasWeight:false },
+    { title:'DECODER — Dense 1',   op:'Linear(96 → 96) + ReLU + Dropout(0.3)',
+      dim_in:'[3, 96]',            dim_out:'[3, 96]',
+      desc:'Fully-connected layer pertama di decoder head',
+      col:'#059669', phase:'dec',  hasWeight:true },
+    { title:'DECODER — Dense 2',   op:'Linear(96 → 21 × 200.000)',
+      dim_in:'[3, 96]',            dim_out:'[3, 4.200.000]',
+      desc:'Linear projection ke semua timestep × fitur output',
+      col:'#047857', phase:'dec',  hasWeight:true },
+    { title:'RESHAPE OUTPUT',      op:'.view(-1, 200.000, 21)',
+      dim_in:'[3, 4.200.000]',     dim_out:'[3, 200.000, 21]',
+      desc:'Prediksi 1 hari penuh: 200k timestep × 21 fitur sensor',
+      col:'#065f46', phase:'dec',  hasWeight:false },
+    { title:'MSE LOSS',            op:'nn.MSELoss(pred, target)',
+      dim_in:'[3, 200.000, 21]  vs  [3, 200.000, 21]', dim_out:'scalar',
+      desc:'Normalized space [-0.1,1.1] · AdamW lr=1e-3 · Clip grad=1.0',
+      col:'#dc2626', phase:'loss', hasWeight:false },
+    { title:'BACKWARD PASS  ←',   op:'loss.backward()',
+      dim_in:'scalar (loss)',       dim_out:'∂L/∂W per layer',
+      desc:'Chain rule dari Loss → Decoder → Pool → ResBlok 7 → … → ResBlok 1',
+      col:'#ea580c', phase:'bp',   hasWeight:false },
+    { title:'ADAMW UPDATE  ←',     op:'optimizer.step() · ReduceLROnPlateau',
+      dim_in:'∇W (gradients)',      dim_out:"W ← W − lr·∇W · lr=1e-3→5e-5",
+      desc:'Update bobot ResBlok 1-7, Decoder Dense 1-2 · Simpan checkpoint',
+      col:'#d97706', phase:'upd',  hasWeight:false },
+  ],
+
+  p2: [
+    { title:'INPUT DATA (BARU)',   op:'3 hari CSV terbaru',
+      dim_in:'— (raw CSV)',         dim_out:'[1, 600.000, 21]',
+      desc:'Batch=1 · 3 hari terakhir · 21 fitur · unsqueeze(0)',
+      col:'#475569', phase:'input', hasWeight:false },
+    { title:'NORMALISASI',         op:'scaler_stage1.transform()  —  NO FIT',
+      dim_in:'[1, 600.000, 21]',   dim_out:'[1, 600.000, 21]',
+      desc:'Scaler dari training (sudah di-fit) · Tidak ada data leakage',
+      col:'#7c3aed', phase:'pre',  hasWeight:false },
+    { title:'TRANSPOSE',           op:'x.transpose(1, 2)',
+      dim_in:'[1, 600.000, 21]',   dim_out:'[1, 21, 600.000]',
+      desc:'Format Conv1d (B, C_in, L)',
+      col:'#6d28d9', phase:'pre',  hasWeight:false },
+    { title:'TCN STACK × 7',       op:'ResBlok d=1,2,4,8,16,32,64  —  model.eval()',
+      dim_in:'[1, 21, 600.000]',   dim_out:'[1, 96, 600.000]',
+      desc:'Dropout OFF · BatchNorm pakai running_mean/var · no_grad()',
+      col:'#34d399', phase:'inf',  hasWeight:false },
+    { title:'ADAPTIVE AVG POOL',   op:'AdaptiveAvgPool1d(1)',
+      dim_in:'[1, 96, 600.000]',   dim_out:'[1, 96, 1]',
+      desc:'Pool seluruh sequence',
+      col:'#0891b2', phase:'pool', hasWeight:false },
+    { title:'SQUEEZE + CONTEXT',   op:'.squeeze(-1)',
+      dim_in:'[1, 96, 1]',         dim_out:'[1, 96]',
+      desc:'Context vektor — compressed representation 1 hari',
+      col:'#0e7490', phase:'pool', hasWeight:false },
+    { title:'DECODER DENSE 1+2',   op:'Linear(96→96) → Linear(96→21×200k)',
+      dim_in:'[1, 96]',            dim_out:'[1, 4.200.000]',
+      desc:'Fully-connected decoder — no gradient',
+      col:'#059669', phase:'inf',  hasWeight:false },
+    { title:'RESHAPE PREDIKSI',    op:'.view(-1, 200.000, 21)',
+      dim_in:'[1, 4.200.000]',     dim_out:'[1, 200.000, 21]',
+      desc:'Prediksi normalized 1 hari ke depan',
+      col:'#065f46', phase:'inf',  hasWeight:false },
+    { title:'INVERSE TRANSFORM',   op:'scaler_stage1.inverse_transform()',
+      dim_in:'[1, 200.000, 21]',   dim_out:'[1, 200.000, 21]',
+      desc:'Kembalikan ke skala sensor asli · denormalisasi',
+      col:'#0ea5e9', phase:'inf',  hasWeight:false },
+    { title:'OUTPUT PREDIKSI',     op:'Simpan CSV + Hitung Metrik',
+      dim_in:'[1, 200.000, 21]',   dim_out:'CSV: 200.000 × 21',
+      desc:'MAE · RMSE · MSE · MAPE · Plot aktual vs prediksi',
+      col:'#38bdf8', phase:'out',  hasWeight:false },
+  ],
+
+  p3: [
+    { title:'CSV PER HARI',        op:'read_and_crop() per file',
+      dim_in:'— (raw CSV)',         dim_out:'[200.000, 21]',
+      desc:'Setiap hari = 1 sampel · 200.000 baris × 21 fitur sensor',
+      col:'#475569', phase:'input', hasWeight:false },
+    { title:'STATISTIK HARIAN',    op:'mean + std + max + min (axis=0)',
+      dim_in:'[200.000, 21]',      dim_out:'[84]',
+      desc:'mean:[21] · std:[21] · max:[21] · min:[21] → concat → [84]',
+      col:'#10b981', phase:'pre',  hasWeight:false },
+    { title:'BATCH STATISTIK',     op:'Stack N hari → batch',
+      dim_in:'[84] per hari',       dim_out:'[3, 84]',
+      desc:'BATCH_SIZE=3 · DataLoader shuffle=True · drop_last=True',
+      col:'#059669', phase:'pre',  hasWeight:false },
+    { title:'NORMALISASI STAT',    op:'MinMaxScaler.fit_transform()',
+      dim_in:'[3, 84]',            dim_out:'[3, 84]',
+      desc:'Range [-0.1, 1.1] · Fit pada train days · scaler_stage2.pkl',
+      col:'#7c3aed', phase:'pre',  hasWeight:false },
+    { title:'LABELING PER HARI',   op:'fault_columns > 0 → Warning',
+      dim_in:'fault_columns[3]',    dim_out:'[3]  label: 0=Healthy / 1=Warning',
+      desc:'0 fault aktif → Healthy(0) · ≥1 fault aktif → Warning(1)',
+      col:'#6d28d9', phase:'pre',  hasWeight:false },
+    { title:'LINEAR 1  —  256 neuron', op:'Linear(84 → 256)',
+      dim_in:'[3, 84]',            dim_out:'[3, 256]',
+      desc:'LayerNorm(256) + ReLU() + Dropout(0.3)',
+      col:'#f59e0b', phase:'mlp',  hasWeight:true },
+    { title:'LINEAR 2  —  128 neuron', op:'Linear(256 → 128)',
+      dim_in:'[3, 256]',           dim_out:'[3, 128]',
+      desc:'LayerNorm(128) + ReLU() + Dropout(0.3)',
+      col:'#f59e0b', phase:'mlp',  hasWeight:true },
+    { title:'LINEAR 3  —  64 neuron',  op:'Linear(128 → 64)',
+      dim_in:'[3, 128]',           dim_out:'[3, 64]',
+      desc:'LayerNorm(64) + ReLU() + Dropout(0.3)',
+      col:'#fbbf24', phase:'mlp',  hasWeight:true },
+    { title:'OUTPUT  —  2 neuron',     op:'Linear(64 → 2)',
+      dim_in:'[3, 64]',            dim_out:'[3, 2]  logits: Healthy / Warning',
+      desc:'Output raw logits — tanpa aktivasi (CrossEntropy butuh logits)',
+      col:'#f472b6', phase:'out',  hasWeight:true },
+    { title:'CROSS-ENTROPY LOSS',  op:'nn.CrossEntropyLoss(weight=[0.5, 2.5])',
+      dim_in:'[3, 2] logits  vs  [3] label', dim_out:'scalar',
+      desc:'Warning diberi bobot 5× lebih tinggi · Clip grad=1.0',
+      col:'#dc2626', phase:'loss', hasWeight:false },
+    { title:'BACKWARD PASS  ←',   op:'loss.backward()',
+      dim_in:'scalar (CE loss)',    dim_out:'∂L/∂W per layer',
+      desc:'Gradient: Loss → Linear64→2 → Linear128→64 → Linear256→128 → Linear84→256',
+      col:'#ea580c', phase:'bp',   hasWeight:false },
+    { title:'ADAMW UPDATE  ←',     op:'optimizer.step() · ReduceLROnPlateau',
+      dim_in:'∇W (gradients)',      dim_out:"W ← W − lr·∇W · lr=1e-3→5e-5",
+      desc:'Update bobot Linear1-2-3-4 · Checkpoint tiap 50 epoch',
+      col:'#d97706', phase:'upd',  hasWeight:false },
+  ],
+
+  p4: [
+    { title:'CSV HARI BARU',       op:'read_and_crop() 1 hari',
+      dim_in:'— (raw CSV)',         dim_out:'[200.000, 21]',
+      desc:'1 hari data baru · Tanpa label (unseen)',
+      col:'#475569', phase:'input', hasWeight:false },
+    { title:'STATISTIK HARIAN',    op:'mean + std + max + min (axis=0)',
+      dim_in:'[200.000, 21]',      dim_out:'[84]',
+      desc:'Agregasi 200k baris → 84 fitur statistik per hari',
+      col:'#10b981', phase:'pre',  hasWeight:false },
+    { title:'NORMALISASI + BATCH', op:'scaler_stage2.transform()  —  NO FIT',
+      dim_in:'[84]',               dim_out:'[1, 84]',
+      desc:'unsqueeze(0) → batch=1 · Scaler dari training',
+      col:'#7c3aed', phase:'pre',  hasWeight:false },
+    { title:'LINEAR 1  —  256',    op:'Linear(84 → 256)  —  eval mode',
+      dim_in:'[1, 84]',            dim_out:'[1, 256]',
+      desc:'LayerNorm + ReLU · Dropout OFF (eval) · no_grad()',
+      col:'#f59e0b', phase:'mlp',  hasWeight:false },
+    { title:'LINEAR 2  —  128',    op:'Linear(256 → 128)',
+      dim_in:'[1, 256]',           dim_out:'[1, 128]',
+      desc:'LayerNorm + ReLU · Dropout OFF',
+      col:'#f59e0b', phase:'mlp',  hasWeight:false },
+    { title:'LINEAR 3  —  64',     op:'Linear(128 → 64)',
+      dim_in:'[1, 128]',           dim_out:'[1, 64]',
+      desc:'LayerNorm + ReLU · Dropout OFF',
+      col:'#fbbf24', phase:'mlp',  hasWeight:false },
+    { title:'OUTPUT  —  2 logit',  op:'Linear(64 → 2)',
+      dim_in:'[1, 64]',            dim_out:'[1, 2]  logits',
+      desc:'Raw scores: [score_Healthy, score_Warning]',
+      col:'#f472b6', phase:'out',  hasWeight:false },
+    { title:'SOFTMAX',             op:'F.softmax(logits, dim=1)',
+      dim_in:'[1, 2]  logits',     dim_out:'[1, 2]  probabilities',
+      desc:'P(Healthy) + P(Warning) = 1.0',
+      col:'#f97316', phase:'sm',   hasWeight:false },
+    { title:'ARGMAX → LABEL',      op:'torch.argmax(probs, dim=1)',
+      dim_in:'[1, 2]  probs',      dim_out:'[1]  →  0=Healthy / 1=Warning',
+      desc:'Label final · Confidence = max(probs) · Export laporan',
+      col:'#ef4444', phase:'sm',   hasWeight:false },
+  ],
+};
+
+// ── FLOWCHART RENDERER ────────────────────────────────
+class FlowChart {
+  constructor(canvasId, pid) {
+    this.cvs  = document.getElementById(canvasId);
+    this.ctx  = this.cvs.getContext('2d');
+    this.pid  = pid;
+    this.nodes= NODES[pid];
+    this.rects= [];
+    this.particles_fwd = [];
+    this.particles_bwd = [];
+    this.activeIdx = -1;
+    this.bpIdx     = -1;   // which node is being "updated" by backprop
+    this.frame     = 0;
+    this._raf      = null;
+    this.running   = false;
+    this._layout();
+  }
+
+  // ── Layout ─────────────────────────────────────────
+  _layout() {
+    const W  = Math.max(window.innerWidth, 640);
+    const NW = Math.min(W - 80, 860);   // node width (wider, centred)
+    const G  = 44;                       // gap between nodes
+    const PX = Math.floor((W - NW) / 2); // centred
+    const PY = 30;
+
+    this.NW = NW; this.G = G; this.PX = PX; this.PY = PY;
+
+    // TCN blocks use vertical internals layout — much taller
+    let yOff = PY;
+    this.rects = this.nodes.map((n) => {
+      const h = n.phase === 'tcn' ? 490 : n.phase === 'loss' ? 210 : 98;
+      const r = {
+        x:  PX,
+        y:  yOff,
+        w:  NW,
+        h,
+        cx: PX + NW / 2,
+        cy: yOff + h / 2,
+        node: n,
+      };
+      yOff += h + G;
+      return r;
+    });
+
+    const totalH = yOff + PY;
+    this.W = W;
+    this.H = totalH;
+    this.cvs.width  = W * DPR;
+    this.cvs.height = totalH * DPR;
+    this.cvs.style.width  = W + 'px';
+    this.cvs.style.height = totalH + 'px';
+    this.ctx.scale(DPR, DPR);
+
+    // Backprop path x (right side, clamped to canvas)
+    this.BPX = Math.min(PX + NW + 46, W - 10);
+  }
+
+  // ── Draw everything ───────────────────────────────
+  draw() {
+    const ctx = this.ctx, {W, H} = this;
+    ctx.fillStyle = '#f8fafc';
+    ctx.fillRect(0, 0, W, H);
+
+    this._drawConnectors();
+    this._drawBPPath();
+    this.rects.forEach((r, i) => this._drawNode(r, i));
+    this._drawParticles();
+    this.frame++;
+  }
+
+  _drawConnectors() {
+    const ctx = this.ctx;
+    this.rects.forEach((r, i) => {
+      if (i >= this.rects.length - 1) return;
+      const r2  = this.rects[i + 1];
+      const x   = r.cx;
+      const y1  = r.y + r.h;
+      const y2  = r2.y;
+      const mid = (y1 + y2) / 2;
+
+      // Line
+      ctx.beginPath();
+      ctx.moveTo(x, y1);
+      ctx.lineTo(x, y2);
+      const isActive = i === this.activeIdx;
+      ctx.strokeStyle = isActive ? r.node.col : '#94a3b8';
+      ctx.lineWidth   = isActive ? 2.5 : 1.5;
+      ctx.stroke();
+
+      // Arrowhead
+      const aw = 7, ah = 10;
+      ctx.beginPath();
+      ctx.moveTo(x - aw, y2 - ah);
+      ctx.lineTo(x, y2);
+      ctx.lineTo(x + aw, y2 - ah);
+      ctx.strokeStyle = isActive ? r.node.col : '#94a3b8';
+      ctx.lineWidth   = isActive ? 2.5 : 1.5;
+      ctx.stroke();
+
+      // Dim label on arrow
+      if (isActive && this.particles_fwd.length === 0) {
+        ctx.fillStyle = r.node.col;
+        ctx.font = 'bold 9px "Courier New"';
+        ctx.textAlign = 'left';
+        ctx.fillText(r.node.dim_out, x + 10, mid + 3);
+      } else {
+        ctx.fillStyle = '#64748b';
+        ctx.font = '8px "Courier New"';
+        ctx.textAlign = 'left';
+        ctx.fillText(r.node.dim_out, x + 10, mid + 3);
+      }
+    });
+  }
+
+  _drawBPPath() {
+    const ctx = this.ctx;
+    if (!this.rects.length) return;
+    // Find weight layers
+    const wLayers = this.rects.filter(r => r.node.hasWeight);
+    if (!wLayers.length) return;
+
+    const x    = this.BPX;
+    const last = this.rects[this.rects.length - 1];
+    const yBot = last.y + last.h / 2;
+    const yTop = wLayers[0].y + wLayers[0].h / 2;
+
+    // Vertical backprop line
+    ctx.beginPath();
+    ctx.moveTo(x, yBot);
+    ctx.lineTo(x, yTop);
+    ctx.strokeStyle = hexA('#ea580c', .5);
+    ctx.lineWidth   = 2.5;
+    ctx.setLineDash([6, 4]);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // Horizontal connectors from BPX to each weight layer
+    wLayers.forEach(r => {
+      const y2 = r.y + r.h / 2;
+      const isUpdating = this.bpIdx >= 0 && this.rects[this.bpIdx] === r;
+      ctx.beginPath();
+      ctx.moveTo(x, y2);
+      ctx.lineTo(r.x + r.w, y2);
+      ctx.strokeStyle = isUpdating ? '#fb923c' : hexA('#f97316', .2);
+      ctx.lineWidth   = isUpdating ? 2.5 : 1;
+      ctx.setLineDash([3, 2]);
+      ctx.stroke();
+      ctx.setLineDash([]);
+
+      // Arrowhead pointing left into the node
+      const aw = 6, ah = 9;
+      ctx.beginPath();
+      ctx.moveTo(r.x + r.w + ah, y2 - aw);
+      ctx.lineTo(r.x + r.w, y2);
+      ctx.lineTo(r.x + r.w + ah, y2 + aw);
+      ctx.strokeStyle = isUpdating ? '#fb923c' : hexA('#f97316', .25);
+      ctx.lineWidth   = isUpdating ? 2.5 : 1;
+      ctx.stroke();
+
+      // Label when updating
+      if (isUpdating) {
+        ctx.shadowColor = '#f97316';
+        ctx.shadowBlur  = 8;
+        ctx.fillStyle   = '#fbbf24';
+        ctx.font        = 'bold 8.5px "Segoe UI"';
+        ctx.textAlign   = 'left';
+        ctx.fillText('← ∇W', x + 5, y2 - 5);
+        ctx.shadowBlur  = 0;
+      }
+    });
+
+    // Label at top
+    ctx.fillStyle = '#ea580c';
+    ctx.font = 'bold 10px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText('← BACKPROP', x, yTop - 16);
+  }
+
+  _drawNode(r, i) {
+    const ctx = this.ctx;
+    const {x, y, w, h, node} = r;
+    const isActive   = i === this.activeIdx;
+    const isUpdating = i === this.bpIdx;
+    const isDone     = i < this.activeIdx && this.activeIdx >= 0;
+    const col        = node.col;
+    const radius     = 9;
+    const isTCN      = node.phase === 'tcn';
+    const isLoss     = node.phase === 'loss';
+
+    // ── Background ──
+    ctx.fillStyle = isActive ? hexA(col, .12) : isUpdating ? hexA(col, .15) : '#ffffff';
+    this._roundRect(ctx, x, y, w, h, radius);
+    ctx.fill();
+
+    // ── Border ──
+    ctx.strokeStyle = isActive ? col : isUpdating ? col : isDone ? hexA(col, .4) : hexA(col, .28);
+    ctx.lineWidth   = isActive || isUpdating ? 2.5 : 1.5;
+    this._roundRect(ctx, x, y, w, h, radius);
+    ctx.stroke();
+
+    // ── Drop shadow on active ──
+    if (isActive || isUpdating) {
+      ctx.shadowColor = col;
+      ctx.shadowBlur  = isUpdating ? 14 : 10;
+      ctx.strokeStyle = hexA(col, .3);
+      ctx.lineWidth   = 6;
+      this._roundRect(ctx, x - 2, y - 2, w + 4, h + 4, radius + 1);
+      ctx.stroke();
+      ctx.shadowBlur  = 0;
+    }
+
+    // ── Left color bar ──
+    ctx.fillStyle = isActive || isUpdating ? col : isDone ? hexA(col, .55) : hexA(col, .4);
+    this._roundRect(ctx, x, y, 6, h, [radius, 0, 0, radius]);
+    ctx.fill();
+
+    // ── Phase tag (top right) ──
+    ctx.fillStyle = isActive ? col : hexA(col, .15);
+    ctx.fillRect(x + w - 82, y + 6, 76, 16);
+    ctx.fillStyle = isActive ? '#ffffff' : col;
+    ctx.font = 'bold 7.5px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText(this._phaseLabel(node.phase), x + w - 44, y + 17);
+
+    // ── Index badge ──
+    ctx.fillStyle = isActive || isUpdating ? col : hexA(col, .5);
+    ctx.font = 'bold 12px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText(`${i + 1}`, x + 17, y + (isTCN ? 22 : h / 2 + 5));
+
+    // ── Title ──
+    ctx.fillStyle = isActive || isUpdating ? '#0f172a' : isDone ? '#475569' : '#1e293b';
+    ctx.font      = 'bold 12.5px "Segoe UI"';
+    ctx.textAlign = 'left';
+    ctx.fillText(node.title, x + 30, y + 22);
+
+    if (isTCN) {
+      // ── TCN: header row + big 2-row detail ──
+      ctx.font = 'bold 9px "Courier New"';
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.fillText('IN:', x + 30, y + 37);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillText(node.dim_in, x + 46, y + 37);
+
+      this._drawTCNDetail(r, isActive, isUpdating, isDone);
+
+      ctx.font = 'bold 9px "Courier New"';
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.textAlign = 'left';
+      ctx.fillText('OUT:', x + 30, y + h - 20);
+      ctx.fillStyle = isActive ? col : '#1e293b';
+      ctx.fillText(node.dim_out, x + 54, y + h - 20);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '8px "Segoe UI"';
+      const desc = node.desc.length > 120 ? node.desc.slice(0, 118) + '…' : node.desc;
+      ctx.fillText(desc, x + 30, y + h - 8);
+
+    } else if (isLoss) {
+      // ── Loss node: op label + ŷ vs y_ref detail (desc drawn inside _drawLossDetail) ──
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.font = '9.5px "Courier New"';
+      ctx.fillText(node.op, x + 30, y + 36);
+      this._drawLossDetail(r, isActive, isUpdating, isDone);
+
+    } else {
+      // ── Normal node ──
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.font = '9.5px "Courier New"';
+      ctx.fillText(node.op, x + 30, y + 35);
+
+      const dimY = y + 54;
+      ctx.font = 'bold 9px "Courier New"';
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.fillText('IN:', x + 30, dimY);
+      ctx.fillStyle = '#1e293b';
+      ctx.fillText(node.dim_in, x + 46, dimY);
+
+      ctx.fillStyle = isActive ? col : '#64748b';
+      ctx.fillText('OUT:', x + 30, dimY + 15);
+      ctx.fillStyle = isActive ? col : '#1e293b';
+      ctx.font = 'bold 9px "Courier New"';
+      ctx.fillText(node.dim_out, x + 52, dimY + 15);
+
+      ctx.fillStyle = '#64748b';
+      ctx.font = '8px "Segoe UI"';
+      const desc = node.desc.length > 105 ? node.desc.slice(0, 103) + '…' : node.desc;
+      ctx.fillText(desc, x + 30, y + h - 8);
+    }
+
+    ctx.textAlign = 'left';
+  }
+
+  // ── Residual Block Detail: 2 Conv passes + skip + backprop only at Conv/BN ──
+  _drawTCNDetail(r, isActive, isUpdating, isDone) {
+    const ctx = this.ctx;
+    const {x, y, w, node} = r;
+
+    const dilM    = node.op.match(/d=(\d+)/);
+    const dil     = dilM ? dilM[1] : '?';
+    const isFirst = node.op.includes('21→96');
+
+    // 8 ops in vertical column — hasW = has trainable params → ∇W during backprop
+    // ReLU & Dropout: gradient FLOWS through (chain rule) but NO weight update
+    const ops = [
+      { n:'CausalConv1d',  d:`k=3, d=${dil}, W+b`,  c:'#7c3aed', hasW:true  },
+      { n:'BatchNorm1d',   d:'γ, β  trainable',       c:'#0891b2', hasW:true  },
+      { n:'ReLU()',        d:'max(0,x)  — no params',  c:'#15803d', hasW:false },
+      { n:'Dropout(0.3)', d:'p=0.3  — no params',    c:'#b45309', hasW:false },
+      { n:'CausalConv1d',  d:`k=3, d=${dil}, W+b`,  c:'#7c3aed', hasW:true  },
+      { n:'BatchNorm1d',   d:'γ, β  trainable',       c:'#0891b2', hasW:true  },
+      { n:'ReLU()',        d:'max(0,x)  — no params',  c:'#15803d', hasW:false },
+      { n:'Dropout(0.3)', d:'p=0.3  — no params',    c:'#b45309', hasW:false },
+      { n:'⊕  Add',       d:isFirst?'+ 1×1 Conv skip':'+ Identity skip', c:'#be185d', hasW:false },
+    ];
+
+    // ── Layout: single vertical column (9 ops) ──
+    const bW     = 260;   // box width
+    const bH     = 34;    // box height
+    const gap    = 9;     // gap between boxes
+    const sepH   = 22;    // extra gap for "── Pass 2 ──" separator
+    const startY = y + 50;
+    const cx     = x + w / 2;
+    const bx     = cx - bW / 2;
+
+    // Y position for each op (ops 4-8 get extra sepH offset for separator)
+    const opY = ops.map((_, i) => startY + i * (bH + gap) + (i >= 4 ? sepH : 0));
+
+    // ── SKIP CONNECTION: vertical dashed line on LEFT ──
+    const skipX   = bx - 22;
+    const skipTop = opY[0] + bH / 2;
+    const skipBot = opY[8] + bH / 2;  // ⊕Add is now ops[8]
+    const skipCol = isUpdating ? hexA('#be185d', .18)
+                  : isActive   ? '#be185d'
+                  :              hexA('#be185d', isDone ? .35 : .3);
+    ctx.beginPath();
+    ctx.moveTo(skipX, skipTop); ctx.lineTo(skipX, skipBot);
+    ctx.strokeStyle = skipCol; ctx.lineWidth = isActive ? 2 : 1.5;
+    ctx.setLineDash([6, 4]); ctx.stroke(); ctx.setLineDash([]);
+    // Horizontal branch into ⊕Add
+    ctx.beginPath();
+    ctx.moveTo(skipX, skipBot); ctx.lineTo(bx + 2, skipBot);
+    ctx.strokeStyle = skipCol; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(bx + 9, skipBot - 5); ctx.lineTo(bx + 2, skipBot); ctx.lineTo(bx + 9, skipBot + 5);
+    ctx.strokeStyle = isUpdating ? hexA('#be185d', .18) : isActive ? '#be185d' : hexA('#be185d', .45);
+    ctx.lineWidth = 1.5; ctx.stroke();
+    // Skip label
+    ctx.fillStyle = isUpdating ? hexA('#be185d', .25) : isActive ? '#be185d' : hexA('#be185d', isDone ? .5 : .45);
+    ctx.font      = '8px "Segoe UI"';
+    ctx.textAlign = 'right';
+    ctx.fillText(isFirst ? 'skip: Conv1d(1×1)' : 'skip: Identity', skipX - 4, (skipTop + skipBot) / 2 + 3);
+
+    // ── PASS SEPARATOR between ops[3] and ops[4] ──
+    const sepMid = opY[3] + bH + (opY[4] - opY[3] - bH) / 2;
+    ctx.beginPath();
+    ctx.moveTo(bx + 16, sepMid); ctx.lineTo(bx + bW - 16, sepMid);
+    ctx.strokeStyle = hexA('#64748b', .3); ctx.lineWidth = 1;
+    ctx.setLineDash([4, 3]); ctx.stroke(); ctx.setLineDash([]);
+    ctx.fillStyle = hexA('#64748b', .55);
+    ctx.font      = 'bold 8px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText('── Pass 2 ──', cx, sepMid - 3);
+
+    // ── DRAW 9 OPS (vertical column) ──
+    ops.forEach((op, i) => {
+      const by        = opY[i];
+      const dimForBP  = isUpdating && !op.hasW;
+      const glowForBP = isUpdating &&  op.hasW;
+
+      // Box fill
+      ctx.fillStyle = dimForBP  ? '#f8fafc'
+                    : glowForBP ? hexA('#ea580c', .07)
+                    : isActive  ? hexA(op.c, .1)
+                    :             hexA(op.c, .06);
+      this._roundRect(ctx, bx, by, bW, bH, 7); ctx.fill();
+
+      // Box border
+      ctx.strokeStyle = dimForBP  ? '#e2e8f0'
+                      : glowForBP ? '#ea580c'
+                      : isActive  ? op.c
+                      : isDone    ? hexA(op.c, .5)
+                      :             hexA(op.c, .4);
+      ctx.lineWidth = glowForBP || (isActive && op.hasW) ? 2.5 : 1.5;
+      this._roundRect(ctx, bx, by, bW, bH, 7); ctx.stroke();
+
+      // Glow effect
+      if (glowForBP) {
+        ctx.shadowColor = '#ea580c'; ctx.shadowBlur = 16;
+        ctx.strokeStyle = hexA('#ea580c', .3); ctx.lineWidth = 6;
+        this._roundRect(ctx, bx-2, by-2, bW+4, bH+4, 8);
+        ctx.stroke(); ctx.shadowBlur = 0;
+      } else if (isActive && op.hasW) {
+        ctx.shadowColor = op.c; ctx.shadowBlur = 10;
+        ctx.strokeStyle = hexA(op.c, .22); ctx.lineWidth = 5;
+        this._roundRect(ctx, bx-2, by-2, bW+4, bH+4, 8);
+        ctx.stroke(); ctx.shadowBlur = 0;
+      }
+
+      // Op name (left side)
+      ctx.fillStyle = dimForBP  ? '#cbd5e1'
+                    : glowForBP ? '#7c2d12'
+                    : isActive  ? '#0f172a'
+                    : isDone    ? '#475569'
+                    :             '#1e293b';
+      ctx.font      = 'bold 10px "Segoe UI"';
+      ctx.textAlign = 'left';
+      ctx.fillText(op.n, bx + 10, by + bH / 2 + 4);
+
+      // Detail (right side)
+      ctx.fillStyle = dimForBP ? '#e2e8f0' : hexA(op.c, isActive ? .85 : .6);
+      ctx.font      = '8px "Courier New"';
+      ctx.textAlign = 'right';
+      ctx.fillText(op.d, bx + bW - 36, by + bH / 2 + 4);
+
+      // ∇W / no-∇W badge (far right corner)
+      if (op.hasW) {
+        const bc = glowForBP ? '#ea580c' : isActive ? op.c : hexA(op.c, .65);
+        ctx.fillStyle = glowForBP ? hexA('#ea580c', .14) : hexA(op.c, .1);
+        ctx.fillRect(bx + bW - 29, by + 7, 24, 14);
+        ctx.fillStyle = bc;
+        ctx.font      = 'bold 8px "Segoe UI"';
+        ctx.textAlign = 'center';
+        ctx.fillText('∇W', bx + bW - 17, by + 17);
+      } else {
+        ctx.fillStyle = dimForBP ? '#e2e8f0' : hexA('#94a3b8', .5);
+        ctx.font      = '7.5px "Segoe UI"';
+        ctx.textAlign = 'center';
+        ctx.fillText('no∇W', bx + bW - 17, by + 17);
+      }
+
+      // Forward ↓ arrow (except after last op)
+      if (i < ops.length - 1) {
+        const ax = cx, ay = by + bH, ey = opY[i + 1];
+        ctx.beginPath();
+        ctx.moveTo(ax, ay); ctx.lineTo(ax, ey);
+        ctx.strokeStyle = dimForBP ? '#cbd5e1' : isActive ? hexA(op.c, .6) : '#94a3b8';
+        ctx.lineWidth = 1.5; ctx.stroke();
+        ctx.beginPath();
+        ctx.moveTo(ax - 5, ey - 7); ctx.lineTo(ax, ey); ctx.lineTo(ax + 5, ey - 7);
+        ctx.strokeStyle = dimForBP ? '#cbd5e1' : isActive ? hexA(op.c, .6) : '#94a3b8';
+        ctx.stroke();
+      }
+    });
+
+    // ════════════════════════════════════════════════════════
+    // BACKPROP PATH — selalu tampil, intensitas sesuai state
+    // Pair A (Pass 1): ops[0]=Conv1d_1 (top), ops[1]=BN_1 (bottom)
+    // Pair B (Pass 2): ops[4]=Conv1d_2 (top), ops[5]=BN_2 (bottom)
+    // ReLU, Dropout, ⊕Add → tidak ada segmen sama sekali
+    // ════════════════════════════════════════════════════════
+    {
+      const OC  = '#ea580c';
+      const bpX = bx + bW + 26;
+
+      // Opacity & thickness scale by phase state
+      const lineA  = isUpdating ? 1    : isActive ? .75 : isDone ? .55 : .40;
+      const lineW  = isUpdating ? 2.5  : isActive ? 2   : 1.8;
+      const arrowA = isUpdating ? 1    : isActive ? .75 : isDone ? .55 : .40;
+      const labelA = isUpdating ? 1    : isActive ? .75 : isDone ? .55 : .38;
+      const entryA = isUpdating ? .55  : isActive ? .45 : isDone ? .35 : .28;
+
+      [[0, 1], [4, 5]].forEach(([topI, botI]) => {
+        const segTop = opY[topI];
+        const segBot = opY[botI] + bH;
+
+        // ── Vertical segment through Conv1d + gap + BN ──
+        ctx.beginPath();
+        ctx.moveTo(bpX, segBot); ctx.lineTo(bpX, segTop);
+        ctx.strokeStyle = hexA(OC, lineA); ctx.lineWidth = lineW; ctx.stroke();
+
+        // ↑ arrowhead at top of Conv1d
+        ctx.beginPath();
+        ctx.moveTo(bpX - 5, segTop + 9); ctx.lineTo(bpX, segTop); ctx.lineTo(bpX + 5, segTop + 9);
+        ctx.strokeStyle = hexA(OC, arrowA); ctx.lineWidth = isUpdating ? 2 : 1; ctx.stroke();
+
+        // Small dashed entry below BN
+        ctx.beginPath();
+        ctx.moveTo(bpX, segBot + gap + 2); ctx.lineTo(bpX, segBot);
+        ctx.strokeStyle = hexA(OC, entryA); ctx.lineWidth = 1.5;
+        ctx.setLineDash([3, 3]); ctx.stroke(); ctx.setLineDash([]);
+        ctx.beginPath();
+        ctx.moveTo(bpX - 4, segBot + 6); ctx.lineTo(bpX, segBot); ctx.lineTo(bpX + 4, segBot + 6);
+        ctx.strokeStyle = hexA(OC, entryA); ctx.lineWidth = 1; ctx.stroke();
+
+        // ── Horizontal branches INTO Conv1d and BN boxes ──
+        [topI, botI].forEach(i => {
+          const mY = opY[i] + bH / 2;
+          ctx.beginPath();
+          ctx.moveTo(bpX, mY); ctx.lineTo(bx + bW + 2, mY);
+          ctx.strokeStyle = hexA(OC, arrowA); ctx.lineWidth = isUpdating ? 2 : 1; ctx.stroke();
+          ctx.beginPath();
+          ctx.moveTo(bx + bW + 9, mY - 5); ctx.lineTo(bx + bW + 2, mY); ctx.lineTo(bx + bW + 9, mY + 5);
+          ctx.strokeStyle = hexA(OC, arrowA); ctx.lineWidth = isUpdating ? 2 : 1; ctx.stroke();
+          // ∇W label
+          ctx.fillStyle = hexA(OC, labelA); ctx.font = 'bold 8.5px "Segoe UI"'; ctx.textAlign = 'left';
+          ctx.fillText('∇W', bpX + 6, mY + 3);
+        });
+      });
+
+      // Explanatory text (hanya saat isUpdating)
+      if (isUpdating) {
+        const botY = opY[8] + bH + 13;
+        ctx.fillStyle = OC; ctx.font = 'bold 8px "Segoe UI"'; ctx.textAlign = 'center';
+        ctx.fillText('Backprop ∇W: Conv1d & BatchNorm saja  ·  ReLU & Dropout: tidak punya parameter', cx, botY);
+      }
+    }
+
+    // (error/loss dihitung di LOSS node setelah output akhir, bukan di sini)
+
+    ctx.textAlign = 'left';
+  }
+
+  // ── Loss Node Detail: ŷ vs y_ref → error ε → backprop ──
+  _drawLossDetail(r, isActive, isUpdating, isDone) {
+    const ctx = this.ctx;
+    const {x, y, w, h} = r;
+    const node = r.node;
+    const cx   = x + w / 2;
+    const rA   = isUpdating ? 1 : isActive ? .85 : isDone ? .6 : .45;
+
+    // ── Dua blok: ŷ dan y_ref ──
+    const bW   = 130, bH = 44;
+    const gap  = 80;
+    const bY   = y + 52;
+    const hatX = cx - gap / 2 - bW;
+    const refX = cx + gap / 2;
+
+    // Blok ŷ (predicted)
+    ctx.fillStyle = hexA('#0891b2', rA * .1);
+    this._roundRect(ctx, hatX, bY, bW, bH, 8); ctx.fill();
+    ctx.strokeStyle = hexA('#0891b2', rA);
+    ctx.lineWidth   = isUpdating ? 2 : 1.5;
+    this._roundRect(ctx, hatX, bY, bW, bH, 8); ctx.stroke();
+    if (isUpdating || isActive) {
+      ctx.shadowColor = '#0891b2'; ctx.shadowBlur = 8;
+      ctx.strokeStyle = hexA('#0891b2', .25); ctx.lineWidth = 5;
+      this._roundRect(ctx, hatX-2, bY-2, bW+4, bH+4, 9);
+      ctx.stroke(); ctx.shadowBlur = 0;
+    }
+    ctx.fillStyle = hexA('#0891b2', rA); ctx.font = 'bold 10px "Segoe UI"'; ctx.textAlign = 'center';
+    ctx.fillText('ŷ  Predicted', hatX + bW/2, bY + 15);
+    const dimParts = node.dim_in.split('vs');
+    ctx.fillStyle = hexA('#1e293b', rA); ctx.font = '8px "Courier New"';
+    ctx.fillText(dimParts[0].trim(), hatX + bW/2, bY + 28);
+    ctx.fillStyle = hexA('#64748b', rA * .8); ctx.font = '7.5px "Segoe UI"';
+    ctx.fillText('(model output)', hatX + bW/2, bY + 40);
+
+    // Blok y (reference)
+    ctx.fillStyle = hexA('#15803d', rA * .1);
+    this._roundRect(ctx, refX, bY, bW, bH, 8); ctx.fill();
+    ctx.strokeStyle = hexA('#15803d', rA);
+    ctx.lineWidth   = isUpdating ? 2 : 1.5;
+    this._roundRect(ctx, refX, bY, bW, bH, 8); ctx.stroke();
+    if (isUpdating || isActive) {
+      ctx.shadowColor = '#15803d'; ctx.shadowBlur = 8;
+      ctx.strokeStyle = hexA('#15803d', .25); ctx.lineWidth = 5;
+      this._roundRect(ctx, refX-2, bY-2, bW+4, bH+4, 9);
+      ctx.stroke(); ctx.shadowBlur = 0;
+    }
+    ctx.fillStyle = hexA('#15803d', rA); ctx.font = 'bold 10px "Segoe UI"'; ctx.textAlign = 'center';
+    ctx.fillText('y  Reference', refX + bW/2, bY + 15);
+    ctx.fillStyle = hexA('#1e293b', rA); ctx.font = '8px "Courier New"';
+    ctx.fillText((dimParts[1] || dimParts[0]).trim(), refX + bW/2, bY + 28);
+    ctx.fillStyle = hexA('#64748b', rA * .8); ctx.font = '7.5px "Segoe UI"';
+    ctx.fillText('(ground truth)', refX + bW/2, bY + 40);
+
+    // ── Garis putus-putus "error ε" antara kedua blok ──
+    const lineY   = bY + bH / 2;
+    const lineX0  = hatX + bW;
+    const lineX1  = refX;
+    const lineMid = (lineX0 + lineX1) / 2;
+
+    ctx.beginPath();
+    ctx.moveTo(lineX0, lineY); ctx.lineTo(lineX1, lineY);
+    ctx.strokeStyle = hexA('#ea580c', rA); ctx.lineWidth = isUpdating ? 2.5 : 1.8;
+    ctx.setLineDash([6, 4]); ctx.stroke(); ctx.setLineDash([]);
+
+    // Label "error ε"
+    ctx.fillStyle = '#ffffff';
+    ctx.fillRect(lineMid - 29, lineY - 10, 58, 16);
+    ctx.strokeStyle = hexA('#ea580c', rA * .7); ctx.lineWidth = 1;
+    ctx.strokeRect(lineMid - 29, lineY - 10, 58, 16);
+    ctx.fillStyle = hexA('#ea580c', rA);
+    ctx.font = isUpdating ? 'bold 9.5px "Segoe UI"' : '9px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText('error  ε', lineMid, lineY + 4);
+
+    // ── Panah ε turun → Loss scalar → ∇ backprop ──
+    const arrX  = lineMid;
+    const arrY0 = lineY + 12;
+    const arrY1 = bY + bH + 22;
+
+    ctx.beginPath();
+    ctx.moveTo(arrX, arrY0); ctx.lineTo(arrX, arrY1);
+    ctx.strokeStyle = hexA('#ea580c', rA); ctx.lineWidth = isUpdating ? 2 : 1.5; ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(arrX - 5, arrY1 - 7); ctx.lineTo(arrX, arrY1); ctx.lineTo(arrX + 5, arrY1 - 7);
+    ctx.strokeStyle = hexA('#ea580c', rA); ctx.stroke();
+
+    ctx.fillStyle = hexA('#dc2626', rA);
+    ctx.font = isUpdating ? 'bold 9px "Segoe UI"' : '8.5px "Segoe UI"';
+    ctx.textAlign = 'center';
+    ctx.fillText('Loss = MSE(ŷ, y)  →  scalar  →  ∇ backprop ke semua layer', arrX, arrY1 + 13);
+
+    // Desc (Normalized space / training config) — di dalam node, posisi terkontrol
+    const descY = arrY1 + 30;
+    ctx.fillStyle = hexA('#64748b', rA * .8);
+    ctx.font = '8px "Segoe UI"';
+    ctx.textAlign = 'left';
+    const descTxt = node.desc.length > 110 ? node.desc.slice(0, 108) + '…' : node.desc;
+    ctx.fillText(descTxt, x + 30, descY);
+  }
+
+  _phaseLabel(ph) {
+    const m = {input:'INPUT',pre:'PRE-PROC',tcn:'TCN BLOCK',pool:'POOL/CTX',
+      dec:'DECODER',loss:'LOSS',bp:'BACKPROP',upd:'WEIGHT UPD',
+      inf:'INFERENCE',mlp:'MLP LAYER',out:'OUTPUT',sm:'SOFTMAX'};
+    return m[ph] || ph.toUpperCase();
+  }
+
+  _roundRect(ctx, x, y, w, h, r) {
+    if (typeof r === 'number') r = [r, r, r, r];
+    ctx.beginPath();
+    ctx.moveTo(x + r[0], y);
+    ctx.lineTo(x + w - r[1], y);
+    ctx.quadraticCurveTo(x + w, y, x + w, y + r[1]);
+    ctx.lineTo(x + w, y + h - r[2]);
+    ctx.quadraticCurveTo(x + w, y + h, x + w - r[2], y + h);
+    ctx.lineTo(x + r[3], y + h);
+    ctx.quadraticCurveTo(x, y + h, x, y + h - r[3]);
+    ctx.lineTo(x, y + r[0]);
+    ctx.quadraticCurveTo(x, y, x + r[0], y);
+    ctx.closePath();
+  }
+
+  // ── Particles ─────────────────────────────────────
+  spawnFwd(fromIdx) {
+    if (fromIdx >= this.rects.length - 1) return;
+    const r1 = this.rects[fromIdx];
+    const r2 = this.rects[fromIdx + 1];
+    for (let k = 0; k < 4; k++) {
+      this.particles_fwd.push({
+        x:  r1.cx,
+        y:  r1.y + r1.h,
+        ty: r2.y,
+        col: r1.node.col,
+        sp:  2.5 + Math.random() * 2,
+        sz:  3 + Math.random() * 2,
+        tr:  [],
+        done: false,
+        delay: k * 60,
+      });
+    }
+  }
+
+  spawnBwd(bpLineX, fromY, toY, col) {
+    for (let k = 0; k < 3; k++) {
+      this.particles_bwd.push({
+        x: bpLineX,
+        y: fromY,
+        ty: toY,
+        col,
+        sp: 2 + Math.random() * 2,
+        sz: 2.5 + Math.random() * 1.5,
+        tr: [],
+        done: false,
+        delay: k * 80,
+      });
+    }
+  }
+
+  _drawParticles() {
+    const ctx = this.ctx;
+    // Forward
+    this.particles_fwd = this.particles_fwd.filter(p => {
+      if (p.delay > 0) { p.delay -= 16; return true; }
+      p.y  = Math.min(p.y + p.sp, p.ty);
+      p.tr.push({x: p.x, y: p.y});
+      if (p.tr.length > 12) p.tr.shift();
+      p.tr.forEach((tp, i) => {
+        const r = i / p.tr.length;
+        // Trail dots (colored, semi-transparent on light bg)
+        ctx.beginPath(); ctx.arc(tp.x, tp.y, p.sz * r * .8, 0, Math.PI * 2);
+        ctx.fillStyle = hexA(p.col, r * .7); ctx.fill();
+      });
+      // Head dot with dark-core glow (visible on white)
+      const h = p.tr[p.tr.length - 1];
+      if (h) {
+        const g = ctx.createRadialGradient(h.x,h.y,0,h.x,h.y,p.sz*2.5);
+        g.addColorStop(0, p.col);
+        g.addColorStop(.5, hexA(p.col,.7));
+        g.addColorStop(1, hexA(p.col,0));
+        ctx.beginPath(); ctx.arc(h.x,h.y,p.sz*2.5,0,Math.PI*2);
+        ctx.fillStyle=g; ctx.fill();
+      }
+      return p.y < p.ty;
+    });
+
+    // Backward (move UP) — orange
+    this.particles_bwd = this.particles_bwd.filter(p => {
+      if (p.delay > 0) { p.delay -= 16; return true; }
+      p.y  = Math.max(p.y - p.sp, p.ty);
+      p.tr.push({x: p.x, y: p.y});
+      if (p.tr.length > 12) p.tr.shift();
+      p.tr.forEach((tp, i) => {
+        const r = i / p.tr.length;
+        ctx.beginPath(); ctx.arc(tp.x, tp.y, p.sz * r * .75, 0, Math.PI * 2);
+        ctx.fillStyle = hexA('#ea580c', r * .7); ctx.fill();
+      });
+      const h = p.tr[p.tr.length-1];
+      if (h) {
+        const g = ctx.createRadialGradient(h.x,h.y,0,h.x,h.y,p.sz*2.5);
+        g.addColorStop(0,'#ea580c');
+        g.addColorStop(.5,hexA('#ea580c',.6));
+        g.addColorStop(1,hexA('#ea580c',0));
+        ctx.beginPath(); ctx.arc(h.x,h.y,p.sz*2.5,0,Math.PI*2);
+        ctx.fillStyle=g; ctx.fill();
+      }
+      return p.y > p.ty;
+    });
+  }
+
+  setActive(idx) {
+    this.activeIdx = idx;
+    this.bpIdx     = -1;
+    if (idx >= 0 && idx < this.rects.length - 1) {
+      this.spawnFwd(idx);
+    }
+  }
+
+  setBP(idx) {
+    this.bpIdx = idx;
+    if (idx >= 0) {
+      const r      = this.rects[idx];
+      const lastR  = this.rects[this.rects.length - 1];
+      this.spawnBwd(this.BPX, lastR.y + lastR.h / 2, r.y + r.h / 2, r.node.col);
+    }
+  }
+
+  startRender() {
+    if (this.running) return;
+    this.running = true;
+    const loop = () => {
+      if (!this.running) return;
+      this.draw();
+      this._raf = requestAnimationFrame(loop);
+    };
+    loop();
+  }
+
+  stopRender() {
+    this.running = false;
+    if (this._raf) cancelAnimationFrame(this._raf);
+  }
+
+  resize() {
+    this.ctx.setTransform(1,0,0,1,0,0);
+    this._layout();
+    this.ctx.scale(DPR, DPR);
+  }
+}
+
+// ── Training Controller ───────────────────────────────
+const mseFn = e => Math.max(.003,.82*Math.exp(-5.5*e/100)+.01+.015*Math.sin(e*.7)*Math.exp(-3*e/100));
+const ceFn  = e => Math.max(.008,.78*Math.exp(-5.2*e/100)+.018+.02*Math.sin(e*.65)*Math.exp(-3*e/100));
+const accFn = e => Math.min(.98,.4+.54*(1-Math.exp(-5.2*e/100))+.02*Math.sin(e*.6)*Math.exp(-2.5*e/100));
+const f1Fn  = e => Math.min(.96,.38+.54*(1-Math.exp(-5*e/100))+.02*Math.sin(e*.5)*Math.exp(-2*e/100));
+const lrAt  = e => e<30?1e-3:e<60?5e-4:e<85?1e-4:5e-5;
+
+class TrainCtrl {
+  constructor(n, fc) {
+    this.n=n; this.fc=fc;
+    this.ep=0; this.maxE=100; this.speed=5;
+    this.isClf=(n===3);
+    this.playing=false;
+    // Forward: step through each node
+    // Backprop: step backwards through hasWeight nodes
+    this.fwdNodes = fc.nodes.map((_,i)=>i);
+    this.bwdNodes = fc.nodes.map((_,i)=>i).filter(i=>fc.nodes[i].hasWeight).reverse();
+    this.fwdIdx=0; this.bwdIdx=0;
+    this.phase='idle'; // 'fwd'|'loss'|'bwd'|'upd'
+    this.pEl=0; this.lastTs=null; this._raf=null;
+    this._updateUI();
+  }
+  _durPerNode(){ // ms per node step
+    const base = this.isClf ? 250 : 200;
+    return base / this.speed;
+  }
+  _tick(ts){
+    if(!this.playing){this._raf=null;return;}
+    if(!this.lastTs)this.lastTs=ts;
+    const dt=ts-this.lastTs; this.lastTs=ts;
+    this.pEl+=dt;
+    if(this.pEl >= this._durPerNode()){
+      this.pEl=0;
+      this._step();
+    }
+    this._raf=requestAnimationFrame(t=>this._tick(t));
+  }
+  _step(){
+    if(this.phase==='idle'||this.phase==='upd'){
+      // Start forward pass
+      this.phase='fwd'; this.fwdIdx=0;
+      this.fc.setActive(this.fwdNodes[0]);
+      this._setPhasePill('→ FORWARD','#38bdf8');
+    } else if(this.phase==='fwd'){
+      this.fwdIdx++;
+      if(this.fwdIdx < this.fwdNodes.length){
+        this.fc.setActive(this.fwdNodes[this.fwdIdx]);
+      } else {
+        // Move to loss / backprop
+        this.phase='loss';
+        this.fc.activeIdx = this.fwdNodes[this.fwdNodes.length-1];
+        this._setPhasePill('✦ LOSS','#f87171');
+        // After short pause → backprop
+        setTimeout(()=>{
+          if(!this.playing)return;
+          this.phase='bwd'; this.bwdIdx=0;
+          this.fc.setBP(this.bwdNodes[0]);
+          this._setPhasePill('← BACKPROP','#fb923c');
+        }, this._durPerNode()*2);
+      }
+    } else if(this.phase==='bwd'){
+      this.bwdIdx++;
+      if(this.bwdIdx < this.bwdNodes.length){
+        this.fc.setBP(this.bwdNodes[this.bwdIdx]);
+      } else {
+        // Weight update done → next epoch
+        this.phase='upd';
+        this.fc.bpIdx=-1;
+        this._setPhasePill('✓ W UPDATE','#f59e0b');
+        this.ep=Math.min(this.ep+1, this.maxE);
+        this._updateUI();
+        if(this.ep>=this.maxE){
+          this.playing=false; this._btn();
+          this._setPhasePill('✓ SELESAI','#34d399');
+          return;
+        }
+      }
+    }
+  }
+  _setPhasePill(txt, col){
+    const el=document.getElementById(`pp${this.n}`);
+    if(!el)return;
+    el.textContent=txt; el.style.color=col;
+    el.style.borderColor=col; el.style.background=hexA(col,.1);
+  }
+  _updateUI(){
+    const e=this.ep, n=this.n;
+    const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    $(`ev${n}`,`${e} / 100`);
+    const pf=document.getElementById(`pf${n}`);if(pf)pf.style.width=`${e}%`;
+    if(e>0){
+      if(!this.isClf){
+        const mse=mseFn(e);
+        $(`mm${n}`,mse.toFixed(5));
+        $(`mr${n}`,Math.sqrt(mse).toFixed(5));
+        $(`ma${n}`,(mse*.6).toFixed(5));
+      } else {
+        $(`mm${n}`,ceFn(e).toFixed(5));
+        $(`mr${n}`,(accFn(e)*100).toFixed(1)+'%');
+        $(`ma${n}`,f1Fn(e).toFixed(3));
+      }
+    }
+  }
+  play(){
+    if(this.ep>=this.maxE) this.reset();
+    this.playing=true; this.lastTs=null; this._btn();
+    this._raf=requestAnimationFrame(t=>this._tick(t));
+  }
+  pause(){this.playing=false; this._btn(); if(this._raf){cancelAnimationFrame(this._raf);this._raf=null;}}
+  toggle(){this.playing?this.pause():this.play();}
+  reset(){
+    this.pause(); this.ep=0; this.fwdIdx=0; this.bwdIdx=0;
+    this.phase='idle'; this.pEl=0;
+    this.fc.activeIdx=-1; this.fc.bpIdx=-1;
+    this.fc.particles_fwd=[]; this.fc.particles_bwd=[];
+    this._updateUI();
+    [`mm${this.n}`,`mr${this.n}`,`ma${this.n}`].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
+    this._setPhasePill('IDLE','#64748b');
+  }
+  setSp(s){this.speed=+s;}
+  _btn(){const b=document.getElementById(`btn${this.n}`);if(b)b.textContent=this.playing?'⏸ Pause':'▶ Play';}
+}
+
+// ── Inference Controller ──────────────────────────────
+class InfCtrl {
+  constructor(n, fc) {
+    this.n=n; this.fc=fc;
+    this.speed=2; this.nodeIdx=-1; this.playing=false;
+    this.pEl=0; this.lastTs=null; this._raf=null;
+  }
+  _dur(){ return 700/this.speed; }
+  _tick(ts){
+    if(!this.playing){this._raf=null;return;}
+    if(!this.lastTs)this.lastTs=ts;
+    const dt=ts-this.lastTs; this.lastTs=ts;
+    this.pEl+=dt;
+    if(this.pEl>=this._dur()){
+      this.pEl=0;
+      this.nodeIdx++;
+      if(this.nodeIdx<this.fc.nodes.length){
+        this.fc.setActive(this.nodeIdx);
+        this._pill(`→ ${this.fc.nodes[this.nodeIdx].title.split(' ')[0]}`,'#34d399');
+        this._updateOut();
+      } else {
+        this.playing=false; this._btn();
+        this._pill('✓ SELESAI','#34d399');
+      }
+    }
+    this._raf=requestAnimationFrame(t=>this._tick(t));
+  }
+  _updateOut(){
+    const n=this.n, ni=this.nodeIdx;
+    const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    if(n===2&&ni>=this.fc.nodes.length-1){
+      const mse=mseFn(90);
+      $('mm2',mse.toFixed(5));
+    }
+    if(n===4&&ni>=this.fc.nodes.length-1){
+      $('mm4','Warning');$('mr4','0.15');$('ma4','0.85');
+    }
+  }
+  _pill(txt,col){
+    const el=document.getElementById(`pp${this.n}`);
+    if(!el)return;
+    el.textContent=txt;el.style.color=col;
+    el.style.borderColor=col;el.style.background=hexA(col,.08);
+  }
+  play(){
+    if(this.nodeIdx>=this.fc.nodes.length-1) this.reset();
+    this.playing=true; this.lastTs=null; this._btn();
+    this._raf=requestAnimationFrame(t=>this._tick(t));
+  }
+  pause(){this.playing=false;this._btn();if(this._raf){cancelAnimationFrame(this._raf);this._raf=null;}}
+  toggle(){this.playing?this.pause():this.play();}
+  reset(){
+    this.pause(); this.nodeIdx=-1; this.pEl=0;
+    this.fc.activeIdx=-1; this.fc.particles_fwd=[];
+    const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
+    if(this.n===2){$('mm2','—');}
+    if(this.n===4){$('mm4','—');$('mr4','—');$('ma4','—');}
+    this._pill('IDLE','#334155');
+    this._btn();
+  }
+  setSp(s){this.speed=+s;}
+  _btn(){const b=document.getElementById(`btn${this.n}`);if(b)b.textContent=this.playing?'⏸ Pause':'▶ Play Inference';}
+}
+
+// ── Init ──────────────────────────────────────────────
+const FCS={}, CTRLS={};
+
+function initPage(pid, cid, n, isInf=false){
+  FCS[pid]  = new FlowChart(cid, pid);
+  CTRLS[pid]= isInf ? new InfCtrl(n, FCS[pid]) : new TrainCtrl(n, FCS[pid]);
+}
+
+initPage('p1','fc1',1,false);
+initPage('p2','fc2',2,true);
+initPage('p3','fc3',3,false);
+initPage('p4','fc4',4,true);
+
+// Start rendering active page
+FCS['p1'].startRender();
+
+// ── Global controls ───────────────────────────────────
+function tog(n){ CTRLS['p'+n].toggle(); }
+function rst(n){ CTRLS['p'+n].reset(); }
+function setSp(n,v){ CTRLS['p'+n].setSp(+v); }
+
+// ── Page switching ────────────────────────────────────
+const PIDS=['p1','p2','p3','p4'];
+function showPage(pid,tab){
+  PIDS.forEach(id=>{
+    document.getElementById(id).classList.remove('active');
+    FCS[id].stopRender();
+  });
+  document.querySelectorAll('.nt').forEach(t=>t.classList.remove('active'));
+  document.getElementById(pid).classList.add('active');
+  tab.classList.add('active');
+  FCS[pid].startRender();
+}
+
+// ── Resize ────────────────────────────────────────────
+window.addEventListener('resize',()=>{
+  PIDS.forEach(pid=>{
+    FCS[pid].ctx.setTransform(1,0,0,1,0,0);
+    FCS[pid]._layout();
+    // no need to re-scale — _layout already calls ctx.scale
+  });
+});
+</script>
+</body>
+</html>
