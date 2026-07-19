@@ -520,7 +520,7 @@ const NODES = {
     { title:'TRAIN / TEST SPLIT',  op:'train_dfs = dfs[:29] · test_dfs = dfs[29:]',
       dim_in:'[37 hari total]',     dim_out:'Train: [29 hari] | Test: [8 hari]',
       desc:'TRAIN_RATIO=0.8 · kronologis (bukan random) · 29 train + 8 test',
-      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true },
+      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true, clickable:'split' },
     { title:'SLIDING WINDOW',      op:'X[i] = concat(day_i, day_i+1, day_i+2) · y[i] = day_i+3',
       dim_in:'[29 hari train]',     dim_out:'X:[26, 600.000, 21] · y:[26, 200.000, 21]',
       desc:'3 hari input → prediksi hari ke-4 · 26 window train · 8 window test · 🔍 klik untuk visualisasi animasi',
@@ -541,31 +541,31 @@ const NODES = {
     { title:'RESIDUAL BLOCK 1',    op:'CausalConv1d(21→96, k=3, d=1)  ×2',
       dim_in:'[3, 21, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip(1×1) · ∇W: Conv×2, BN×2',
-      col:'#a78bfa', phase:'tcn',  hasWeight:true },
+      col:'#a78bfa', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:1, blockNum:1 },
     { title:'RESIDUAL BLOCK 2',    op:'CausalConv1d(96→96, k=3, d=2)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip(Identity) · Dilation=2',
-      col:'#818cf8', phase:'tcn',  hasWeight:true },
+      col:'#818cf8', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:2, blockNum:2 },
     { title:'RESIDUAL BLOCK 3',    op:'CausalConv1d(96→96, k=3, d=4)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=4 · RF naik',
-      col:'#6366f1', phase:'tcn',  hasWeight:true },
+      col:'#6366f1', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:4, blockNum:3 },
     { title:'RESIDUAL BLOCK 4',    op:'CausalConv1d(96→96, k=3, d=8)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=8',
-      col:'#60a5fa', phase:'tcn',  hasWeight:true },
+      col:'#60a5fa', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:8, blockNum:4 },
     { title:'RESIDUAL BLOCK 5',    op:'CausalConv1d(96→96, k=3, d=16)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=16',
-      col:'#34d399', phase:'tcn',  hasWeight:true },
+      col:'#34d399', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:16, blockNum:5 },
     { title:'RESIDUAL BLOCK 6',    op:'CausalConv1d(96→96, k=3, d=32)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=32',
-      col:'#22d3ee', phase:'tcn',  hasWeight:true },
+      col:'#22d3ee', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:32, blockNum:6 },
     { title:'RESIDUAL BLOCK 7',    op:'CausalConv1d(96→96, k=3, d=64)  ×2',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 600.000]',
       desc:'Conv1×BN×ReLU×Drop → Conv2×BN×ReLU×Drop → ⊕skip · Dilation=64 · RF=381',
-      col:'#38bdf8', phase:'tcn',  hasWeight:true },
+      col:'#38bdf8', phase:'tcn',  hasWeight:true, clickable:'resblock', dilation:64, blockNum:7 },
     { title:'ADAPTIVE AVG POOL',   op:'AdaptiveAvgPool1d(output_size=1)',
       dim_in:'[3, 96, 600.000]',   dim_out:'[3, 96, 1]',
       desc:'Pool seluruh sequence → 1 nilai per channel',
@@ -682,7 +682,7 @@ const NODES = {
     { title:'STATISTIK HARIAN',     op:'mean+std+max+min (axis=0) per hari → [84]',
       dim_in:'[37, 200.000, 21 sensor]', dim_out:'[37, 84]  float32',
       desc:'day_to_feature_vector() · concat[mean(21), std(21), max(21), min(21)] · INPUT_DIM=84',
-      col:'#10b981', phase:'pre',  hasWeight:false, setup:true },
+      col:'#10b981', phase:'pre',  hasWeight:false, setup:true, clickable:'statfeat' },
     { title:'LABELING PER HARI',    op:'fault_columns.any() > 0 → Warning(1)  else  Healthy(0)',
       dim_in:'[37, 200.000, 3 fault col]', dim_out:'[37]  label: 0=Healthy / 1=Warning',
       desc:'SIV_MajorBCFltPres · SIV_MajorInputConvFltPres · SIV_MajorInverterFltPres',
@@ -690,7 +690,7 @@ const NODES = {
     { title:'TRAIN / TEST SPLIT',   op:'X_train=X[:29] · X_test=X[29:] · y_train · y_test',
       dim_in:'[37 hari total]',     dim_out:'Train: [29 hari] | Test: [8 hari]',
       desc:'TRAIN_RATIO=0.8 · kronologis · X_train:[29,84] float32 · y_train:[29] int64',
-      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true },
+      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true, clickable:'split' },
     { title:'FIT SCALER',           op:'MinMaxScaler((-0.1,1.1)).fit_transform(X_train_cls)',
       dim_in:'X_train [29, 84]  float32', dim_out:'X_scaled [29, 84]  float32',
       desc:'Fit HANYA dari X_train · transform juga X_test · save scaler_stage2.pkl',
@@ -744,7 +744,7 @@ const NODES = {
     { title:'SOFTMAX → ARGMAX',     op:'F.softmax(logits, dim=1) → argmax(dim=1)',
       dim_in:'logits [8, 2]',       dim_out:'labels [8]  →  0=Healthy / 1=Warning',
       desc:'Probabilitas per kelas · Label = argmax · per-day log: True=X | Pred=X ✓/✗',
-      col:'#047857', phase:'eval', hasWeight:false, eval:true },
+      col:'#047857', phase:'eval', hasWeight:false, eval:true, clickable:'softmax' },
     { title:'TEST METRICS',         op:'Accuracy · F1 · Precision · Recall (weighted)  vs  y_test',
       dim_in:'ŷ_test [8] vs y_test [8]',
       dim_out:'testAcc=62.50% · testF1=48.08% · testPrec=39.06% · testRecall=62.50%',
@@ -834,7 +834,7 @@ const NODES = {
     { title:'SOFTMAX → ARGMAX',        op:'torch.softmax(logits, dim=1) → torch.argmax(dim=1)',
       dim_in:'logits [1, 2]',  dim_out:'label  +  confidence %  +  prob [Healthy, Warning]',
       desc:'P(Healthy) + P(Warning) = 1.0 · label = argmax · confidence = max(prob) × 100',
-      col:'#f59e0b', phase:'sm',   hasWeight:false },
+      col:'#f59e0b', phase:'sm',   hasWeight:false, clickable:'softmax' },
     // ── OUTPUT ────────────────────────────────────────────
     { title:'OUTPUT + EXPORT',         op:'evidence/inference_prediksi_sensor.csv · inference_health_status.csv · gambar*.png',
       dim_in:'pred_signal [200k, 21]  +  pred_status  +  confidence',  dim_out:'CSV + PNG + jurnal_informasi_lengkap.txt',
@@ -2436,15 +2436,714 @@ function showPage(pid,tab){
     requestAnimationFrame(()=>requestAnimationFrame(draw));
   };
 
-  // Click handler on p1 canvas — SLIDING WINDOW node = index 4
-  window.addEventListener('load',()=>{
-    FCS['p1'].cvs.addEventListener('click',e=>{
-      const br=FCS['p1'].cvs.getBoundingClientRect();
+})();
+
+// ── Generic click dispatch for all clickable nodes ────
+(function(){
+  const DISPATCH = {
+    true:       ()=> window._openSW(),
+    sw:         ()=> window._openSW(),
+    split:      (n)=> window._openSplit(n),
+    resblock:   (n)=> window._openResBlock(n),
+    statfeat:   ()=> window._openStatFeat(),
+    softmax:    ()=> window._openSoftmax(),
+  };
+  const PIDS2=['p1','p2','p3','p4','p5'];
+  PIDS2.forEach(pid=>{
+    FCS[pid].cvs.addEventListener('click',e=>{
+      const br=FCS[pid].cvs.getBoundingClientRect();
       const cx=e.clientX-br.left, cy=e.clientY-br.top;
-      const r=FCS['p1'].rects[4];
-      if(r&&cx>=r.x&&cx<=r.x+r.w&&cy>=r.y&&cy<=r.y+r.h) window._openSW();
+      for(const r of FCS[pid].rects){
+        if(cx>=r.x&&cx<=r.x+r.w&&cy>=r.y&&cy<=r.y+r.h){
+          const c=r.node.clickable;
+          if(c && DISPATCH[c]) DISPATCH[c](r.node);
+          break;
+        }
+      }
     });
   });
+})();
+
+// ── Modal: Train/Test Split ───────────────────────────
+(function(){
+  const N=37, NT=29;
+  const M=document.createElement('div');
+  M.style.cssText='display:none;position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.97);overflow-y:auto';
+  M.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 50px;box-sizing:border-box">
+    <div style="width:100%;max-width:1000px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:1rem;font-weight:900;color:#f1f5f9">Train / Test Split — Kronologis (80% / 20%)</div>
+          <div style="font-size:.7rem;color:#64748b;margin-top:3px">37 hari data · split kronologis (bukan random) · D1–D29 Training · D30–D37 Testing</div>
+        </div>
+        <div style="display:flex;gap:7px">
+          <button id="spl-play" style="padding:6px 16px;border-radius:7px;border:1.5px solid #6d28d9;color:#a78bfa;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">▶ Play</button>
+          <button id="spl-rst"  style="padding:6px 11px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:700;cursor:pointer;font-size:.8rem">↺</button>
+          <button id="spl-cls"  style="padding:6px 14px;border-radius:7px;border:1.5px solid #475569;color:#cbd5e1;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">✕ Tutup</button>
+        </div>
+      </div>
+      <canvas id="spl-cvs" style="display:block;border-radius:10px"></canvas>
+      <div id="spl-info" style="font-size:.73rem;color:#64748b;margin-top:10px;min-height:18px;text-align:center"></div>
+    </div>
+  </div>`;
+  document.body.appendChild(M);
+
+  const cvs=M.querySelector('#spl-cvs'), ctx=cvs.getContext('2d');
+  const infoEl=M.querySelector('#spl-info');
+  const D2=window.devicePixelRatio||1;
+
+  // Animation phases: 0=idle, 1=days appearing, 2=split reveal, 3=done
+  let phase=0, step=0, timer=null, playing=false;
+
+  function rr(x,y,w,h,r2){
+    ctx.beginPath();ctx.moveTo(x+r2,y);ctx.lineTo(x+w-r2,y);ctx.arcTo(x+w,y,x+w,y+r2,r2);
+    ctx.lineTo(x+w,y+h-r2);ctx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+    ctx.lineTo(x+r2,y+h);ctx.arcTo(x,y+h,x,y+h-r2,r2);
+    ctx.lineTo(x,y+r2);ctx.arcTo(x,y,x+r2,y,r2);ctx.closePath();
+  }
+
+  function draw(){
+    const wrap=M.querySelector('div[style*="max-width:1000px"]');
+    const PW=Math.min(wrap.offsetWidth||900,980);
+    const PAD=20, CW=Math.floor((PW-PAD*2)/N), H=260;
+    cvs.width=PW*D2; cvs.height=H*D2;
+    cvs.style.width=PW+'px'; cvs.style.height=H+'px';
+    ctx.setTransform(D2,0,0,D2,0,0);
+    ctx.fillStyle='#0a0f1e'; ctx.fillRect(0,0,PW,H);
+
+    const visCount = phase===0?0 : phase===1?step : N;
+    const splitVisible = phase>=2;
+    const labelsVisible = phase>=3;
+
+    // Day boxes
+    for(let d=0;d<visCount;d++){
+      const x=PAD+d*CW, isTr=d<NT;
+      const colored=splitVisible;
+      ctx.fillStyle=colored?(isTr?'#1d4ed8':'#c2410c'):'#334155';
+      rr(x+2,40,CW-4,70,6); ctx.fill();
+      ctx.strokeStyle=colored?(isTr?'#60a5fa':'#fb923c'):'#475569';
+      ctx.lineWidth=1;
+      rr(x+2,40,CW-4,70,6); ctx.stroke();
+      ctx.fillStyle='#ffffff';
+      ctx.font=`bold ${CW>24?10:8}px "Segoe UI"`;
+      ctx.textAlign='center';
+      ctx.fillText('D'+(d+1),x+CW/2,82);
+    }
+
+    // Split line
+    if(splitVisible){
+      const sx=PAD+NT*CW;
+      ctx.save();
+      ctx.strokeStyle='#ef4444'; ctx.lineWidth=2.5; ctx.setLineDash([6,4]);
+      ctx.beginPath(); ctx.moveTo(sx,20); ctx.lineTo(sx,200); ctx.stroke();
+      ctx.restore();
+      ctx.fillStyle='#ef4444'; ctx.font='bold 9px "Segoe UI"'; ctx.textAlign='center';
+      ctx.fillText('SPLIT',sx,14);
+    }
+
+    // Labels
+    if(labelsVisible){
+      // Train label
+      ctx.fillStyle='rgba(29,78,216,.15)';
+      ctx.fillRect(PAD,130,NT*CW,40);
+      ctx.fillStyle='#3b82f6'; ctx.font='bold 13px "Segoe UI"'; ctx.textAlign='center';
+      ctx.fillText('TRAINING DATA',PAD+NT*CW/2,150);
+      ctx.font='9px "Segoe UI"'; ctx.fillStyle='#60a5fa';
+      ctx.fillText(NT+' hari · '+Math.round(NT/N*100)+'% · '+(NT-3)+' sliding window',PAD+NT*CW/2,165);
+
+      // Test label
+      ctx.fillStyle='rgba(194,65,12,.15)';
+      ctx.fillRect(PAD+NT*CW,130,(N-NT)*CW,40);
+      ctx.fillStyle='#f97316'; ctx.font='bold 13px "Segoe UI"'; ctx.textAlign='center';
+      ctx.fillText('TEST DATA',PAD+(NT+(N-NT)/2)*CW,150);
+      ctx.font='9px "Segoe UI"'; ctx.fillStyle='#fb923c';
+      ctx.fillText((N-NT)+' hari · '+Math.round((N-NT)/N*100)+'%',PAD+(NT+(N-NT)/2)*CW,165);
+
+      // Summary bar
+      const bY=195, bH=20, bW=PW-PAD*2;
+      ctx.fillStyle='#1d4ed8';
+      ctx.fillRect(PAD,bY,Math.round(bW*NT/N),bH);
+      ctx.fillStyle='#c2410c';
+      ctx.fillRect(PAD+Math.round(bW*NT/N),bY,Math.round(bW*(N-NT)/N),bH);
+      ctx.fillStyle='#ffffff'; ctx.font='bold 9px "Segoe UI"'; ctx.textAlign='center';
+      ctx.fillText('80% TRAIN',PAD+bW*NT/N/2,bY+13);
+      ctx.fillText('20% TEST',PAD+Math.round(bW*NT/N)+bW*(N-NT)/N/2,bY+13);
+
+      infoEl.textContent='Split kronologis memastikan model dilatih pada data historis dan diuji pada data yang lebih baru — mencegah data leakage.';
+    } else if(splitVisible){
+      infoEl.textContent='Batas pemisah: setelah D'+NT+' → D'+(NT+1)+' dan seterusnya adalah data TEST';
+    } else {
+      infoEl.textContent=visCount>0?'D'+visCount+' dari D'+N+' ditambahkan...':'Tekan ▶ Play untuk animasi';
+    }
+  }
+
+  function stopPlay(){playing=false;clearInterval(timer);timer=null;M.querySelector('#spl-play').textContent='▶ Play';}
+  function startPlay(){
+    if(phase>=3){phase=0;step=0;}
+    playing=true; M.querySelector('#spl-play').textContent='⏸ Pause';
+    timer=setInterval(()=>{
+      if(phase===0){phase=1;step=0;}
+      else if(phase===1){
+        step++;
+        if(step>=N){phase=2;step=0;}
+      } else if(phase===2){
+        setTimeout(()=>{phase=3;draw();},300);
+        stopPlay(); return;
+      }
+      draw();
+    },80);
+  }
+
+  M.querySelector('#spl-play').onclick=()=>playing?stopPlay():startPlay();
+  M.querySelector('#spl-rst').onclick=()=>{stopPlay();phase=0;step=0;draw();};
+  M.querySelector('#spl-cls').onclick=()=>{stopPlay();M.style.display='none';};
+  M.addEventListener('click',e=>{if(e.target===M){stopPlay();M.style.display='none';}});
+  document.addEventListener('keydown',e=>{
+    if(M.style.display==='none')return;
+    if(e.key==='Escape'){stopPlay();M.style.display='none';}
+    if(e.key===' '){e.preventDefault();playing?stopPlay():startPlay();}
+  });
+
+  window._openSplit=function(){
+    M.style.display='block';
+    phase=0;step=0;
+    requestAnimationFrame(()=>requestAnimationFrame(draw));
+  };
+})();
+
+// ── Modal: Residual Block Detail ──────────────────────
+(function(){
+  const M=document.createElement('div');
+  M.style.cssText='display:none;position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.97);overflow-y:auto';
+  M.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 50px;box-sizing:border-box">
+    <div style="width:100%;max-width:680px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div id="rb-title" style="font-size:1rem;font-weight:900;color:#f1f5f9">Residual Block</div>
+          <div id="rb-sub"   style="font-size:.7rem;color:#64748b;margin-top:3px"></div>
+        </div>
+        <div style="display:flex;gap:7px">
+          <button id="rb-play" style="padding:6px 16px;border-radius:7px;border:1.5px solid #a78bfa;color:#a78bfa;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">▶ Play</button>
+          <button id="rb-rst"  style="padding:6px 11px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:700;cursor:pointer;font-size:.8rem">↺</button>
+          <button id="rb-cls"  style="padding:6px 14px;border-radius:7px;border:1.5px solid #475569;color:#cbd5e1;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">✕ Tutup</button>
+        </div>
+      </div>
+      <div id="rb-info" style="font-size:.73rem;color:#64748b;min-height:18px;margin-bottom:8px;font-family:'Courier New',monospace"></div>
+      <canvas id="rb-cvs" style="display:block;border-radius:10px"></canvas>
+    </div>
+  </div>`;
+  document.body.appendChild(M);
+
+  const cvs=M.querySelector('#rb-cvs'), ctx=cvs.getContext('2d');
+  const infoEl=M.querySelector('#rb-info');
+  const D2=window.devicePixelRatio||1;
+
+  // Steps: 0=input, 1=conv1, 2=bn1, 3=relu1, 4=drop1, 5=conv2, 6=bn2, 7=relu2, 8=drop2, 9=skip, 10=add, 11=output
+  const STEPS=[
+    {label:'INPUT',          dim:(ic,d)=>`[B, ${ic===21?'21':'96'}, L]`,     col:'#475569', desc:'Input tensor masuk ke 2 cabang: main path dan skip connection'},
+    {label:'CausalConv1d #1',dim:(ic,d)=>`kernel=3, dilation=${d}, pad=${2*(3-1)*d}`, col:'#7c3aed', desc:'Dilated causal conv: padding causal agar tidak "melihat" masa depan'},
+    {label:'BatchNorm1d',    dim:()=>'normalize per channel (running mean/var)',col:'#5b21b6', desc:'Normalisasi channel: mean≈0, var≈1 → training lebih stabil'},
+    {label:'ReLU',           dim:()=>'max(0, x)',                              col:'#4338ca', desc:'Aktivasi: nilai negatif di-zero-kan'},
+    {label:'Dropout(0.3)',   dim:()=>'p=0.3 saat train, OFF saat eval',        col:'#3730a3', desc:'Regularisasi: 30% neuron dimatikan acak saat training'},
+    {label:'CausalConv1d #2',dim:(ic,d)=>`kernel=3, dilation=${d}, 96→96`,    col:'#7c3aed', desc:'Conv kedua dengan dilation sama — perluasan receptive field'},
+    {label:'BatchNorm1d',    dim:()=>'normalize per channel',                  col:'#5b21b6', desc:'BatchNorm kedua setelah conv kedua'},
+    {label:'ReLU',           dim:()=>'max(0, x)',                              col:'#4338ca', desc:'Aktivasi kedua'},
+    {label:'Dropout(0.3)',   dim:()=>'p=0.3 saat train, OFF saat eval',        col:'#3730a3', desc:'Dropout kedua — output main path selesai'},
+    {label:'SKIP CONNECTION',dim:(ic)=>ic===21?'Conv1d(21→96, k=1)':'Identity()', col:'#059669', desc:'Jika in_ch≠out_ch: 1×1 conv untuk matching dimensi. Jika sama: langsung pass-through'},
+    {label:'ADD  ⊕',        dim:()=>'main_path + skip',                       col:'#10b981', desc:'Residual addition: gradien bisa mengalir langsung ke layer-layer sebelumnya'},
+    {label:'OUTPUT',         dim:()=>'[B, 96, L]',                             col:'#34d399', desc:'Output siap masuk ke Residual Block berikutnya'},
+  ];
+
+  let curStep=-1, playing=false, timer=null, curNode=null;
+
+  function rr(x,y,w,h,r2){
+    ctx.beginPath();ctx.moveTo(x+r2,y);ctx.lineTo(x+w-r2,y);ctx.arcTo(x+w,y,x+w,y+r2,r2);
+    ctx.lineTo(x+w,y+h-r2);ctx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+    ctx.lineTo(x+r2,y+h);ctx.arcTo(x,y+h,x,y+h-r2,r2);
+    ctx.lineTo(x,y+r2);ctx.arcTo(x,y,x+r2,y,r2);ctx.closePath();
+  }
+
+  function draw(){
+    const PW=Math.min(M.querySelector('[style*="max-width:680"]').offsetWidth||660,660);
+    const dil=curNode?curNode.dilation:1;
+    const ic=curNode?curNode.blockNum===1?21:96:21;
+    const MAIN_X=60, SKIP_X=PW-160, W_BOX=PW-240, BH=40, GAP=14, PAD_T=30;
+
+    // 12 steps in main+skip columns
+    const mainSteps=[0,1,2,3,4,5,6,7,8]; // input + 8 main layers
+    const skipStep=9;
+    const addStep=10, outStep=11;
+    const totalMainH=mainSteps.length*(BH+GAP)+PAD_T;
+    const H=totalMainH+(BH+GAP)*2+40;
+
+    cvs.width=PW*D2; cvs.height=H*D2;
+    cvs.style.width=PW+'px'; cvs.style.height=H+'px';
+    ctx.setTransform(D2,0,0,D2,0,0);
+    ctx.fillStyle='#0a0f1e'; ctx.fillRect(0,0,PW,H);
+
+    // Draw step boxes
+    const stepY=(i)=>PAD_T+i*(BH+GAP);
+
+    mainSteps.forEach((si,i)=>{
+      const s=STEPS[si], y=stepY(i), isAct=curStep===si;
+      ctx.fillStyle=isAct?hexA(s.col,.25):hexA(s.col,.08);
+      rr(MAIN_X,y,W_BOX,BH,7); ctx.fill();
+      ctx.strokeStyle=isAct?s.col:hexA(s.col,.3);
+      ctx.lineWidth=isAct?2:1;
+      rr(MAIN_X,y,W_BOX,BH,7); ctx.stroke();
+      if(isAct){ctx.shadowColor=s.col;ctx.shadowBlur=10;rr(MAIN_X,y,W_BOX,BH,7);ctx.stroke();ctx.shadowBlur=0;}
+      ctx.fillStyle=isAct?'#f1f5f9':hexA('#94a3b8',.7);
+      ctx.font=`${isAct?'bold ':''} 10px "Segoe UI"`;ctx.textAlign='left';
+      ctx.fillText(s.label,MAIN_X+10,y+16);
+      ctx.fillStyle=isAct?hexA(s.col,1):hexA(s.col,.5);
+      ctx.font='8px "Courier New"';
+      ctx.fillText(s.dim(ic,dil),MAIN_X+10,y+30);
+
+      if(i<mainSteps.length-1){
+        ctx.fillStyle=hexA('#475569',.5);ctx.textAlign='center';ctx.font='12px sans-serif';
+        ctx.fillText('↓',MAIN_X+W_BOX/2,y+BH+GAP/2+4);
+      }
+    });
+
+    // Vertical line from ADD down
+    const addY=stepY(mainSteps.length);
+    const outY=stepY(mainSteps.length+1);
+
+    // Skip box (right side, vertically centered between input and ADD)
+    const skipY=(stepY(0)+addY)/2-BH/2;
+    const ss=STEPS[skipStep], isSkipAct=curStep===skipStep;
+    const SKW=130, SKX=PW-SKW-10;
+    ctx.fillStyle=isSkipAct?hexA(ss.col,.25):hexA(ss.col,.08);
+    rr(SKX,skipY,SKW,BH,7); ctx.fill();
+    ctx.strokeStyle=isSkipAct?ss.col:hexA(ss.col,.3);
+    ctx.lineWidth=isSkipAct?2:1;
+    rr(SKX,skipY,SKW,BH,7); ctx.stroke();
+    ctx.fillStyle=isSkipAct?'#f1f5f9':hexA('#94a3b8',.7);
+    ctx.font='8.5px "Segoe UI"';ctx.textAlign='center';
+    ctx.fillText('SKIP',SKX+SKW/2,skipY+15);
+    ctx.fillStyle=isSkipAct?hexA(ss.col,1):hexA(ss.col,.5);
+    ctx.font='7px "Courier New"';
+    ctx.fillText(ss.dim(ic,dil),SKX+SKW/2,skipY+28);
+
+    // Skip connection lines
+    ctx.strokeStyle=hexA('#059669',.35);ctx.lineWidth=1.5;ctx.setLineDash([4,3]);
+    ctx.beginPath();
+    ctx.moveTo(MAIN_X+W_BOX,stepY(0)+BH/2);
+    ctx.lineTo(SKX+SKW/2,stepY(0)+BH/2);
+    ctx.lineTo(SKX+SKW/2,skipY);
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(SKX+SKW/2,skipY+BH);
+    ctx.lineTo(SKX+SKW/2,addY+BH/2);
+    ctx.lineTo(MAIN_X+W_BOX/2,addY+BH/2);
+    ctx.stroke();
+    ctx.setLineDash([]);
+
+    // ADD box
+    const as=STEPS[addStep], isAddAct=curStep===addStep;
+    ctx.fillStyle=isAddAct?hexA(as.col,.25):hexA(as.col,.08);
+    rr(MAIN_X,addY,W_BOX,BH,7); ctx.fill();
+    ctx.strokeStyle=isAddAct?as.col:hexA(as.col,.3);ctx.lineWidth=isAddAct?2:1;
+    rr(MAIN_X,addY,W_BOX,BH,7); ctx.stroke();
+    ctx.fillStyle=isAddAct?'#f1f5f9':hexA('#94a3b8',.7);
+    ctx.font=`${isAddAct?'bold ':''} 11px "Segoe UI"`;ctx.textAlign='center';
+    ctx.fillText(as.label,MAIN_X+W_BOX/2,addY+16);
+    ctx.fillStyle=isAddAct?hexA(as.col,1):hexA(as.col,.5);
+    ctx.font='8px "Courier New"';ctx.fillText(as.dim(ic,dil),MAIN_X+W_BOX/2,addY+30);
+    ctx.fillStyle=hexA('#475569',.5);ctx.textAlign='center';ctx.font='12px sans-serif';
+    ctx.fillText('↓',MAIN_X+W_BOX/2,addY+BH+GAP/2+4);
+
+    // OUTPUT box
+    const os=STEPS[outStep], isOutAct=curStep===outStep;
+    ctx.fillStyle=isOutAct?hexA(os.col,.25):hexA(os.col,.1);
+    rr(MAIN_X,outY,W_BOX,BH,7); ctx.fill();
+    ctx.strokeStyle=isOutAct?os.col:hexA(os.col,.3);ctx.lineWidth=isOutAct?2:1;
+    rr(MAIN_X,outY,W_BOX,BH,7); ctx.stroke();
+    ctx.fillStyle=isOutAct?'#f1f5f9':hexA('#94a3b8',.7);
+    ctx.font=`${isOutAct?'bold ':''} 10px "Segoe UI"`;ctx.textAlign='left';
+    ctx.fillText(os.label,MAIN_X+10,outY+16);
+    ctx.fillStyle=isOutAct?hexA(os.col,1):hexA(os.col,.5);
+    ctx.font='8px "Courier New"';ctx.fillText(os.dim(ic,dil),MAIN_X+10,outY+30);
+
+    // Info
+    if(curStep>=0&&curStep<STEPS.length){
+      infoEl.textContent=STEPS[curStep].desc;
+    } else {
+      infoEl.textContent='Klik ▶ Play untuk animasi aliran data melalui semua sub-layer';
+    }
+  }
+
+  function stopPlay(){playing=false;clearInterval(timer);timer=null;M.querySelector('#rb-play').textContent='▶ Play';}
+  function startPlay(){
+    if(curStep>=STEPS.length-1){curStep=-1;}
+    playing=true;M.querySelector('#rb-play').textContent='⏸ Pause';
+    timer=setInterval(()=>{
+      curStep++;
+      if(curStep>=STEPS.length){stopPlay();return;}
+      draw();
+    },700);
+  }
+
+  M.querySelector('#rb-play').onclick=()=>playing?stopPlay():startPlay();
+  M.querySelector('#rb-rst').onclick=()=>{stopPlay();curStep=-1;draw();};
+  M.querySelector('#rb-cls').onclick=()=>{stopPlay();M.style.display='none';};
+  M.addEventListener('click',e=>{if(e.target===M){stopPlay();M.style.display='none';}});
+  document.addEventListener('keydown',e=>{
+    if(M.style.display==='none')return;
+    if(e.key==='Escape'){stopPlay();M.style.display='none';}
+    if(e.key===' '){e.preventDefault();playing?stopPlay():startPlay();}
+    if(e.key==='ArrowRight'){stopPlay();curStep=Math.min(STEPS.length-1,curStep+1);draw();}
+    if(e.key==='ArrowLeft'){stopPlay();curStep=Math.max(-1,curStep-1);draw();}
+  });
+
+  window._openResBlock=function(node){
+    curNode=node;
+    M.querySelector('#rb-title').textContent=`Residual Block ${node.blockNum} / 7  —  Dilation = ${node.dilation}`;
+    M.querySelector('#rb-sub').textContent=
+      `Receptive field Block ${node.blockNum}: ±${(3-1)*node.dilation} timestep · `+
+      (node.blockNum===1?'in_ch=21 (features) → out_ch=96':'in_ch=96 → out_ch=96 · skip=Identity');
+    M.style.display='block';
+    curStep=-1;stopPlay();
+    requestAnimationFrame(()=>requestAnimationFrame(draw));
+  };
+})();
+
+// ── Modal: Statistik Harian (Feature Extraction) ─────
+(function(){
+  const M=document.createElement('div');
+  M.style.cssText='display:none;position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.97);overflow-y:auto';
+  M.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 50px;box-sizing:border-box">
+    <div style="width:100%;max-width:860px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:1rem;font-weight:900;color:#f1f5f9">Statistik Harian — Kompresi Fitur</div>
+          <div style="font-size:.7rem;color:#64748b;margin-top:3px">200.000 baris × 21 sensor → 4 statistik × 21 = 84 fitur per hari</div>
+        </div>
+        <div style="display:flex;gap:7px">
+          <button id="sf-play" style="padding:6px 16px;border-radius:7px;border:1.5px solid #10b981;color:#10b981;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">▶ Play</button>
+          <button id="sf-rst"  style="padding:6px 11px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:700;cursor:pointer;font-size:.8rem">↺</button>
+          <button id="sf-cls"  style="padding:6px 14px;border-radius:7px;border:1.5px solid #475569;color:#cbd5e1;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">✕ Tutup</button>
+        </div>
+      </div>
+      <div id="sf-info" style="font-size:.73rem;color:#64748b;min-height:18px;margin-bottom:8px"></div>
+      <canvas id="sf-cvs" style="display:block;border-radius:10px"></canvas>
+    </div>
+  </div>`;
+  document.body.appendChild(M);
+
+  const cvs=M.querySelector('#sf-cvs'), ctx=cvs.getContext('2d');
+  const infoEl=M.querySelector('#sf-info');
+  const D2=window.devicePixelRatio||1;
+  const SENSORS=['T_HS_InConv_1','T_HS_InConv_2','T_HS_Inv_1','T_HS_Inv_2','T_Container',
+    'I_L1','I_L2','I_L3','I_Battery','I_DC_In','U_Battery','U_DC_In','U_DC_Out',
+    'U_L1','U_L2','U_L3','InConv_E','Output_E','OpenAC','OpenIn','DevAlive'];
+  const STAT_COLS=['#3b82f6','#10b981','#f59e0b','#ef4444'];
+  const STAT_LBL=['mean','std','max','min'];
+  // step: 0=show raw, 1=mean, 2=std, 3=max, 4=min, 5=concat(show 84 vector)
+  let step=-1, playing=false, timer=null;
+
+  function rr(x,y,w,h,r2){
+    ctx.beginPath();ctx.moveTo(x+r2,y);ctx.lineTo(x+w-r2,y);ctx.arcTo(x+w,y,x+w,y+r2,r2);
+    ctx.lineTo(x+w,y+h-r2);ctx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+    ctx.lineTo(x+r2,y+h);ctx.arcTo(x,y+h,x,y+h-r2,r2);
+    ctx.lineTo(x,y+r2);ctx.arcTo(x,y,x+r2,y,r2);ctx.closePath();
+  }
+
+  function draw(){
+    const wrap=M.querySelector('[style*="max-width:860"]');
+    const PW=Math.min(wrap.offsetWidth||840,840);
+    const H=360;
+    cvs.width=PW*D2; cvs.height=H*D2;
+    cvs.style.width=PW+'px'; cvs.style.height=H+'px';
+    ctx.setTransform(D2,0,0,D2,0,0);
+    ctx.fillStyle='#0a0f1e'; ctx.fillRect(0,0,PW,H);
+
+    const N_SEN=21, LEFT=30, RIGHT=PW-30, MID=(LEFT+RIGHT)/2;
+    const COL_W=Math.floor((RIGHT-LEFT)/N_SEN);
+
+    // ── Raw data matrix (left section) ──
+    const RAW_X=LEFT, RAW_W=Math.round((RIGHT-LEFT)*0.38);
+    const RAW_H=200, RAW_Y=50;
+    ctx.fillStyle=step>=0?hexA('#334155',.8):hexA('#334155',.4);
+    rr(RAW_X,RAW_Y,RAW_W,RAW_H,8); ctx.fill();
+    ctx.strokeStyle=step>=0?'#475569':'#1e293b';ctx.lineWidth=1;
+    rr(RAW_X,RAW_Y,RAW_W,RAW_H,8); ctx.stroke();
+
+    // Grid lines inside raw matrix
+    const COL_W2=RAW_W/Math.min(N_SEN,8);
+    for(let c=1;c<Math.min(N_SEN,8);c++){
+      ctx.strokeStyle=hexA('#475569',.4);ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.moveTo(RAW_X+c*COL_W2,RAW_Y+4);ctx.lineTo(RAW_X+c*COL_W2,RAW_Y+RAW_H-4);ctx.stroke();
+    }
+    for(let r=1;r<8;r++){
+      ctx.strokeStyle=hexA('#475569',.3);ctx.lineWidth=0.5;
+      ctx.beginPath();ctx.moveTo(RAW_X+4,RAW_Y+r*RAW_H/8);ctx.lineTo(RAW_X+RAW_W-4,RAW_Y+r*RAW_H/8);ctx.stroke();
+    }
+
+    ctx.fillStyle='#94a3b8';ctx.font='bold 10px "Segoe UI"';ctx.textAlign='center';
+    ctx.fillText('200.000 baris',RAW_X+RAW_W/2,RAW_Y-8);
+    ctx.fillStyle='#64748b';ctx.font='9px "Segoe UI"';
+    ctx.fillText('×',RAW_X+RAW_W/2,RAW_Y+RAW_H/2+4);
+    ctx.fillStyle='#94a3b8';ctx.font='bold 10px "Segoe UI"';
+    ctx.fillText('21 sensor',RAW_X+RAW_W/2,RAW_Y+RAW_H+14);
+
+    // ── Arrow ──
+    const ARR_X=RAW_X+RAW_W+10, ARR_W=50;
+    if(step>=0){
+      ctx.fillStyle='#34d399';ctx.font='bold 22px sans-serif';ctx.textAlign='center';
+      ctx.fillText('→',ARR_X+ARR_W/2,RAW_Y+RAW_H/2+8);
+    }
+
+    // ── Stat columns ──
+    const STAT_X=RAW_X+RAW_W+ARR_W+10, STAT_W=Math.round((RIGHT-STAT_X)*0.94);
+    const SC_W=Math.floor(STAT_W/4), SC_H=RAW_H;
+    STAT_LBL.forEach((lbl,si)=>{
+      const sx=STAT_X+si*SC_W, visible=(step>=si+1), active=(step===si+1);
+      ctx.fillStyle=visible?hexA(STAT_COLS[si],.15):hexA(STAT_COLS[si],.04);
+      rr(sx+3,RAW_Y,SC_W-6,SC_H,6); ctx.fill();
+      ctx.strokeStyle=active?STAT_COLS[si]:visible?hexA(STAT_COLS[si],.4):hexA(STAT_COLS[si],.1);
+      ctx.lineWidth=active?2:1;
+      if(active){ctx.shadowColor=STAT_COLS[si];ctx.shadowBlur=10;}
+      rr(sx+3,RAW_Y,SC_W-6,SC_H,6); ctx.stroke();
+      ctx.shadowBlur=0;
+      if(visible){
+        ctx.fillStyle=active?STAT_COLS[si]:hexA(STAT_COLS[si],.6);
+        ctx.font=`bold ${active?11:9}px "Segoe UI"`;ctx.textAlign='center';
+        ctx.fillText(lbl,sx+SC_W/2,RAW_Y+16);
+        // Mini bars for each sensor
+        const BAR_H=Math.floor((SC_H-30)/N_SEN), BAR_W=SC_W-20;
+        for(let s=0;s<N_SEN;s++){
+          const bx=sx+10, by=RAW_Y+24+s*BAR_H;
+          const rnd=Math.random()*0.5+0.2;
+          ctx.fillStyle=hexA(STAT_COLS[si],.3+rnd*.3);
+          ctx.fillRect(bx,by+1,Math.round(BAR_W*rnd),BAR_H-2);
+        }
+        ctx.fillStyle=active?STAT_COLS[si]:hexA(STAT_COLS[si],.5);
+        ctx.font='8px "Segoe UI"';
+        ctx.fillText('[21]',sx+SC_W/2,RAW_Y+SC_H+14);
+      }
+    });
+
+    // ── 84-feature vector (final step) ──
+    if(step>=5){
+      const VX=STAT_X, VW=STAT_W, VH=30, VY=RAW_Y+SC_H+30;
+      ctx.fillStyle=hexA('#6366f1',.15);
+      rr(VX,VY,VW,VH,7); ctx.fill();
+      ctx.strokeStyle='#6366f1';ctx.lineWidth=1.5;
+      ctx.shadowColor='#6366f1';ctx.shadowBlur=8;
+      rr(VX,VY,VW,VH,7); ctx.stroke();
+      ctx.shadowBlur=0;
+      // 84 mini dots
+      const DOT_W=Math.floor(VW/84);
+      for(let i=0;i<84;i++){
+        const grp=Math.floor(i/21);
+        ctx.fillStyle=STAT_COLS[grp];
+        ctx.fillRect(VX+4+i*(DOT_W+0.5),VY+8,Math.max(1,DOT_W),VH-16);
+      }
+      ctx.fillStyle='#a5b4fc';ctx.font='bold 10px "Segoe UI"';ctx.textAlign='center';
+      ctx.fillText('feat [84] = concat(mean·21, std·21, max·21, min·21)',VX+VW/2,VY+VH+16);
+    }
+
+    const DESCS=[
+      'Tekan ▶ Play — lihat bagaimana 200k baris dikompresi menjadi 84 angka',
+      'Step 1: hitung MEAN setiap sensor dari 200k baris → 21 nilai',
+      'Step 2: hitung STD (standar deviasi) setiap sensor → 21 nilai',
+      'Step 3: hitung MAX setiap sensor → 21 nilai tertinggi',
+      'Step 4: hitung MIN setiap sensor → 21 nilai terendah',
+      '✓ CONCAT: mean[21]+std[21]+max[21]+min[21] = feat[84] — siap masuk MLP Classifier',
+    ];
+    infoEl.textContent=DESCS[Math.max(0,step+1)];
+  }
+
+  function stopPlay(){playing=false;clearInterval(timer);timer=null;M.querySelector('#sf-play').textContent='▶ Play';}
+  function startPlay(){
+    if(step>=5){step=-1;}
+    playing=true;M.querySelector('#sf-play').textContent='⏸ Pause';
+    timer=setInterval(()=>{
+      step++;if(step>5){stopPlay();return;}draw();
+    },900);
+  }
+
+  M.querySelector('#sf-play').onclick=()=>playing?stopPlay():startPlay();
+  M.querySelector('#sf-rst').onclick=()=>{stopPlay();step=-1;draw();};
+  M.querySelector('#sf-cls').onclick=()=>{stopPlay();M.style.display='none';};
+  M.addEventListener('click',e=>{if(e.target===M){stopPlay();M.style.display='none';}});
+  document.addEventListener('keydown',e=>{
+    if(M.style.display==='none')return;
+    if(e.key==='Escape'){stopPlay();M.style.display='none';}
+    if(e.key===' '){e.preventDefault();playing?stopPlay():startPlay();}
+  });
+
+  window._openStatFeat=function(){
+    M.style.display='block';step=-1;stopPlay();
+    requestAnimationFrame(()=>requestAnimationFrame(draw));
+  };
+})();
+
+// ── Modal: Softmax → Argmax ───────────────────────────
+(function(){
+  const M=document.createElement('div');
+  M.style.cssText='display:none;position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.97);overflow-y:auto';
+  M.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;padding:20px 16px 50px;box-sizing:border-box">
+    <div style="width:100%;max-width:640px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:1rem;font-weight:900;color:#f1f5f9">Softmax → Argmax — Keputusan Klasifikasi</div>
+          <div style="font-size:.7rem;color:#64748b;margin-top:3px">logits [1,2] → softmax → probabilitas → argmax → label final</div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center">
+          <div style="font-size:.68rem;color:#64748b">Skenario:</div>
+          <button id="sm-h"    style="padding:5px 11px;border-radius:6px;border:1.5px solid #3b82f6;color:#3b82f6;background:transparent;font-weight:700;cursor:pointer;font-size:.7rem">Healthy</button>
+          <button id="sm-w"    style="padding:5px 11px;border-radius:6px;border:1.5px solid #f97316;color:#f97316;background:transparent;font-weight:700;cursor:pointer;font-size:.7rem">Warning</button>
+          <button id="sm-u"    style="padding:5px 11px;border-radius:6px;border:1.5px solid #94a3b8;color:#94a3b8;background:transparent;font-weight:700;cursor:pointer;font-size:.7rem">Uncertain</button>
+          <button id="sm-cls"  style="padding:5px 12px;border-radius:6px;border:1.5px solid #475569;color:#cbd5e1;background:transparent;font-weight:800;cursor:pointer;font-size:.7rem">✕</button>
+        </div>
+      </div>
+      <canvas id="sm-cvs" style="display:block;border-radius:10px"></canvas>
+      <div id="sm-info" style="font-size:.73rem;color:#64748b;margin-top:10px;min-height:36px;text-align:center;line-height:1.6"></div>
+    </div>
+  </div>`;
+  document.body.appendChild(M);
+
+  const cvs=M.querySelector('#sm-cvs'), ctx=cvs.getContext('2d');
+  const infoEl=M.querySelector('#sm-info');
+  const D2=window.devicePixelRatio||1;
+
+  const SCENARIOS={
+    h:{logits:[2.8,-1.2],label:0,name:'Healthy',col:'#3b82f6'},
+    w:{logits:[-0.8,2.4],label:1,name:'Warning',col:'#f97316'},
+    u:{logits:[0.3,0.5], label:1,name:'Warning (tipis)',col:'#f59e0b'},
+  };
+  let curSc='h', animT=0, raf=null;
+
+  function softmax(a,b){const ea=Math.exp(a),eb=Math.exp(b),s=ea+eb;return[ea/s,eb/s];}
+
+  function animate(ts){
+    animT=Math.min(animT+(ts?0.025:1),1);
+    draw(animT);
+    if(animT<1) raf=requestAnimationFrame(animate);
+    else raf=null;
+  }
+
+  function startAnim(){
+    animT=0;
+    if(raf)cancelAnimationFrame(raf);
+    raf=requestAnimationFrame(animate);
+  }
+
+  function rr(x,y,w,h,r2){
+    ctx.beginPath();ctx.moveTo(x+r2,y);ctx.lineTo(x+w-r2,y);ctx.arcTo(x+w,y,x+w,y+r2,r2);
+    ctx.lineTo(x+w,y+h-r2);ctx.arcTo(x+w,y+h,x+w-r2,y+h,r2);
+    ctx.lineTo(x+r2,y+h);ctx.arcTo(x,y+h,x,y+h-r2,r2);
+    ctx.lineTo(x,y+r2);ctx.arcTo(x,y,x+r2,y,r2);ctx.closePath();
+  }
+
+  function draw(t){
+    t=t||1;
+    const PW=Math.min(M.querySelector('[style*="max-width:640"]').offsetWidth||620,620);
+    const H=310;
+    cvs.width=PW*D2;cvs.height=H*D2;
+    cvs.style.width=PW+'px';cvs.style.height=H+'px';
+    ctx.setTransform(D2,0,0,D2,0,0);
+    ctx.fillStyle='#0a0f1e';ctx.fillRect(0,0,PW,H);
+
+    const sc=SCENARIOS[curSc];
+    const [pH,pW]=softmax(...sc.logits);
+    const probs=[pH,pW];
+    const labels=['Healthy','Warning'];
+    const cols=['#3b82f6','#f97316'];
+    const winner=sc.label;
+
+    const PAD=40,BAR_W=Math.round((PW-PAD*2-40)/2),MAX_H=160,GAP=40;
+    const BASE_Y=220;
+
+    // Logits display
+    ctx.fillStyle='#334155';ctx.font='bold 9px "Segoe UI"';ctx.textAlign='center';
+    ctx.fillText('LOGITS (raw output MLP)',PW/2,22);
+    ctx.fillStyle='#60a5fa';ctx.font='bold 11px "Courier New"';
+    ctx.fillText(`[${sc.logits[0].toFixed(2)},  ${sc.logits[1].toFixed(2)}]`,PW/2,38);
+
+    // Arrow softmax
+    ctx.fillStyle='#34d399';ctx.font='bold 11px "Segoe UI"';ctx.textAlign='center';
+    ctx.fillText('softmax(x) = eˣ / Σeˣ  ↓',PW/2,60);
+
+    // Bars
+    probs.forEach((p,i)=>{
+      const bx=PAD+(i*(BAR_W+GAP));
+      const barH=Math.round(MAX_H*p*t);
+      const isWin=(i===winner);
+
+      // Base
+      ctx.fillStyle=hexA(cols[i],.1);
+      rr(bx,BASE_Y-MAX_H,BAR_W,MAX_H,6);ctx.fill();
+      ctx.strokeStyle=hexA(cols[i],.2);ctx.lineWidth=1;
+      rr(bx,BASE_Y-MAX_H,BAR_W,MAX_H,6);ctx.stroke();
+
+      // Bar fill
+      ctx.fillStyle=isWin&&t>=0.95?hexA(cols[i],.9):hexA(cols[i],.6);
+      if(isWin&&t>=0.95){ctx.shadowColor=cols[i];ctx.shadowBlur=16;}
+      rr(bx,BASE_Y-barH,BAR_W,barH,6);ctx.fill();
+      ctx.shadowBlur=0;
+
+      // Winner crown
+      if(isWin&&t>=0.97){
+        ctx.fillStyle=cols[i];ctx.font='bold 20px sans-serif';ctx.textAlign='center';
+        ctx.fillText('★',bx+BAR_W/2,BASE_Y-barH-14);
+        ctx.strokeStyle=cols[i];ctx.lineWidth=2;
+        rr(bx-2,BASE_Y-barH-2,BAR_W+4,barH+4,7);ctx.stroke();
+        ctx.shadowBlur=0;
+      }
+
+      // Percentage
+      ctx.fillStyle=t>=0.5?'#ffffff':'transparent';
+      ctx.font=`bold ${t>=0.9?16:12}px "Segoe UI"`;ctx.textAlign='center';
+      ctx.fillText(t>=0.5?(p*100*t).toFixed(1)+'%':'',bx+BAR_W/2,BASE_Y-barH+20+(barH>30?0:30));
+
+      // Label
+      ctx.fillStyle=isWin?cols[i]:'#64748b';
+      ctx.font=`bold ${isWin?13:11}px "Segoe UI"`;ctx.textAlign='center';
+      ctx.fillText(labels[i],bx+BAR_W/2,BASE_Y+18);
+      ctx.fillStyle=hexA(cols[i],.6);ctx.font='8px "Segoe UI"';
+      ctx.fillText('('+i+')',bx+BAR_W/2,BASE_Y+30);
+    });
+
+    // Argmax result
+    if(t>=0.98){
+      ctx.fillStyle='#1e293b';rr(PAD,BASE_Y+40,PW-PAD*2,40,8);ctx.fill();
+      ctx.strokeStyle=cols[winner];ctx.lineWidth=1.5;
+      ctx.shadowColor=cols[winner];ctx.shadowBlur=8;
+      rr(PAD,BASE_Y+40,PW-PAD*2,40,8);ctx.stroke();ctx.shadowBlur=0;
+      ctx.fillStyle=cols[winner];ctx.font='bold 13px "Segoe UI"';ctx.textAlign='center';
+      ctx.fillText(`argmax → ${winner}  →  LABEL: ${sc.name.toUpperCase()}  (confidence: ${(Math.max(...probs)*100).toFixed(1)}%)`,PW/2,BASE_Y+65);
+    }
+
+    infoEl.innerHTML=t>=0.98
+      ?`<span style="color:${cols[winner]};font-weight:900">${labels[winner]} menang</span> dengan P=${(probs[winner]*100).toFixed(1)}%<br><span style="color:#64748b;font-size:.68rem">P(Healthy)=${(pH*100).toFixed(1)}% · P(Warning)=${(pW*100).toFixed(1)}% · P(H)+P(W)=100%</span>`
+      :'Pilih skenario: Healthy / Warning / Uncertain untuk melihat keputusan model';
+  }
+
+  function setSc(s){curSc=s;startAnim();}
+  M.querySelector('#sm-h').onclick=()=>setSc('h');
+  M.querySelector('#sm-w').onclick=()=>setSc('w');
+  M.querySelector('#sm-u').onclick=()=>setSc('u');
+  M.querySelector('#sm-cls').onclick=()=>{if(raf)cancelAnimationFrame(raf);M.style.display='none';};
+  M.addEventListener('click',e=>{if(e.target===M){if(raf)cancelAnimationFrame(raf);M.style.display='none';}});
+  document.addEventListener('keydown',e=>{
+    if(M.style.display==='none')return;
+    if(e.key==='Escape'){if(raf)cancelAnimationFrame(raf);M.style.display='none';}
+    if(e.key==='h'||e.key==='H')setSc('h');
+    if(e.key==='w'||e.key==='W')setSc('w');
+    if(e.key==='u'||e.key==='U')setSc('u');
+  });
+
+  window._openSoftmax=function(){
+    M.style.display='block';curSc='h';
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{animT=0;startAnim();}));
+  };
 })();
 
 // ── Resize ────────────────────────────────────────────
