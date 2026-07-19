@@ -89,6 +89,9 @@ canvas.fc{display:block;margin:0 auto}
   <div class="nt" style="--tc:#f472b6" onclick="showPage('p4',this)">
     <div class="nd"></div>MLP Klasifikasi Inference
   </div>
+  <div class="nt" style="--tc:#a78bfa" onclick="showPage('p5',this)">
+    <div class="nd"></div>Inference Gabungan (stage3)
+  </div>
 </nav>
 
 <!-- PAGE 1 -->
@@ -193,17 +196,17 @@ canvas.fc{display:block;margin:0 auto}
 <div id="p3" class="page">
   <div class="ctrl">
     <div class="ep-box">
-      <div class="ep-lbl">Epoch</div>
+      <div class="ep-lbl" id="el3">Epoch</div>
       <div class="ep-val" id="ev3" style="color:#f59e0b">0 / 100</div>
     </div>
     <div class="prog-wrap">
-      <div class="prog-lbl">Training Progress</div>
+      <div class="prog-lbl" id="pl3">Training Progress</div>
       <div class="prog-track"><div class="prog-fill" id="pf3" style="background:#f59e0b"></div></div>
     </div>
     <div class="met-row">
-      <div class="mbox"><div class="mlbl">CE Loss</div><div class="mval" id="mm3" style="color:#f87171">—</div></div>
-      <div class="mbox"><div class="mlbl">Accuracy</div><div class="mval" id="mr3" style="color:#34d399">—</div></div>
-      <div class="mbox"><div class="mlbl">F1</div><div class="mval" id="ma3" style="color:#a78bfa">—</div></div>
+      <div class="mbox"><div class="mlbl" id="ml3a">CE Loss</div><div class="mval" id="mm3" style="color:#f87171">—</div></div>
+      <div class="mbox"><div class="mlbl" id="ml3b">Accuracy</div><div class="mval" id="mr3" style="color:#34d399">—</div></div>
+      <div class="mbox"><div class="mlbl" id="ml3c">F1</div><div class="mval" id="ma3" style="color:#a78bfa">—</div></div>
     </div>
     <div class="phase-pill" id="pp3" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
     <div class="cbtns">
@@ -284,6 +287,34 @@ canvas.fc{display:block;margin:0 auto}
     <div class="leg-item" style="color:#64748b;font-style:italic">Tidak ada Backprop pada Inference</div>
   </div>
   <div class="canvas-scroll"><canvas id="fc4" class="fc"></canvas></div>
+</div>
+
+<!-- PAGE 5 -->
+<div id="p5" class="page">
+  <div class="ctrl">
+    <div class="phase-pill" id="pp5" style="color:#64748b;border-color:#e2e8f0;background:#f8fafc">IDLE</div>
+    <div class="cbtns" style="margin-left:0">
+      <button class="btn" id="btn5" style="color:#a78bfa;border-color:#a78bfa" onclick="tog(5)">▶ Play Inference</button>
+      <button class="btn" style="color:#64748b;border-color:#cbd5e1" onclick="rst(5)">↺ Reset</button>
+      <select class="spd" id="sp5" onchange="setSp(5,this.value)">
+        <option value="1">1×</option><option value="2" selected>2×</option><option value="5">5×</option>
+      </select>
+    </div>
+    <div class="met-row">
+      <div class="mbox"><div class="mlbl">Mode</div><div class="mval" style="color:#a78bfa">model.eval()</div></div>
+      <div class="mbox"><div class="mlbl">Gradient</div><div class="mval" style="color:#f87171">no_grad()</div></div>
+      <div class="mbox"><div class="mlbl">Input</div><div class="mval" style="color:#a78bfa">3 hari CSV</div></div>
+      <div class="mbox"><div class="mlbl">Step</div><div class="mval" id="mm5" style="color:#a78bfa">—</div></div>
+    </div>
+  </div>
+  <div class="legend">
+    <div class="leg-item"><div class="leg-dot" style="background:#475569"></div>Setup</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#3b82f6"></div>Mode A — Training Inference</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#f59e0b"></div>Mode B — Testing Inference (future)</div>
+    <div class="leg-item"><div class="leg-dot" style="background:#10b981"></div>Output &amp; Export</div>
+    <div class="leg-item" style="color:#64748b;font-style:italic">Tidak ada Backprop · torch.no_grad()</div>
+  </div>
+  <div class="canvas-scroll"><canvas id="fc5" class="fc"></canvas></div>
 </div>
 
 <script>
@@ -475,7 +506,7 @@ const NODES = {
   p1: [
     // ── SETUP (one-time, sebelum epoch loop) ─────────────────
     { title:'BACA CSV',            op:'glob(data/*.csv) · read_and_crop() × 37',
-      dim_in:'37 file CSV (data/)',  dim_out:'[37, 200.000, 24 col]',
+      dim_in:'37 file CSV (data/)',  dim_out:'[37, 200.000, 25 col]',
       desc:'Sort by date · filter nama · parse ts_date · 37 hari data sensor SIV',
       col:'#475569', phase:'input', hasWeight:false, setup:true },
     { title:'FILTER WAKTU',        op:"df[(ts_date ≥ 03:00) & (ts_date ≤ 18:16:35)].iloc[:200k]",
@@ -568,12 +599,12 @@ const NODES = {
       desc:'Update bobot ResBlok 1-7, Decoder Dense 1-2 · lr scheduler step',
       col:'#d97706', phase:'upd',  hasWeight:false },
     // ── SAVE + EVALUATION (setelah training selesai, data test) ───
-    { title:'SAVE MODEL',         op:'torch.save(model.state_dict(), "tcn_stage1_best.pth")',
-      dim_in:'model weights (trained)',  dim_out:'tcn_stage1_best.pth  (disk)',
-      desc:'Simpan checkpoint akhir training · epoch=100 · best_val tracking via ReduceLROnPlateau',
+    { title:'SAVE MODEL',         op:'torch.save(model.state_dict(), "model_stage1_forecaster.pth")',
+      dim_in:'model weights (trained)',  dim_out:'model_stage1_forecaster.pth  (disk)',
+      desc:'Simpan final weights setelah epoch=100 · checkpoints_stage1/ tersedia tiap 50 ep',
       col:'#b45309', phase:'save', hasWeight:false, eval:true },
-    { title:'LOAD MODEL',         op:'model.load_state_dict(torch.load("tcn_stage1_best.pth"))',
-      dim_in:'tcn_stage1_best.pth  (disk)',  dim_out:'model weights (restored to RAM)',
+    { title:'LOAD MODEL',         op:'model.load_state_dict(torch.load("model_stage1_forecaster.pth"))',
+      dim_in:'model_stage1_forecaster.pth  (disk)',  dim_out:'model weights (restored to RAM)',
       desc:'Muat bobot tersimpan · model.to(device) · model.eval() · torch.no_grad()',
       col:'#0891b2', phase:'load', hasWeight:false, eval:true },
     { title:'TEST FORWARD PASS',  op:'model.eval() · torch.no_grad() · scaler.transform(X_test)',
@@ -635,54 +666,90 @@ const NODES = {
   ],
 
   p3: [
-    { title:'CSV PER HARI',        op:'read_and_crop() per file',
-      dim_in:'— (raw CSV)',         dim_out:'[200.000, 21]',
-      desc:'Setiap hari = 1 sampel · 200.000 baris × 21 fitur sensor',
-      col:'#475569', phase:'input', hasWeight:false },
-    { title:'STATISTIK HARIAN',    op:'mean + std + max + min (axis=0)',
-      dim_in:'[200.000, 21]',      dim_out:'[84]',
-      desc:'mean:[21] · std:[21] · max:[21] · min:[21] → concat → [84]',
-      col:'#10b981', phase:'pre',  hasWeight:false },
-    { title:'BATCH STATISTIK',     op:'Stack N hari → batch',
-      dim_in:'[84] per hari',       dim_out:'[3, 84]',
-      desc:'BATCH_SIZE=3 · DataLoader shuffle=True · drop_last=True',
-      col:'#059669', phase:'pre',  hasWeight:false },
-    { title:'NORMALISASI STAT',    op:'MinMaxScaler.fit_transform()',
-      dim_in:'[3, 84]',            dim_out:'[3, 84]',
-      desc:'Range [-0.1, 1.1] · Fit pada train days · scaler_stage2.pkl',
-      col:'#7c3aed', phase:'pre',  hasWeight:false },
-    { title:'LABELING PER HARI',   op:'fault_columns > 0 → Warning',
-      dim_in:'fault_columns[3]',    dim_out:'[3]  label: 0=Healthy / 1=Warning',
-      desc:'0 fault aktif → Healthy(0) · ≥1 fault aktif → Warning(1)',
-      col:'#6d28d9', phase:'pre',  hasWeight:false },
-    { title:'LINEAR 1  —  256 neuron', op:'Linear(84 → 256)',
-      dim_in:'[3, 84]',            dim_out:'[3, 256]',
-      desc:'LayerNorm(256) + ReLU() + Dropout(0.3)',
+    // ── SETUP (one-time, sebelum epoch loop) ─────────────────
+    { title:'BACA CSV',             op:'glob(data/*.csv) · read_and_crop() × 37  —  filter "hasil/prediksi"',
+      dim_in:'37 file CSV (data/)', dim_out:'[37, 200.000, 25 col]',
+      desc:'Sort by extract_date · utf-8-sig · sep=; · decimal=, · skip "hasil/prediksi/inference"',
+      col:'#475569', phase:'input', hasWeight:false, setup:true },
+    { title:'FILTER WAKTU + CROP', op:"time(3,0,0) ≤ ts_date ≤ time(18,16,35) · iloc[:200k]",
+      dim_in:'[37, raw rows, 25 col]', dim_out:'[37, 200.000, 25 col]',
+      desc:'N_TAKE=200.000 · N_DROP_FIRST=0 · skip file jika rows < 200k setelah filter',
+      col:'#64748b', phase:'pre',  hasWeight:false, setup:true },
+    { title:'FILL MISSING',         op:'ffill().bfill()  →  24 kolom (21 sensor + 3 fault)',
+      dim_in:'[37, 200.000, 25 col]', dim_out:'[37, 200.000, 25 col]',
+      desc:'Forward-fill lalu back-fill · kolom hilang dari CSV diisi np.nan terlebih dulu',
+      col:'#7c3aed', phase:'pre',  hasWeight:false, setup:true },
+    { title:'STATISTIK HARIAN',     op:'mean+std+max+min (axis=0) per hari → [84]',
+      dim_in:'[37, 200.000, 21 sensor]', dim_out:'[37, 84]  float32',
+      desc:'day_to_feature_vector() · concat[mean(21), std(21), max(21), min(21)] · INPUT_DIM=84',
+      col:'#10b981', phase:'pre',  hasWeight:false, setup:true },
+    { title:'LABELING PER HARI',    op:'fault_columns.any() > 0 → Warning(1)  else  Healthy(0)',
+      dim_in:'[37, 200.000, 3 fault col]', dim_out:'[37]  label: 0=Healthy / 1=Warning',
+      desc:'SIV_MajorBCFltPres · SIV_MajorInputConvFltPres · SIV_MajorInverterFltPres',
+      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true },
+    { title:'TRAIN / TEST SPLIT',   op:'X_train=X[:29] · X_test=X[29:] · y_train · y_test',
+      dim_in:'[37 hari total]',     dim_out:'Train: [29 hari] | Test: [8 hari]',
+      desc:'TRAIN_RATIO=0.8 · kronologis · X_train:[29,84] float32 · y_train:[29] int64',
+      col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true },
+    { title:'FIT SCALER',           op:'MinMaxScaler((-0.1,1.1)).fit_transform(X_train_cls)',
+      dim_in:'X_train [29, 84]  float32', dim_out:'X_scaled [29, 84]  float32',
+      desc:'Fit HANYA dari X_train · transform juga X_test · save scaler_stage2.pkl',
+      col:'#4c1d95', phase:'pre',  hasWeight:false, setup:true },
+    { title:'TO TENSOR + DATALOADER', op:'FloatTensor.to(device) · DataLoader(batch=3, shuffle=True, drop_last=True)',
+      dim_in:'[29, 84]  float32',   dim_out:'9 batch × [3, 84]  (drop_last=True)',
+      desc:'device=cuda/cpu · ClassDataset wrapper · batch_size=3 · shuffle=True · drop_last=True',
+      col:'#3730a3', phase:'pre',  hasWeight:false, setup:true },
+    // ── EPOCH LOOP (per batch, diulang 100×) ─────────────────
+    { title:'LINEAR 1  —  256 neuron', op:'Linear(84 → 256) + LayerNorm(256) + ReLU + Dropout(0.3)',
+      dim_in:'[3, 84]',             dim_out:'[3, 256]',
+      desc:'Fully-connected layer pertama · LayerNorm stabilisasi training · Dropout 0.3',
       col:'#f59e0b', phase:'mlp',  hasWeight:true },
-    { title:'LINEAR 2  —  128 neuron', op:'Linear(256 → 128)',
-      dim_in:'[3, 256]',           dim_out:'[3, 128]',
-      desc:'LayerNorm(128) + ReLU() + Dropout(0.3)',
+    { title:'LINEAR 2  —  128 neuron', op:'Linear(256 → 128) + LayerNorm(128) + ReLU + Dropout(0.3)',
+      dim_in:'[3, 256]',            dim_out:'[3, 128]',
+      desc:'Layer kedua · LayerNorm(128) + ReLU + Dropout(0.3)',
       col:'#f59e0b', phase:'mlp',  hasWeight:true },
-    { title:'LINEAR 3  —  64 neuron',  op:'Linear(128 → 64)',
-      dim_in:'[3, 128]',           dim_out:'[3, 64]',
-      desc:'LayerNorm(64) + ReLU() + Dropout(0.3)',
+    { title:'LINEAR 3  —  64 neuron',  op:'Linear(128 → 64) + LayerNorm(64) + ReLU + Dropout(0.3)',
+      dim_in:'[3, 128]',            dim_out:'[3, 64]',
+      desc:'Layer ketiga · LayerNorm(64) + ReLU + Dropout(0.3)',
       col:'#fbbf24', phase:'mlp',  hasWeight:true },
-    { title:'OUTPUT  —  2 neuron',     op:'Linear(64 → 2)',
-      dim_in:'[3, 64]',            dim_out:'[3, 2]  logits: Healthy / Warning',
-      desc:'Output raw logits — tanpa aktivasi (CrossEntropy butuh logits)',
+    { title:'OUTPUT  —  2 logit',      op:'Linear(64 → 2)',
+      dim_in:'[3, 64]',             dim_out:'[3, 2]  logits: Healthy / Warning',
+      desc:'Raw logits — tanpa aktivasi · CrossEntropyLoss butuh raw logits (bukan softmax)',
       col:'#f472b6', phase:'out',  hasWeight:true },
     { title:'CROSS-ENTROPY LOSS',  op:'nn.CrossEntropyLoss(weight=[0.5, 2.5])',
       dim_in:'[3, 2] logits  vs  [3] label', dim_out:'scalar',
-      desc:'Warning diberi bobot 5× lebih tinggi · Clip grad=1.0',
+      desc:'Warning bobot 2.5× · Healthy 0.5× · imbalanced class handling · clip_grad_norm=1.0',
       col:'#dc2626', phase:'loss', hasWeight:false },
     { title:'BACKWARD PASS  ←',   op:'loss.backward()',
       dim_in:'scalar (CE loss)',    dim_out:'∂L/∂W per layer',
       desc:'Gradient: Loss → Linear64→2 → Linear128→64 → Linear256→128 → Linear84→256',
       col:'#ea580c', phase:'bp',   hasWeight:false },
-    { title:'ADAMW UPDATE  ←',     op:'optimizer.step() · ReduceLROnPlateau',
-      dim_in:'∇W (gradients)',      dim_out:"W ← W − lr·∇W · lr=1e-3→5e-5",
-      desc:'Update bobot Linear1-2-3-4 · Checkpoint tiap 50 epoch',
+    { title:'ADAMW UPDATE  ←',     op:'optimizer.step() · ReduceLROnPlateau(factor=0.5, patience=30)',
+      dim_in:'∇W (gradients)',      dim_out:"W ← W − lr·∇W · lr=1e-3 · checkpoint @ ep50 & ep100",
+      desc:'Update Linear1-4 · scheduler.step(avg_loss) · checkpoint tiap 50 epoch',
       col:'#d97706', phase:'upd',  hasWeight:false },
+    // ── SAVE + EVALUATION (setelah training selesai, data test) ───
+    { title:'SAVE MODEL',           op:'torch.save(model.state_dict(), "model_stage2_classifier.pth")',
+      dim_in:'model weights (trained)', dim_out:'model_stage2_classifier.pth  (disk)',
+      desc:'Final weights only · checkpoints_stage2/ sudah ada ep50 & ep100 selama training',
+      col:'#b45309', phase:'save', hasWeight:false, eval:true },
+    { title:'LOAD MODEL',           op:'model.load_state_dict(torch.load("model_stage2_classifier.pth"))',
+      dim_in:'model_stage2_classifier.pth  (disk)', dim_out:'model weights (restored to RAM)',
+      desc:'Muat bobot tersimpan · model.to(device) · model.eval() · torch.no_grad()',
+      col:'#0891b2', phase:'load', hasWeight:false, eval:true },
+    { title:'TEST FORWARD PASS',    op:'model.eval() · torch.no_grad() · scaler.transform(X_test)',
+      dim_in:'X_test [8 hari, 84 fitur]', dim_out:'logits [8, 2]',
+      desc:'Single batch (tanpa DataLoader) · Dropout=OFF · transform saja (bukan fit_transform)',
+      col:'#059669', phase:'eval', hasWeight:false, eval:true },
+    { title:'SOFTMAX → ARGMAX',     op:'F.softmax(logits, dim=1) → argmax(dim=1)',
+      dim_in:'logits [8, 2]',       dim_out:'labels [8]  →  0=Healthy / 1=Warning',
+      desc:'Probabilitas per kelas · Label = argmax · per-day log: True=X | Pred=X ✓/✗',
+      col:'#047857', phase:'eval', hasWeight:false, eval:true },
+    { title:'TEST METRICS',         op:'Accuracy · F1 · Precision · Recall (weighted)  vs  y_test',
+      dim_in:'ŷ_test [8] vs y_test [8]',
+      dim_out:'testAcc=62.50% · testF1=48.08% · testPrec=39.06% · testRecall=62.50%',
+      desc:'confusion_matrix · classification_report · export jurnal_confusion_matrix_test.png',
+      col:'#10b981', phase:'eval', hasWeight:false, eval:true },
   ],
 
   p4: [
@@ -722,6 +789,57 @@ const NODES = {
       dim_in:'[1, 2]  probs',      dim_out:'[1]  →  0=Healthy / 1=Warning',
       desc:'Label final · Confidence = max(probs) · Export laporan',
       col:'#ef4444', phase:'sm',   hasWeight:false },
+  ],
+
+  p5: [
+    // ── INPUT 3 HARI ─────────────────────────────────────
+    { title:'INPUT 3 HARI CSV',        op:'read_csv_day(hari_N-2) · read_csv_day(hari_N-1) · read_csv_day(hari_N)',
+      dim_in:'3 file CSV  (hari ke-N-2, N-1, N)',  dim_out:'[3, 200.000, 21 sensor]  float32',
+      desc:'Auto-detect sep ;/, · filter waktu 03:00–18:16:35 · ffill/bfill · 200k rows/hari',
+      col:'#475569', phase:'input', hasWeight:false },
+    // ── STAGE 1 — TCN FORECAST ───────────────────────────
+    { title:'LOAD TCN + SCALER 1',     op:'tcn_model.load_state_dict(torch.load("model_stage1_forecaster.pth"))  ·  joblib.load("scaler_stage1.pkl")',
+      dim_in:'model_stage1_forecaster.pth  +  scaler_stage1.pkl',  dim_out:'TCNForecaster.eval()  +  MinMaxScaler  (device=cuda/cpu)',
+      desc:'map_location=device · model.eval() · torch.no_grad() aktif sepanjang inference stage 1',
+      col:'#0891b2', phase:'load', hasWeight:false },
+    { title:'CONCAT + NORMALIZE',      op:'np.concatenate([N-2, N-1, N], axis=0) · scaler1.transform()',
+      dim_in:'[3, 200.000, 21]  original scale',  dim_out:'seq_sc [600.000, 21]  normalized [-0.1, 1.1]',
+      desc:'Stack 3 hari → 600k timestep · MinMaxScaler dari training Stage 1 · NO FIT · reshape(-1, 21)',
+      col:'#6366f1', phase:'pre',  hasWeight:false },
+    { title:'TCN FORWARD PASS',        op:'tcn_model(seq_sc.unsqueeze(0))  —  torch.no_grad()',
+      dim_in:'seq_sc [1, 600.000, 21]  ← 3 hari digabung',  dim_out:'pred_sc [1, 200.000, 21]  ← prediksi 1 hari ke depan',
+      desc:'600k timestep (3 hari) masuk → 7 ResBlok dilation [1,2,4,8,16,32,64] → AdaptiveAvgPool → Decoder → output 200k timestep (1 hari ke depan)',
+      col:'#38bdf8', phase:'inf',  hasWeight:false, glow:true },
+    { title:'INVERSE TRANSFORM',       op:'scaler1.inverse_transform(pred_sc.reshape(-1, 21)).reshape(200k, 21)',
+      dim_in:'pred_sc [200.000, 21]  normalized [-0.1, 1.1]',  dim_out:'pred_signal [200.000, 21]  skala sensor asli',
+      desc:'Denormalisasi ke satuan fisik asli · OUTPUT FORECAST: sinyal 21 sensor prediksi 1 hari ke depan',
+      col:'#818cf8', phase:'inf',  hasWeight:false },
+    // ── STAGE 2 — MLP CLASSIFICATION ────────────────────
+    { title:'LOAD MLP + SCALER 2',     op:'mlp_model.load_state_dict(torch.load("model_stage2_classifier.pth"))  ·  joblib.load("scaler_stage2.pkl")',
+      dim_in:'model_stage2_classifier.pth  +  scaler_stage2.pkl',  dim_out:'MLPClassifier.eval()  +  MinMaxScaler  (input: pred_signal)',
+      desc:'map_location=device · model.eval() · torch.no_grad() · scaler fit dari training Stage 2',
+      col:'#0891b2', phase:'load', hasWeight:false },
+    { title:'EKSTRAK FITUR STATISTIK', op:'mean+std+max+min (axis=0) → np.concatenate → [84]',
+      dim_in:'pred_signal [200.000, 21]  skala asli',  dim_out:'feat [84]  float32',
+      desc:'day_to_feature_vector() · mean(21)+std(21)+max(21)+min(21) · INPUT_DIM = 21×4 = 84',
+      col:'#10b981', phase:'pre',  hasWeight:false },
+    { title:'NORMALIZE FITUR',         op:'scaler2.transform(feat.reshape(1, -1))',
+      dim_in:'feat [84]  skala asli',  dim_out:'feat_scaled [1, 84]  normalized [-0.1, 1.1]',
+      desc:'MinMaxScaler dari training Stage 2 · NO FIT · transform saja · siap masuk MLP',
+      col:'#34d399', phase:'pre',  hasWeight:false },
+    { title:'MLP FORWARD PASS',        op:'mlp_model(feat_scaled)  —  torch.no_grad()',
+      dim_in:'feat_scaled [1, 84]',  dim_out:'logits [1, 2]  (score Healthy / Warning)',
+      desc:'Linear(84→256)+LN+ReLU+Drop → Linear(256→128)+LN+ReLU+Drop → Linear(128→64)+LN+ReLU+Drop → Linear(64→2) · Dropout OFF (eval)',
+      col:'#f59e0b', phase:'mlp',  hasWeight:false, glow:true },
+    { title:'SOFTMAX → ARGMAX',        op:'torch.softmax(logits, dim=1) → torch.argmax(dim=1)',
+      dim_in:'logits [1, 2]',  dim_out:'label  +  confidence %  +  prob [Healthy, Warning]',
+      desc:'P(Healthy) + P(Warning) = 1.0 · label = argmax · confidence = max(prob) × 100',
+      col:'#f59e0b', phase:'sm',   hasWeight:false },
+    // ── OUTPUT ────────────────────────────────────────────
+    { title:'OUTPUT + EXPORT',         op:'evidence/inference_prediksi_sensor.csv · inference_health_status.csv · gambar*.png',
+      dim_in:'pred_signal [200k, 21]  +  pred_status  +  confidence',  dim_out:'CSV + PNG + jurnal_informasi_lengkap.txt',
+      desc:'CSV prediksi sensor · health_status.csv · plot PNG dpi=300 · jurnal_informasi_lengkap.txt',
+      col:'#a78bfa', phase:'out',  hasWeight:false },
   ],
 };
 
@@ -776,10 +894,10 @@ class FlowChart {
     });
 
     // Precompute useful indices
-    this.splitNodeI = this.nodes.findIndex(n => n.split);
-    this.evalStartI = this.nodes.findIndex(n => n.eval);
-    this.evalActive = false;
-    this.evalDone   = false;
+    this.splitNodeI  = this.nodes.findIndex(n => n.split);
+    this.evalStartI  = this.nodes.findIndex(n => n.eval);
+    this.evalActive  = false;
+    this.evalDone    = false;
 
     const totalH = yOff + PY;
     this.W = W;
@@ -804,6 +922,7 @@ class FlowChart {
     this._drawBPPath();
     this._drawTestBranch();
     this._drawEvalSeparator();
+    this._drawModeSeparators();
     this.rects.forEach((r, i) => this._drawNode(r, i));
     this._drawParticles();
     this.frame++;
@@ -816,7 +935,6 @@ class FlowChart {
       const r2  = this.rects[i + 1];
       // Skip connector between last training node and first eval node (handled by _drawTestBranch)
       if (r2.node.eval && !r.node.eval) return;
-      // Skip connector between last setup node and first eval node too
       const x   = r.cx;
       const y1  = r.y + r.h;
       const y2  = r2.y;
@@ -1086,6 +1204,8 @@ class FlowChart {
     ctx.textAlign = 'left';
   }
 
+  _drawModeSeparators() { /* removed — p5 simplified to single 3-day input flow */ }
+
   _drawNode(r, i) {
     const ctx = this.ctx;
     const {x, y, w, h, node} = r;
@@ -1105,17 +1225,29 @@ class FlowChart {
     ctx.fill();
 
     // ── Border ──
-    ctx.strokeStyle = isActive ? col : isUpdating ? col : isDone ? hexA(col, .4) : evalDimmed ? hexA(col, .15) : hexA(col, .28);
-    ctx.lineWidth   = isActive || isUpdating ? 2.5 : 1.5;
+    const isGlow = !!node.glow;
+    ctx.strokeStyle = isActive ? col : isUpdating ? col : isDone ? hexA(col, isGlow ? .75 : .4) : evalDimmed ? hexA(col, .15) : hexA(col, isGlow ? .65 : .28);
+    ctx.lineWidth   = isActive || isUpdating ? 2.5 : isGlow ? 2 : 1.5;
     this._roundRect(ctx, x, y, w, h, radius);
     ctx.stroke();
+
+    // ── Permanent glow ring for hero nodes (TCN / MLP forward pass) ──
+    if (isGlow && !isActive && !isUpdating && !evalDimmed) {
+      ctx.shadowColor = col;
+      ctx.shadowBlur  = 12;
+      ctx.strokeStyle = hexA(col, isDone ? .3 : .22);
+      ctx.lineWidth   = 7;
+      this._roundRect(ctx, x - 3, y - 3, w + 6, h + 6, radius + 2);
+      ctx.stroke();
+      ctx.shadowBlur  = 0;
+    }
 
     // ── Drop shadow on active ──
     if (isActive || isUpdating) {
       ctx.shadowColor = col;
-      ctx.shadowBlur  = isUpdating ? 14 : 10;
-      ctx.strokeStyle = hexA(col, .3);
-      ctx.lineWidth   = 6;
+      ctx.shadowBlur  = isUpdating ? 18 : 14;
+      ctx.strokeStyle = hexA(col, isGlow ? .45 : .3);
+      ctx.lineWidth   = isGlow ? 8 : 6;
       this._roundRect(ctx, x - 2, y - 2, w + 4, h + 4, radius + 1);
       ctx.stroke();
       ctx.shadowBlur  = 0;
@@ -1881,36 +2013,42 @@ class TrainCtrl {
     }
   }
   _switchToEvalUI(){
-    if(this.isClf) return; // only page 1 has eval
     const n=this.n, tot=this.evalNodes.length;
     const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
     const $s=(id,p,v)=>{const el=document.getElementById(id);if(el)el.style[p]=v;};
-    // Swap labels
     $(`el${n}`,'Evaluasi');
     $(`pl${n}`,'Evaluasi Progress');
     $(`ev${n}`,`1 / ${tot}`);
-    // Switch progress bar to green
     $s(`pf${n}`,'background','#10b981');
     $s(`pf${n}`,'width',`${(1/tot)*100}%`);
-    // Swap metric labels to test metrics
-    $(`ml${n}a`,'Test MSE'); $s(`mm${n}`,'color','#34d399');
-    $(`ml${n}b`,'Test RMSE'); $s(`mr${n}`,'color','#34d399');
-    $(`ml${n}c`,'Test MAE'); $s(`ma${n}`,'color','#34d399');
+    if(!this.isClf){
+      $(`ml${n}a`,'Test MSE');  $s(`mm${n}`,'color','#34d399');
+      $(`ml${n}b`,'Test RMSE'); $s(`mr${n}`,'color','#34d399');
+      $(`ml${n}c`,'Test MAE');  $s(`ma${n}`,'color','#34d399');
+    } else {
+      $(`ml${n}a`,'Test Acc');  $s(`mm${n}`,'color','#34d399');
+      $(`ml${n}b`,'Test F1');   $s(`mr${n}`,'color','#34d399');
+      $(`ml${n}c`,'Test Prec'); $s(`ma${n}`,'color','#34d399');
+    }
     $(`mm${n}`,'—'); $(`mr${n}`,'—'); $(`ma${n}`,'—');
   }
   _updateEvalUI(done=false){
-    if(this.isClf) return;
     const n=this.n, tot=this.evalNodes.length;
     const step=Math.min(this.evalIdx+1, tot);
     const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
     const $s=(id,p,v)=>{const el=document.getElementById(id);if(el)el.style[p]=v;};
     $(`ev${n}`,`${step} / ${tot}`);
     $s(`pf${n}`,'width',`${(step/tot)*100}%`);
-    // Show test metrics on final step
     if(done || step===tot){
-      $(`mm${n}`,S1.testMSE.toFixed(5));
-      $(`mr${n}`,S1.testRMSE.toFixed(5));
-      $(`ma${n}`,S1.testMAE.toFixed(5));
+      if(!this.isClf){
+        $(`mm${n}`,S1.testMSE.toFixed(5));
+        $(`mr${n}`,S1.testRMSE.toFixed(5));
+        $(`ma${n}`,S1.testMAE.toFixed(5));
+      } else {
+        $(`mm${n}`,S2.testAcc.toFixed(2)+'%');
+        $(`mr${n}`,S2.testF1.toFixed(2)+'%');
+        $(`ma${n}`,S2.testPrec.toFixed(2)+'%');
+      }
     }
   }
   play(){
@@ -1928,16 +2066,23 @@ class TrainCtrl {
     this.fc.evalActive=false; this.fc.evalDone=false;
     this.fc.particles_fwd=[]; this.fc.particles_bwd=[];
     // Restore training UI labels
-    if(!this.isClf){
+    {
       const n=this.n;
       const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
       const $s=(id,p,v)=>{const el=document.getElementById(id);if(el)el.style[p]=v;};
       $(`el${n}`,'Epoch'); $(`pl${n}`,'Training Progress');
       $(`ev${n}`,'0 / 100');
-      $s(`pf${n}`,'background','#38bdf8'); $s(`pf${n}`,'width','0%');
-      $(`ml${n}a`,'MSE'); $s(`mm${n}`,'color','#f87171');
-      $(`ml${n}b`,'RMSE'); $s(`mr${n}`,'color','#fb923c');
-      $(`ml${n}c`,'MAE'); $s(`ma${n}`,'color','#a78bfa');
+      if(!this.isClf){
+        $s(`pf${n}`,'background','#38bdf8'); $s(`pf${n}`,'width','0%');
+        $(`ml${n}a`,'MSE');      $s(`mm${n}`,'color','#f87171');
+        $(`ml${n}b`,'RMSE');     $s(`mr${n}`,'color','#fb923c');
+        $(`ml${n}c`,'MAE');      $s(`ma${n}`,'color','#a78bfa');
+      } else {
+        $s(`pf${n}`,'background','#f59e0b'); $s(`pf${n}`,'width','0%');
+        $(`ml${n}a`,'CE Loss');  $s(`mm${n}`,'color','#f87171');
+        $(`ml${n}b`,'Accuracy'); $s(`mr${n}`,'color','#34d399');
+        $(`ml${n}c`,'F1');       $s(`ma${n}`,'color','#a78bfa');
+      }
     }
     this._updateUI();
     [`mm${this.n}`,`mr${this.n}`,`ma${this.n}`].forEach(id=>{const el=document.getElementById(id);if(el)el.textContent='—';});
@@ -1954,7 +2099,12 @@ class InfCtrl {
     this.speed=2; this.nodeIdx=-1; this.playing=false;
     this.pEl=0; this.lastTs=null; this._raf=null;
   }
-  _dur(){ return 700/this.speed; }
+  _dur(){
+    const base = 700/this.speed;
+    const nd = this.fc.nodes[this.nodeIdx];
+    if(nd && nd.glow) return base * 7;   // TCN/MLP Forward Pass: ~5s default speed
+    return base;
+  }
   _tick(ts){
     if(!this.playing){this._raf=null;return;}
     if(!this.lastTs)this.lastTs=ts;
@@ -1965,7 +2115,10 @@ class InfCtrl {
       this.nodeIdx++;
       if(this.nodeIdx<this.fc.nodes.length){
         this.fc.setActive(this.nodeIdx);
-        this._pill(`→ ${this.fc.nodes[this.nodeIdx].title.split(' ')[0]}`,'#34d399');
+        const nd = this.fc.nodes[this.nodeIdx];
+        const col = nd.phase==='out' ? '#10b981' : nd.phase==='tcn' ? '#38bdf8' : nd.phase==='mlp' ? '#34d399' : '#a78bfa';
+        const tot = this.fc.nodes.length;
+        this._pill(`→ ${nd.title.split('—')[0].trim()}  (${this.nodeIdx+1}/${tot})`, col);
         this._updateOut();
       } else {
         this.playing=false; this._btn();
@@ -1983,6 +2136,10 @@ class InfCtrl {
     }
     if(n===4&&ni>=this.fc.nodes.length-1){
       $('mm4','Warning');$('mr4','0.15');$('ma4','0.85');
+    }
+    if(n===5){
+      const tot=this.fc.nodes.length;
+      $('mm5',`${ni+1} / ${tot}`);
     }
   }
   _pill(txt,col){
@@ -2004,6 +2161,7 @@ class InfCtrl {
     const $=(id,v)=>{const el=document.getElementById(id);if(el)el.textContent=v;};
     if(this.n===2){$('mm2','—');}
     if(this.n===4){$('mm4','—');$('mr4','—');$('ma4','—');}
+    if(this.n===5){$('mm5','—');}
     this._pill('IDLE','#334155');
     this._btn();
   }
@@ -2023,6 +2181,7 @@ initPage('p1','fc1',1,false);
 initPage('p2','fc2',2,true);
 initPage('p3','fc3',3,false);
 initPage('p4','fc4',4,true);
+initPage('p5','fc5',5,true);
 
 // Start rendering active page
 FCS['p1'].startRender();
@@ -2033,7 +2192,7 @@ function rst(n){ CTRLS['p'+n].reset(); }
 function setSp(n,v){ CTRLS['p'+n].setSp(+v); }
 
 // ── Page switching ────────────────────────────────────
-const PIDS=['p1','p2','p3','p4'];
+const PIDS=['p1','p2','p3','p4','p5'];
 function showPage(pid,tab){
   PIDS.forEach(id=>{
     document.getElementById(id).classList.remove('active');
@@ -2050,9 +2209,85 @@ window.addEventListener('resize',()=>{
   PIDS.forEach(pid=>{
     FCS[pid].ctx.setTransform(1,0,0,1,0,0);
     FCS[pid]._layout();
-    // no need to re-scale — _layout already calls ctx.scale
   });
 });
+
+// ── Node Tooltip (hover → copyable text) ──────────────
+(function(){
+  const TT = document.createElement('div');
+  TT.style.cssText = [
+    'position:fixed','z-index:9999','max-width:400px','min-width:260px',
+    'background:#ffffff','border:2px solid #e2e8f0','border-radius:12px',
+    'padding:14px 16px','box-shadow:0 10px 40px rgba(0,0,0,.18)',
+    'font-family:"Segoe UI",system-ui,sans-serif','font-size:.72rem',
+    'display:none','pointer-events:auto','user-select:text',
+    'line-height:1.55','transition:opacity .12s',
+  ].join(';');
+  document.body.appendChild(TT);
+
+  let ttNode = null, hideTimer = null;
+
+  function pos(mx, my){
+    const TW = 410;
+    let tx = mx + 18, ty = my - 24;
+    if(tx + TW > window.innerWidth - 8) tx = mx - TW - 18;
+    if(ty + 260 > window.innerHeight - 8) ty = window.innerHeight - 268;
+    if(ty < 8) ty = 8;
+    TT.style.left = tx + 'px';
+    TT.style.top  = ty + 'px';
+  }
+
+  function show(node, mx, my){
+    if(ttNode === node){ return; }  // sudah tampil untuk node ini — jangan geser lagi
+    ttNode = node;
+    const esc = s => (s||'').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+    TT.innerHTML = `
+      <div style="font-weight:900;font-size:.88rem;color:#0f172a;padding-bottom:7px;
+           margin-bottom:9px;border-bottom:2.5px solid ${node.col}">${esc(node.title)}</div>
+      <div style="background:#f1f5f9;border-radius:6px;padding:6px 9px;margin-bottom:9px;
+           font-family:'Courier New',monospace;font-size:.69rem;color:#334155;
+           cursor:text;word-break:break-all">${esc(node.op)}</div>
+      <div style="margin-bottom:4px">
+        <span style="font-weight:700;color:#64748b;font-size:.66rem">IN&nbsp;&nbsp;</span>
+        <span style="font-family:'Courier New',monospace;color:#1e293b;font-size:.67rem">${esc(node.dim_in||'')}</span>
+      </div>
+      <div style="margin-bottom:9px">
+        <span style="font-weight:700;color:#64748b;font-size:.66rem">OUT&nbsp;</span>
+        <span style="font-family:'Courier New',monospace;font-weight:700;font-size:.67rem;color:${node.col}">${esc(node.dim_out||'')}</span>
+      </div>
+      <div style="color:#475569;font-size:.67rem;border-top:1px solid #f1f5f9;padding-top:7px">${esc(node.desc||'')}</div>
+      <div style="color:#94a3b8;font-size:.58rem;margin-top:8px;text-align:right">
+        drag untuk pilih teks · Ctrl+C copy
+      </div>`;
+    pos(mx, my);
+    TT.style.borderColor = node.col + '55';
+    TT.style.display = 'block';
+  }
+
+  function hide(){ ttNode=null; TT.style.display='none'; }
+
+  TT.addEventListener('mouseenter', ()=>{ clearTimeout(hideTimer); });
+  TT.addEventListener('mouseleave', ()=>{ hide(); });
+
+  PIDS.forEach(pid=>{
+    const cvs = FCS[pid].cvs;
+    cvs.addEventListener('mousemove', e=>{
+      clearTimeout(hideTimer);
+      const br = cvs.getBoundingClientRect();
+      const cx = e.clientX - br.left;
+      const cy = e.clientY - br.top;
+      let found = null;
+      for(const r of FCS[pid].rects){
+        if(cx >= r.x && cx <= r.x+r.w && cy >= r.y && cy <= r.y+r.h){ found=r; break; }
+      }
+      if(found){ cvs.style.cursor='help'; show(found.node, e.clientX, e.clientY); }
+      else      { cvs.style.cursor='';   hideTimer=setTimeout(()=>{ if(!TT.matches(':hover')) hide(); },120); }
+    });
+    cvs.addEventListener('mouseleave', ()=>{
+      hideTimer = setTimeout(()=>{ if(!TT.matches(':hover')) hide(); }, 120);
+    });
+  });
+})();
 </script>
 </body>
 </html>
