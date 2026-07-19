@@ -523,8 +523,8 @@ const NODES = {
       col:'#6d28d9', phase:'pre',  hasWeight:false, setup:true, split:true },
     { title:'SLIDING WINDOW',      op:'X[i] = concat(day_i, day_i+1, day_i+2) · y[i] = day_i+3',
       dim_in:'[29 hari train]',     dim_out:'X:[26, 600.000, 21] · y:[26, 200.000, 21]',
-      desc:'3 hari input → prediksi hari ke-4 · 26 window train · 8 window test',
-      col:'#5b21b6', phase:'pre',  hasWeight:false, setup:true },
+      desc:'3 hari input → prediksi hari ke-4 · 26 window train · 8 window test · 🔍 klik untuk visualisasi animasi',
+      col:'#5b21b6', phase:'pre',  hasWeight:false, setup:true, clickable:true },
     { title:'FIT SCALER',          op:'MinMaxScaler((-0.1,1.1)).fit_transform(X_train)',
       dim_in:'X_train [26, 600.000, 21]', dim_out:'X_scaled [26, 600.000, 21]',
       desc:'Fit HANYA dari X_train · transform juga X_test · save scaler_stage1.pkl',
@@ -1381,6 +1381,20 @@ class FlowChart {
       ctx.fillText(desc, x + 30, y + h - 8);
     }
 
+    // ── Clickable node badge ──
+    if (node.clickable) {
+      const bx = x + w - 118, by = y + h - 22, bw2 = 112, bh2 = 15;
+      ctx.fillStyle = isActive ? hexA(node.col, .25) : hexA(node.col, .1);
+      ctx.beginPath(); ctx.roundRect(bx, by, bw2, bh2, 4); ctx.fill();
+      ctx.strokeStyle = hexA(node.col, isActive ? .7 : .35);
+      ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.roundRect(bx, by, bw2, bh2, 4); ctx.stroke();
+      ctx.fillStyle = isActive ? node.col : hexA(node.col, .7);
+      ctx.font = 'bold 7.5px "Segoe UI"';
+      ctx.textAlign = 'center';
+      ctx.fillText('🔍 klik — lihat animasi', bx + bw2 / 2, by + 10);
+    }
+
     ctx.textAlign = 'left';
   }
 
@@ -2204,6 +2218,235 @@ function showPage(pid,tab){
   FCS[pid].startRender();
 }
 
+// ── Sliding Window Modal ──────────────────────────────
+(function(){
+  const N=37, NT=29;
+  const WINS=[];
+  for(let i=0;i<NT-3;i++) WINS.push([i,i+1,i+2,i+3,'Train']);
+  for(let i=0;i<N-NT;i++){const b=NT-3+i; WINS.push([b,b+1,b+2,b+3,'Test']);}
+
+  const M=document.createElement('div');
+  M.style.cssText='display:none;position:fixed;inset:0;z-index:10000;background:rgba(2,6,23,.97);overflow-y:auto';
+  M.innerHTML=`
+  <div style="display:flex;flex-direction:column;align-items:center;padding:18px 12px 50px;box-sizing:border-box">
+    <div id="sw-wrap" style="width:100%;max-width:1500px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;flex-wrap:wrap;gap:10px">
+        <div>
+          <div style="font-size:1rem;font-weight:900;color:#f1f5f9">Sliding Window · 3 Hari → Prediksi 1 Hari ke Depan</div>
+          <div style="font-size:.7rem;color:#64748b;margin-top:3px">
+            <span style="color:#3b82f6;font-weight:700">▮</span> TRAIN D1–D${NT}: ${NT-3} window &nbsp;·&nbsp;
+            <span style="color:#f97316;font-weight:700">▮</span> TEST D${NT+1}–D${N}: ${N-NT} window &nbsp;·&nbsp;
+            <span style="color:#ef4444;font-weight:700">|</span> garis merah = batas train/test &nbsp;·&nbsp; Total ${WINS.length} window
+          </div>
+        </div>
+        <div style="display:flex;gap:7px;align-items:center;flex-shrink:0">
+          <button id="sw-prev" style="padding:6px 13px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">◀ Prev</button>
+          <button id="sw-play" style="padding:6px 16px;border-radius:7px;border:1.5px solid #38bdf8;color:#38bdf8;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">▶ Play</button>
+          <button id="sw-next" style="padding:6px 13px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">Next ▶</button>
+          <button id="sw-rst"  style="padding:6px 11px;border-radius:7px;border:1.5px solid #334155;color:#94a3b8;background:transparent;font-weight:700;cursor:pointer;font-size:.8rem" title="Reset">↺</button>
+          <button id="sw-cls"  style="padding:6px 14px;border-radius:7px;border:1.5px solid #475569;color:#cbd5e1;background:transparent;font-weight:800;cursor:pointer;font-size:.73rem">✕ Tutup</button>
+        </div>
+      </div>
+      <div id="sw-info" style="font-size:.74rem;min-height:18px;margin-bottom:8px;font-family:'Courier New',monospace;color:#64748b"></div>
+      <canvas id="sw-cvs" style="display:block;border-radius:10px"></canvas>
+    </div>
+  </div>`;
+  document.body.appendChild(M);
+
+  const cvs=M.querySelector('#sw-cvs'), ctx2=cvs.getContext('2d');
+  const infoEl=M.querySelector('#sw-info');
+  const D2=window.devicePixelRatio||1;
+  let cur=-1, playing=false, timer=null;
+
+  function rr2(x,y,w,h,r){
+    ctx2.beginPath();
+    ctx2.moveTo(x+r,y);ctx2.lineTo(x+w-r,y);ctx2.arcTo(x+w,y,x+w,y+r,r);
+    ctx2.lineTo(x+w,y+h-r);ctx2.arcTo(x+w,y+h,x+w-r,y+h,r);
+    ctx2.lineTo(x+r,y+h);ctx2.arcTo(x,y+h,x,y+h-r,r);
+    ctx2.lineTo(x,y+r);ctx2.arcTo(x,y,x+r,y,r);
+    ctx2.closePath();
+  }
+
+  function draw(){
+    const wrap=M.querySelector('#sw-wrap');
+    const PW=Math.max(wrap.offsetWidth||900, 600);
+    const LBL=68, PAD=6;
+    // Each day gets a column; box takes 0.72 of col, gap 0.28 (room for arrow between c and t)
+    const CW=Math.max(16, Math.floor((PW-LBL-PAD)/N));
+    const BW=Math.round(CW*0.78), BX_OFF=Math.round(CW*0.11); // box width & left offset inside col
+    const RH=30, HDR=58, GAP=2;
+    const TH=HDR+WINS.length*(RH+GAP)+28;
+
+    cvs.width=PW*D2; cvs.height=TH*D2;
+    cvs.style.width=PW+'px'; cvs.style.height=TH+'px';
+    ctx2.setTransform(D2,0,0,D2,0,0);
+    ctx2.fillStyle='#0a0f1e'; ctx2.fillRect(0,0,PW,TH);
+
+    const cW=cur>=0?WINS[cur]:null;
+
+    // ── Day header ──
+    for(let d=0;d<N;d++){
+      const isTr=d<NT, x=LBL+d*CW;
+      let fc=isTr?'#1e3a8a':'#431407';
+      if(cW){
+        if(d===cW[0]||d===cW[1]||d===cW[2]) fc=isTr?'#2563eb':'#ea580c';
+        else if(d===cW[3]) fc=isTr?'#1d4ed8':'#b45309';
+      }
+      ctx2.fillStyle=fc;
+      rr2(x+1,7,CW-2,26,4); ctx2.fill();
+      if(cW&&d===cW[3]){
+        ctx2.strokeStyle=isTr?'#60a5fa':'#fbbf24'; ctx2.lineWidth=1.5;
+        rr2(x+1,7,CW-2,26,4); ctx2.stroke();
+      }
+      ctx2.fillStyle='#e2e8f0';
+      ctx2.font=`bold ${CW>20?8:6}px "Segoe UI"`;
+      ctx2.textAlign='center';
+      ctx2.fillText('D'+(d+1), x+CW/2, 23);
+    }
+
+    // Train/test label strip
+    ctx2.fillStyle='rgba(29,78,216,.1)';
+    ctx2.fillRect(LBL,38,NT*CW,14);
+    ctx2.fillStyle='rgba(194,65,12,.1)';
+    ctx2.fillRect(LBL+NT*CW,38,(N-NT)*CW,14);
+    ctx2.font='bold 7px "Segoe UI"'; ctx2.textAlign='center';
+    ctx2.fillStyle='#3b82f6';
+    ctx2.fillText('◄ TRAINING DATA (D1–D'+NT+')', LBL+NT*CW/2, 48);
+    ctx2.fillStyle='#f97316';
+    ctx2.fillText('TEST DATA (D'+(NT+1)+'–D'+N+') ►', LBL+(NT+(N-NT)/2)*CW, 48);
+
+    // Split line
+    const SX=LBL+NT*CW;
+    ctx2.save();
+    ctx2.strokeStyle='#ef4444'; ctx2.lineWidth=1.5; ctx2.setLineDash([5,3]);
+    ctx2.beginPath(); ctx2.moveTo(SX,4); ctx2.lineTo(SX,TH-4); ctx2.stroke();
+    ctx2.restore();
+
+    // ── Window rows ──
+    WINS.forEach(([a,b,c,t,tag],i)=>{
+      const y=HDR+i*(RH+GAP), isTr=tag==='Train', isAct=i===cur;
+      const accentCol=isTr?'#3b82f6':'#f97316';
+
+      // Row BG
+      if(isAct){
+        ctx2.fillStyle=isTr?'rgba(37,99,235,.16)':'rgba(234,88,12,.16)';
+        ctx2.fillRect(0,y,PW,RH+GAP);
+        ctx2.strokeStyle=isTr?'rgba(59,130,246,.35)':'rgba(249,115,22,.35)';
+        ctx2.lineWidth=1;
+        ctx2.beginPath();ctx2.moveTo(0,y);ctx2.lineTo(PW,y);ctx2.stroke();
+        ctx2.beginPath();ctx2.moveTo(0,y+RH);ctx2.lineTo(PW,y+RH);ctx2.stroke();
+      }
+
+      // Label left
+      ctx2.fillStyle=isAct?accentCol:'#1e293b';
+      ctx2.font=`${isAct?'bold ':''} ${Math.min(8,CW-2)}px "Segoe UI"`;
+      ctx2.textAlign='right';
+      ctx2.fillText('W'+(i+1), LBL-6, y+RH/2+3);
+      ctx2.fillStyle=isAct?hexA(accentCol,.7):'#0f172a';
+      ctx2.font='6.5px "Segoe UI"';
+      ctx2.fillText('('+tag+')', LBL-6, y+RH/2+11);
+
+      // Input boxes A B C
+      const fcIn=isAct?(isTr?'#2563eb':'#ea580c'):(isTr?'#172554':'#2d0a05');
+      [a,b,c].forEach(d=>{
+        const x=LBL+d*CW+BX_OFF;
+        ctx2.fillStyle=fcIn;
+        rr2(x,y+5,BW,RH-10,3); ctx2.fill();
+        if(isAct){
+          ctx2.strokeStyle=hexA(accentCol,.6); ctx2.lineWidth=1;
+          rr2(x,y+5,BW,RH-10,3); ctx2.stroke();
+        }
+        ctx2.fillStyle=isAct?'#ffffff':'#334155';
+        ctx2.font=`${isAct?'bold ':''} ${CW>20?8:6}px "Segoe UI"`;
+        ctx2.textAlign='center';
+        ctx2.fillText('D'+(d+1), x+BW/2, y+RH/2+3);
+      });
+
+      // Arrow — in the gap between col c's right edge and col t's left edge
+      const arrowX=LBL+c*CW+CW; // x at start of column t
+      ctx2.fillStyle=isAct?accentCol:'#1e293b';
+      ctx2.font=`${isAct?'bold ':''} ${Math.max(10,Math.round(CW*0.38))}px "Segoe UI"`;
+      ctx2.textAlign='center';
+      ctx2.fillText('→', arrowX-CW*(1-0.78)/2, y+RH/2+4);
+
+      // Target box T (slightly taller, brighter)
+      const tx=LBL+t*CW+BX_OFF;
+      ctx2.fillStyle=isAct?(isTr?'#1d4ed8':'#c2410c'):(isTr?'#172554':'#2d0a05');
+      rr2(tx,y+3,BW,RH-6,3); ctx2.fill();
+      if(isAct){
+        ctx2.shadowColor=accentCol; ctx2.shadowBlur=8;
+        ctx2.strokeStyle=accentCol; ctx2.lineWidth=1.5;
+        rr2(tx,y+3,BW,RH-6,3); ctx2.stroke();
+        ctx2.shadowBlur=0;
+      }
+      ctx2.fillStyle='#ffffff';
+      ctx2.font=`bold ${CW>20?8:6}px "Segoe UI"`;
+      ctx2.textAlign='center';
+      ctx2.fillText('D'+(t+1), tx+BW/2, y+RH/2+3);
+    });
+
+    // Info bar
+    if(cur>=0){
+      const [a,b,c,t,tag]=WINS[cur], col=tag==='Train'?'#60a5fa':'#fb923c';
+      infoEl.innerHTML=`<span style="color:${col};font-weight:900">W${cur+1} / ${WINS.length} · ${tag}</span>&nbsp;&nbsp;`+
+        `Input: <span style="color:${col}">D${a+1} + D${b+1} + D${c+1}</span> (3×200k = 600k timestep) &nbsp;→&nbsp; `+
+        `Prediksi: <span style="color:${col};font-weight:700">D${t+1}</span> (200k timestep)`;
+    } else {
+      infoEl.textContent=`${WINS.length} window total — tekan ▶ Play untuk animasi, ◀ ▶ untuk manual`;
+    }
+  }
+
+  function setWin(i){
+    cur=Math.max(-1,Math.min(WINS.length-1,i));
+    draw();
+    if(cur>3){
+      const RH=30,HDR=58,GAP=2;
+      const rowY=HDR+cur*(RH+GAP);
+      M.scrollTop=Math.max(0,rowY-180);
+    }
+  }
+
+  function stopPlay(){ playing=false; clearInterval(timer); timer=null; M.querySelector('#sw-play').textContent='▶ Play'; }
+  function startPlay(){
+    if(cur>=WINS.length-1){cur=-1;}
+    playing=true; M.querySelector('#sw-play').textContent='⏸ Pause';
+    timer=setInterval(()=>{
+      if(cur>=WINS.length-1){stopPlay();return;}
+      setWin(cur+1);
+    },600);
+  }
+
+  M.querySelector('#sw-play').onclick=()=>playing?stopPlay():startPlay();
+  M.querySelector('#sw-prev').onclick=()=>{stopPlay();setWin(cur-1);};
+  M.querySelector('#sw-next').onclick=()=>{stopPlay();setWin(cur+1);};
+  M.querySelector('#sw-rst').onclick =()=>{stopPlay();setWin(-1);M.scrollTop=0;};
+  M.querySelector('#sw-cls').onclick =()=>{stopPlay();M.style.display='none';};
+  M.addEventListener('click',e=>{if(e.target===M){stopPlay();M.style.display='none';}});
+  document.addEventListener('keydown',e=>{
+    if(M.style.display==='none')return;
+    if(e.key==='Escape'){stopPlay();M.style.display='none';}
+    else if(e.key==='ArrowRight'){stopPlay();setWin(cur+1);}
+    else if(e.key==='ArrowLeft'){stopPlay();setWin(cur-1);}
+    else if(e.key===' '){e.preventDefault();playing?stopPlay():startPlay();}
+  });
+
+  window._openSW=function(){
+    M.style.display='block'; M.scrollTop=0;
+    cur=-1; stopPlay();
+    requestAnimationFrame(()=>requestAnimationFrame(draw));
+  };
+
+  // Click handler on p1 canvas — SLIDING WINDOW node = index 4
+  window.addEventListener('load',()=>{
+    FCS['p1'].cvs.addEventListener('click',e=>{
+      const br=FCS['p1'].cvs.getBoundingClientRect();
+      const cx=e.clientX-br.left, cy=e.clientY-br.top;
+      const r=FCS['p1'].rects[4];
+      if(r&&cx>=r.x&&cx<=r.x+r.w&&cy>=r.y&&cy<=r.y+r.h) window._openSW();
+    });
+  });
+})();
+
 // ── Resize ────────────────────────────────────────────
 window.addEventListener('resize',()=>{
   PIDS.forEach(pid=>{
@@ -2280,7 +2523,7 @@ window.addEventListener('resize',()=>{
       for(const r of FCS[pid].rects){
         if(cx >= r.x && cx <= r.x+r.w && cy >= r.y && cy <= r.y+r.h){ found=r; break; }
       }
-      if(found){ cvs.style.cursor='help'; show(found.node, e.clientX, e.clientY); }
+      if(found){ cvs.style.cursor=found.node.clickable?'pointer':'help'; show(found.node, e.clientX, e.clientY); }
       else      { cvs.style.cursor='';   hideTimer=setTimeout(()=>{ if(!TT.matches(':hover')) hide(); },120); }
     });
     cvs.addEventListener('mouseleave', ()=>{
