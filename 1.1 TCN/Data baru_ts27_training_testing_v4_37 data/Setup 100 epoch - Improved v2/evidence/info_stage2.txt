@@ -1,0 +1,36 @@
+====================================================================
+INFORMASI — MLP CLASSIFIER STAGE 2 (IMPROVED v2)
+Generated: 2026-09-23 15:31:20
+====================================================================
+
+[PERBEDAAN UTAMA vs VERSI ASLI]
+  1. Model diperkecil: 84->32->16->2 (~3.200 parameter, vs ~62.600 sebelumnya)
+  2. Dropout 0.5, weight_decay 5e-4 (lebih kuat)
+  3. Feature jitter augmentation (noise Gaussian tiap epoch)
+  4. Stratified 5-Fold CV + early stopping (patience 20) per fold
+  5. Prediksi akhir = ENSEMBLE rata-rata softmax dari semua fold
+
+[DATASET & SPLIT]
+  Total hari       : 37
+  Train days       : 29 (Healthy=20, Warning=9)
+  Test days        : 8
+
+[HASIL PER FOLD (Val F1, early-stopping)]
+  Fold 1: 100.00%
+  Fold 2: 53.33%
+  Fold 3: 51.43%
+  Fold 4: 83.81%
+  Fold 5: 71.11%
+  Rata-rata: 71.94% (std 18.42%)
+
+[EVALUASI TRAINING SET - ENSEMBLE]
+  Accuracy  : 79.31%
+  Precision : 78.59%
+  Recall    : 79.31%
+  F1-Score  : 78.51%
+
+[EVALUASI TEST SET - ENSEMBLE, HELD-OUT MURNI]
+  Accuracy  : 62.50%
+  Precision : 39.06%
+  Recall    : 62.50%
+  F1-Score  : 48.08%

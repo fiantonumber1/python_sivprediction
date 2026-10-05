@@ -1,0 +1,25 @@
+====================================================================
+INFORMASI — TCN FORECASTER STAGE 1 (IMPROVED v2)
+Generated: 2026-09-24 04:30:23
+====================================================================
+
+[PERBEDAAN UTAMA vs VERSI ASLI]
+  1. Decoder point-wise per-timestep (bukan global-avg-pool + Linear raksasa)
+  2. Residual/persistence connection (prediksi = Day3 + delta)
+  3. FiLM-style fusion context global ke fitur per-timestep
+  4. Validation split internal (4 window terakhir) + early stopping
+  5. Total parameter model: 377,301
+
+[DATASET & SPLIT]
+  Total hari CSV               : 37
+  Train days (TRAIN_RATIO=0.8) : 29
+  Test days                    : 8
+  Window training (total)      : 26
+  Window fit (gradient update)  : 22
+  Window validation (internal) : 4
+  Window testing (held-out)    : 8
+
+[HASIL AKHIR]
+  Train MSE / RMSE / MAE / MAPE : 0.010530 / 0.102617 / 0.042108 / 49.96%
+  Test  MSE / RMSE / MAE / MAPE : 0.011000 / 0.104881 / 0.044177 / 45.96%
+  Best internal Val MSE          : 0.015077

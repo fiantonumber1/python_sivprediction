@@ -1,0 +1,129 @@
+====================================================================
+INFORMASI JURNAL — TCN FORECASTER (STAGE 1)
+Generated: 2026-07-15 00:12:08
+====================================================================
+
+[DATASET & SPLIT — untuk Tabel Jurnal]
+  Total hari CSV               : 37
+  Train days (TRAIN_RATIO=0.8) : 29
+  Test days                    : 8
+  Window training (3->1 hari)  : 26
+  Window testing               : 8
+  Timestep per hari (N_TAKE)   : 200,000
+  Jumlah parameter (fitur)     : 21
+
+[PREPROCESSING — untuk Tabel Data Cleaning Jurnal]
+  Jumlah data per hari         : 200,000 baris
+  Warmup baris di-drop         : 0 baris (tidak ada warmup drop)
+  Jumlah data digunakan/hari   : 200,000 baris (100%)
+  Jumlah data total (13 hari)  : 7,400,000 baris
+  Jumlah parameter digunakan   : 21 parameter
+  Timestamp per hari           : 200,000
+  Missing value handling        : forward-fill (ffill) + backward-fill (bfill)
+  Start time                   : awal operasi harian (~03:00–03:27 WIB, tanpa warmup drop)
+  End time                     : 18:16 WIB
+
+[NORMALISASI — untuk Tabel Normalisasi Jurnal]
+  Metode Normalisasi           : Min-Max Scaler
+  Rentang output normalisasi   : [-0.1, 1.1]
+  Jumlah parameter dinorm.     : 21
+  Fit hanya pada               : 29 hari training
+  Transform pada               : training + test (tanpa data leakage)
+
+[RENTANG DATA PER PARAMETER (dari scaler training)]
+  Parameter                        Min Data     Max Data
+  -------------------------------------------------------
+  SIV_T_HS_InConv_1                  0.0000     295.0000
+  SIV_T_HS_InConv_2                  0.0000      96.0000
+  SIV_T_HS_Inv_1                    31.0000      54.0000
+  SIV_T_HS_Inv_2                    31.0000      50.0000
+  SIV_T_Container                   30.0000     557.0000
+  SIV_I_L1                           0.0000    4144.0000
+  SIV_I_L2                           0.0000     126.0000
+  SIV_I_L3                           0.0000    8198.0000
+  SIV_I_Battery                    -33.0000   24800.0000
+  SIV_I_DC_In                        0.0000     544.0000
+  SIV_U_Battery                     94.0000     114.0000
+  SIV_U_DC_In                        0.0000     936.0000
+  SIV_U_DC_Out                       3.0000     127.0000
+  SIV_U_L1                           0.0000   24768.0000
+  SIV_U_L2                           0.0000   14272.0000
+  SIV_U_L3                           0.0000   24603.0000
+  SIV_InConv_InEnergy                0.0000     644.0000
+  SIV_Output_Energy                  0.0000     574.0000
+  PLC_OpenACOutputCont               0.0000       0.0000
+  PLC_OpenInputCont                  0.0000       0.0000
+  SIV_DevIsAlive                     0.0000   65535.0000
+
+[HYPERPARAMETER TCN — untuk Tabel Jurnal]
+  Optimizer                    : AdamW
+  Learning Rate (awal)         : 0.001
+  Learning Rate (akhir)        : 1.00e-03
+  Batch Size                   : 3
+  Epoch                        : 100
+  Loss Function                : Mean Squared Error (MSE)
+  Gradient Clipping            : 1.0
+  Dropout                      : 0.3
+  Weight Decay                 : 1e-5
+  Scheduler                    : ReduceLROnPlateau (factor=0.5, patience=30)
+
+[ARSITEKTUR TCN — untuk Tabel Jurnal]
+  Jumlah Residual Block        : 7
+  Dilation Factors             : [1, 2, 4, 8, 16, 32, 64]
+  Hidden Channel (n_ch)        : 96
+  Kernel Size                  : 3
+  Input Window                 : 3 hari = 600,000 timestep
+  Output Horizon               : H+1 = 200,000 timestep (1 hari)
+  Input Shape                  : (batch, 600000, 21)
+  Output Shape                 : (batch, 200000, 21)
+
+[HASIL TRAINING — untuk Para 168 Jurnal]
+  MSE Epoch 1                  : 0.3568467  (35.6847%)
+  MSE Epoch 100 (akhir)        : 0.0120068  (1.2007%)
+  Penurunan MSE total          : 96.6%
+  MSE akhir (persen)           : ~1.20%
+
+[EVALUASI TEST SET — untuk Para 170 Jurnal]
+  Test Windows                 : 8
+  MSE Test                     : 0.0074464  (0.7446%)
+  RMSE Test                    : 0.0862925
+  MAE Test                     : 0.0433401
+  Selisih MSE (Train - Test)   : 0.0045604  → relatif kecil
+
+[PEMBENTUKAN SEQUENCE — untuk Tabel 11 Jurnal]
+  Seq     Input A     Input B     Input C  Target H+1  Set
+  ----------------------------------------------------------
+    1    02012026    10022026    13022026    15022026  Training
+    2    10022026    13022026    15022026    19022026  Training
+    3    13022026    15022026    19022026    23022026  Training
+    4    15022026    19022026    23022026    25022026  Training
+    5    19022026    23022026    25022026    01032026  Training
+    6    23022026    25022026    01032026    07032026  Training
+    7    25022026    01032026    07032026    22032026  Training
+    8    01032026    07032026    22032026    28032026  Training
+    9    07032026    22032026    28032026    08042026  Training
+   10    22032026    28032026    08042026    09042026  Training
+   11    28032026    08042026    09042026    11042026  Training
+   12    08042026    09042026    11042026    12042026  Training
+   13    09042026    11042026    12042026    15042026  Training
+   14    11042026    12042026    15042026    16042026  Training
+   15    12042026    15042026    16042026    17042026  Training
+   16    15042026    16042026    17042026    19042026  Training
+   17    16042026    17042026    19042026    21042026  Training
+   18    17042026    19042026    21042026    22042026  Training
+   19    19042026    21042026    22042026    23042026  Training
+   20    21042026    22042026    23042026    24042026  Training
+   21    22042026    23042026    24042026    27042026  Training
+   22    23042026    24042026    27042026    04052026  Training
+   23    24042026    27042026    04052026    05052026  Training
+   24    27042026    04052026    05052026    06052026  Training
+   25    04052026    05052026    06052026    07052026  Training
+   26    05052026    06052026    07052026    08052026  Training
+   27    06052026    07052026    08052026    09052026  Testing
+   28    07052026    08052026    09052026    14052026  Testing
+   29    08052026    09052026    14052026    15052026  Testing
+   30    09052026    14052026    15052026    16052026  Testing
+   31    14052026    15052026    16052026    17052026  Testing
+   32    15052026    16052026    17052026    20052026  Testing
+   33    16052026    17052026    20052026    22052026  Testing
+   34    17052026    20052026    22052026    23052026  Testing

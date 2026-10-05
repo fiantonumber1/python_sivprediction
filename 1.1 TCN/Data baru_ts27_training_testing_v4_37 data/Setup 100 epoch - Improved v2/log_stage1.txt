@@ -1,0 +1,176 @@
+
+============================================================
+STAGE 1 TCN FORECASTER (IMPROVED v2) | 2026-09-23 16:38:55
+Train days: 29 | Test days: 8
+Window fit: 22 | Window val(internal): 4 | Window test: 8
+Epoch: 100 | Batch: 3 | Total parameter: 377,301
+============================================================
+Epoch    1/100 | Train MSE: 1.1328516 | Val MSE: 0.0221312 | LR: 1.00e-03
+Epoch    2/100 | Train MSE: 0.0333634 | Val MSE: 0.0209374 | LR: 1.00e-03
+Epoch    3/100 | Train MSE: 0.0192469 | Val MSE: 0.0204598 | LR: 1.00e-03
+Epoch    4/100 | Train MSE: 0.0180348 | Val MSE: 0.0200524 | LR: 1.00e-03
+Epoch    5/100 | Train MSE: 0.0186445 | Val MSE: 0.0193687 | LR: 1.00e-03
+Epoch    6/100 | Train MSE: 0.0173169 | Val MSE: 0.0188474 | LR: 1.00e-03
+Epoch    7/100 | Train MSE: 0.0171713 | Val MSE: 0.0185539 | LR: 1.00e-03
+Epoch    8/100 | Train MSE: 0.0153945 | Val MSE: 0.0187940 | LR: 1.00e-03
+Epoch    9/100 | Train MSE: 0.0165923 | Val MSE: 0.0183900 | LR: 1.00e-03
+Epoch   10/100 | Train MSE: 0.0149836 | Val MSE: 0.0179938 | LR: 1.00e-03
+Epoch   11/100 | Train MSE: 0.0146884 | Val MSE: 0.0179306 | LR: 1.00e-03
+Epoch   12/100 | Train MSE: 0.0141519 | Val MSE: 0.0177071 | LR: 1.00e-03
+Epoch   13/100 | Train MSE: 0.0143573 | Val MSE: 0.0173849 | LR: 1.00e-03
+Epoch   14/100 | Train MSE: 0.0137818 | Val MSE: 0.0173148 | LR: 1.00e-03
+Epoch   15/100 | Train MSE: 0.0143230 | Val MSE: 0.0171712 | LR: 1.00e-03
+Epoch   16/100 | Train MSE: 0.0136735 | Val MSE: 0.0169818 | LR: 1.00e-03
+Epoch   17/100 | Train MSE: 0.0146818 | Val MSE: 0.0171115 | LR: 1.00e-03
+Epoch   18/100 | Train MSE: 0.0147201 | Val MSE: 0.0166789 | LR: 1.00e-03
+Epoch   19/100 | Train MSE: 0.0135683 | Val MSE: 0.0164440 | LR: 1.00e-03
+Epoch   20/100 | Train MSE: 0.0130090 | Val MSE: 0.0163545 | LR: 1.00e-03
+Epoch   21/100 | Train MSE: 0.0130311 | Val MSE: 0.0162693 | LR: 1.00e-03
+Epoch   22/100 | Train MSE: 0.0132484 | Val MSE: 0.0164088 | LR: 1.00e-03
+Epoch   23/100 | Train MSE: 0.0131354 | Val MSE: 0.0163912 | LR: 1.00e-03
+Epoch   24/100 | Train MSE: 0.0125851 | Val MSE: 0.0166075 | LR: 1.00e-03
+Epoch   25/100 | Train MSE: 0.0126499 | Val MSE: 0.0162948 | LR: 1.00e-03
+Epoch   26/100 | Train MSE: 0.0123174 | Val MSE: 0.0163767 | LR: 1.00e-03
+Epoch   27/100 | Train MSE: 0.0122329 | Val MSE: 0.0164538 | LR: 1.00e-03
+Epoch   28/100 | Train MSE: 0.0137797 | Val MSE: 0.0160820 | LR: 1.00e-03
+Epoch   29/100 | Train MSE: 0.0121966 | Val MSE: 0.0160721 | LR: 1.00e-03
+Epoch   30/100 | Train MSE: 0.0124440 | Val MSE: 0.0161975 | LR: 1.00e-03
+Epoch   31/100 | Train MSE: 0.0122231 | Val MSE: 0.0161841 | LR: 1.00e-03
+Epoch   32/100 | Train MSE: 0.0124105 | Val MSE: 0.0162479 | LR: 1.00e-03
+Epoch   33/100 | Train MSE: 0.0124584 | Val MSE: 0.0160088 | LR: 1.00e-03
+Epoch   34/100 | Train MSE: 0.0118714 | Val MSE: 0.0164404 | LR: 1.00e-03
+Epoch   35/100 | Train MSE: 0.0116591 | Val MSE: 0.0166695 | LR: 1.00e-03
+Epoch   36/100 | Train MSE: 0.0119901 | Val MSE: 0.0159806 | LR: 1.00e-03
+Epoch   37/100 | Train MSE: 0.0115327 | Val MSE: 0.0158276 | LR: 1.00e-03
+Epoch   38/100 | Train MSE: 0.0117900 | Val MSE: 0.0156518 | LR: 1.00e-03
+Epoch   39/100 | Train MSE: 0.0115207 | Val MSE: 0.0158032 | LR: 1.00e-03
+Epoch   40/100 | Train MSE: 0.0122486 | Val MSE: 0.0161648 | LR: 1.00e-03
+Epoch   41/100 | Train MSE: 0.0119208 | Val MSE: 0.0164884 | LR: 1.00e-03
+Epoch   42/100 | Train MSE: 0.0118061 | Val MSE: 0.0161262 | LR: 1.00e-03
+Epoch   43/100 | Train MSE: 0.0120725 | Val MSE: 0.0156462 | LR: 1.00e-03
+Epoch   44/100 | Train MSE: 0.0122201 | Val MSE: 0.0159311 | LR: 1.00e-03
+Epoch   45/100 | Train MSE: 0.0112375 | Val MSE: 0.0158279 | LR: 1.00e-03
+Epoch   46/100 | Train MSE: 0.0113085 | Val MSE: 0.0156351 | LR: 1.00e-03
+Epoch   47/100 | Train MSE: 0.0110852 | Val MSE: 0.0157195 | LR: 1.00e-03
+Epoch   48/100 | Train MSE: 0.0112728 | Val MSE: 0.0160195 | LR: 1.00e-03
+Epoch   49/100 | Train MSE: 0.0113380 | Val MSE: 0.0162406 | LR: 1.00e-03
+Epoch   50/100 | Train MSE: 0.0117102 | Val MSE: 0.0156170 | LR: 1.00e-03
+   -> Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v4_37 data\Setup 100 epoch - Improved v2\checkpoints_stage1\checkpoint_epoch_50.pth
+Epoch   51/100 | Train MSE: 0.0112975 | Val MSE: 0.0156480 | LR: 1.00e-03
+Epoch   52/100 | Train MSE: 0.0110777 | Val MSE: 0.0156954 | LR: 1.00e-03
+Epoch   53/100 | Train MSE: 0.0110451 | Val MSE: 0.0151023 | LR: 1.00e-03
+Epoch   54/100 | Train MSE: 0.0118053 | Val MSE: 0.0159025 | LR: 1.00e-03
+Epoch   55/100 | Train MSE: 0.0123986 | Val MSE: 0.0156719 | LR: 1.00e-03
+Epoch   56/100 | Train MSE: 0.0118044 | Val MSE: 0.0155936 | LR: 1.00e-03
+Epoch   57/100 | Train MSE: 0.0122501 | Val MSE: 0.0153699 | LR: 1.00e-03
+Epoch   58/100 | Train MSE: 0.0117765 | Val MSE: 0.0179606 | LR: 1.00e-03
+Epoch   59/100 | Train MSE: 0.0111061 | Val MSE: 0.0157940 | LR: 1.00e-03
+Epoch   60/100 | Train MSE: 0.0129479 | Val MSE: 0.0153549 | LR: 1.00e-03
+Epoch   61/100 | Train MSE: 0.0115660 | Val MSE: 0.0164834 | LR: 1.00e-03
+Epoch   62/100 | Train MSE: 0.0113681 | Val MSE: 0.0160924 | LR: 5.00e-04
+Epoch   63/100 | Train MSE: 0.0112461 | Val MSE: 0.0159381 | LR: 5.00e-04
+Epoch   64/100 | Train MSE: 0.0111873 | Val MSE: 0.0157349 | LR: 5.00e-04
+Epoch   65/100 | Train MSE: 0.0111929 | Val MSE: 0.0154248 | LR: 5.00e-04
+Epoch   66/100 | Train MSE: 0.0112236 | Val MSE: 0.0156027 | LR: 5.00e-04
+Epoch   67/100 | Train MSE: 0.0112763 | Val MSE: 0.0163674 | LR: 5.00e-04
+Epoch   68/100 | Train MSE: 0.0108856 | Val MSE: 0.0155005 | LR: 5.00e-04
+Epoch   69/100 | Train MSE: 0.0107449 | Val MSE: 0.0153436 | LR: 5.00e-04
+Epoch   70/100 | Train MSE: 0.0110839 | Val MSE: 0.0153966 | LR: 5.00e-04
+Epoch   71/100 | Train MSE: 0.0108332 | Val MSE: 0.0156604 | LR: 2.50e-04
+Epoch   72/100 | Train MSE: 0.0109514 | Val MSE: 0.0159541 | LR: 2.50e-04
+Epoch   73/100 | Train MSE: 0.0105602 | Val MSE: 0.0160150 | LR: 2.50e-04
+Epoch   74/100 | Train MSE: 0.0107818 | Val MSE: 0.0157901 | LR: 2.50e-04
+Epoch   75/100 | Train MSE: 0.0105672 | Val MSE: 0.0157641 | LR: 2.50e-04
+Epoch   76/100 | Train MSE: 0.0104407 | Val MSE: 0.0158530 | LR: 2.50e-04
+Epoch   77/100 | Train MSE: 0.0105919 | Val MSE: 0.0156874 | LR: 2.50e-04
+Epoch   78/100 | Train MSE: 0.0108322 | Val MSE: 0.0156549 | LR: 2.50e-04
+Epoch   79/100 | Train MSE: 0.0107130 | Val MSE: 0.0156355 | LR: 2.50e-04
+Epoch   80/100 | Train MSE: 0.0105067 | Val MSE: 0.0153419 | LR: 1.25e-04
+Epoch   81/100 | Train MSE: 0.0109875 | Val MSE: 0.0155733 | LR: 1.25e-04
+Epoch   82/100 | Train MSE: 0.0112174 | Val MSE: 0.0157721 | LR: 1.25e-04
+Epoch   83/100 | Train MSE: 0.0108899 | Val MSE: 0.0157983 | LR: 1.25e-04
+Epoch   84/100 | Train MSE: 0.0104285 | Val MSE: 0.0155423 | LR: 1.25e-04
+Epoch   85/100 | Train MSE: 0.0112921 | Val MSE: 0.0154265 | LR: 1.25e-04
+Epoch   86/100 | Train MSE: 0.0120780 | Val MSE: 0.0157866 | LR: 1.25e-04
+Epoch   87/100 | Train MSE: 0.0107442 | Val MSE: 0.0160454 | LR: 1.25e-04
+Epoch   88/100 | Train MSE: 0.0108750 | Val MSE: 0.0158876 | LR: 1.25e-04
+Epoch   89/100 | Train MSE: 0.0111574 | Val MSE: 0.0157584 | LR: 6.25e-05
+
+============================================================
+STAGE 1 TCN FORECASTER (IMPROVED v2) | 2026-09-24 00:50:26
+Train days: 29 | Test days: 8
+Window fit: 22 | Window val(internal): 4 | Window test: 8
+Epoch: 100 | Batch: 3 | Total parameter: 377,301
+============================================================
+Epoch   51/100 | Train MSE: 0.0113827 | Val MSE: 0.0159308 | LR: 1.00e-03
+Epoch   52/100 | Train MSE: 0.0116101 | Val MSE: 0.0159785 | LR: 1.00e-03
+Epoch   53/100 | Train MSE: 0.0115028 | Val MSE: 0.0159672 | LR: 1.00e-03
+Epoch   54/100 | Train MSE: 0.0110729 | Val MSE: 0.0158602 | LR: 1.00e-03
+Epoch   55/100 | Train MSE: 0.0114184 | Val MSE: 0.0156702 | LR: 1.00e-03
+Epoch   56/100 | Train MSE: 0.0113948 | Val MSE: 0.0154559 | LR: 1.00e-03
+Epoch   57/100 | Train MSE: 0.0111744 | Val MSE: 0.0152972 | LR: 1.00e-03
+Epoch   58/100 | Train MSE: 0.0108735 | Val MSE: 0.0154676 | LR: 1.00e-03
+Epoch   59/100 | Train MSE: 0.0114720 | Val MSE: 0.0158411 | LR: 1.00e-03
+Epoch   60/100 | Train MSE: 0.0124185 | Val MSE: 0.0160059 | LR: 1.00e-03
+Epoch   61/100 | Train MSE: 0.0106586 | Val MSE: 0.0156455 | LR: 1.00e-03
+Epoch   62/100 | Train MSE: 0.0111976 | Val MSE: 0.0162028 | LR: 1.00e-03
+Epoch   63/100 | Train MSE: 0.0116065 | Val MSE: 0.0153955 | LR: 1.00e-03
+Epoch   64/100 | Train MSE: 0.0108912 | Val MSE: 0.0158091 | LR: 1.00e-03
+Epoch   65/100 | Train MSE: 0.0115171 | Val MSE: 0.0156666 | LR: 1.00e-03
+Epoch   66/100 | Train MSE: 0.0125065 | Val MSE: 0.0156581 | LR: 5.00e-04
+Epoch   67/100 | Train MSE: 0.0122031 | Val MSE: 0.0157278 | LR: 5.00e-04
+Epoch   68/100 | Train MSE: 0.0111020 | Val MSE: 0.0167644 | LR: 5.00e-04
+Epoch   69/100 | Train MSE: 0.0111066 | Val MSE: 0.0156164 | LR: 5.00e-04
+Epoch   70/100 | Train MSE: 0.0107590 | Val MSE: 0.0155878 | LR: 5.00e-04
+Epoch   71/100 | Train MSE: 0.0123319 | Val MSE: 0.0153578 | LR: 5.00e-04
+Epoch   72/100 | Train MSE: 0.0111198 | Val MSE: 0.0154735 | LR: 5.00e-04
+Epoch   73/100 | Train MSE: 0.0121076 | Val MSE: 0.0156316 | LR: 5.00e-04
+Epoch   74/100 | Train MSE: 0.0105275 | Val MSE: 0.0158722 | LR: 5.00e-04
+Epoch   75/100 | Train MSE: 0.0113856 | Val MSE: 0.0151436 | LR: 5.00e-04
+Epoch   76/100 | Train MSE: 0.0100469 | Val MSE: 0.0150768 | LR: 5.00e-04
+Epoch   77/100 | Train MSE: 0.0104702 | Val MSE: 0.0152781 | LR: 5.00e-04
+Epoch   78/100 | Train MSE: 0.0105552 | Val MSE: 0.0153350 | LR: 5.00e-04
+Epoch   79/100 | Train MSE: 0.0106778 | Val MSE: 0.0153920 | LR: 5.00e-04
+Epoch   80/100 | Train MSE: 0.0108718 | Val MSE: 0.0158701 | LR: 5.00e-04
+Epoch   81/100 | Train MSE: 0.0116279 | Val MSE: 0.0159644 | LR: 5.00e-04
+Epoch   82/100 | Train MSE: 0.0108135 | Val MSE: 0.0167833 | LR: 5.00e-04
+Epoch   83/100 | Train MSE: 0.0110004 | Val MSE: 0.0156545 | LR: 5.00e-04
+Epoch   84/100 | Train MSE: 0.0106098 | Val MSE: 0.0167064 | LR: 5.00e-04
+Epoch   85/100 | Train MSE: 0.0118361 | Val MSE: 0.0157949 | LR: 2.50e-04
+Epoch   86/100 | Train MSE: 0.0113309 | Val MSE: 0.0152435 | LR: 2.50e-04
+Epoch   87/100 | Train MSE: 0.0108771 | Val MSE: 0.0156305 | LR: 2.50e-04
+Epoch   88/100 | Train MSE: 0.0105215 | Val MSE: 0.0157050 | LR: 2.50e-04
+Epoch   89/100 | Train MSE: 0.0104876 | Val MSE: 0.0156070 | LR: 2.50e-04
+Epoch   90/100 | Train MSE: 0.0101874 | Val MSE: 0.0155911 | LR: 2.50e-04
+Epoch   91/100 | Train MSE: 0.0106020 | Val MSE: 0.0155883 | LR: 2.50e-04
+Epoch   92/100 | Train MSE: 0.0100694 | Val MSE: 0.0160002 | LR: 2.50e-04
+Epoch   93/100 | Train MSE: 0.0103114 | Val MSE: 0.0157601 | LR: 2.50e-04
+Epoch   94/100 | Train MSE: 0.0102357 | Val MSE: 0.0154621 | LR: 1.25e-04
+Epoch   95/100 | Train MSE: 0.0106275 | Val MSE: 0.0154129 | LR: 1.25e-04
+Epoch   96/100 | Train MSE: 0.0105796 | Val MSE: 0.0156212 | LR: 1.25e-04
+Epoch   97/100 | Train MSE: 0.0113122 | Val MSE: 0.0156314 | LR: 1.25e-04
+Epoch   98/100 | Train MSE: 0.0102767 | Val MSE: 0.0157616 | LR: 1.25e-04
+Epoch   99/100 | Train MSE: 0.0106505 | Val MSE: 0.0158482 | LR: 1.25e-04
+Epoch  100/100 | Train MSE: 0.0113657 | Val MSE: 0.0154991 | LR: 1.25e-04
+   -> Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v4_37 data\Setup 100 epoch - Improved v2\checkpoints_stage1\checkpoint_epoch_100.pth
+[EarlyStopping] Restore ke bobot terbaik (Val MSE: 0.0150768)
+=== STAGE 1 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 1) - skala normalized [-0.1, 1.1] ===
+Train Windows : 26
+Train MSE     : 0.010530
+Train RMSE    : 0.102617
+Train MAE     : 0.042108
+Train MAPE    : 49.96%
+========================================
+
+=== EVALUASI TEST SET (Stage 1) - skala normalized [-0.1, 1.1] ===
+Test Windows : 8
+Test MSE     : 0.011000
+Test RMSE    : 0.104881
+Test MAE     : 0.044177
+Test MAPE    : 45.96%
+========================================
+model_stage1_forecaster.pth disimpan
+kurva_loss_stage1.png disimpan
+info_stage1.txt disimpan

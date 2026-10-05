@@ -1,0 +1,16 @@
+====================================================================
+INFORMASI - TCN FORECASTER STAGE 1 (IMPROVED v3, isolated decoder)
+Generated: 2026-09-24 16:08:55
+====================================================================
+
+[PERBEDAAN vs v2]
+  - TIDAK ada validation split internal (v2 menyisihkan 4/26 window)
+  - TIDAK ada early stopping (v2 patience 15 tapi dinonaktifkan manual)
+  - Scheduler monitor TRAIN loss, patience=30 (identik model lama)
+  - Bobot dipakai = epoch 100 (terakhir), bukan best-checkpoint
+  - Decoder arsitektur SAMA PERSIS dengan v2 (point-wise + persistence + FiLM)
+  - Total parameter: 377,301
+
+[HASIL AKHIR]
+  Train MSE / RMSE / MAE / MAPE : 0.011596 / 0.107685 / 0.043276 / 49.30%
+  Test  MSE / RMSE / MAE / MAPE : 0.011604 / 0.107723 / 0.045499 / 45.66%

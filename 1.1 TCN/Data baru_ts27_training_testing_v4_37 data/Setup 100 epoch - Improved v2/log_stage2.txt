@@ -1,0 +1,44 @@
+
+============================================================
+STAGE 2 MLP CLASSIFIER (IMPROVED v2) | 2026-09-23 15:31:14
+Train days: 29 | Test days: 8
+K-Fold: 5 | Epoch(max): 100 | Batch: 3 | Total parameter/model: 3,378
+Distribusi Train: Healthy=20 Warning=9
+============================================================
+[Fold 1/5] n_train=23 n_val=6 | epoch berhenti=27 | Best Val F1=100.00%
+[Fold 2/5] n_train=23 n_val=6 | epoch berhenti=22 | Best Val F1=53.33%
+[Fold 3/5] n_train=23 n_val=6 | epoch berhenti=42 | Best Val F1=51.43%
+[Fold 4/5] n_train=23 n_val=6 | epoch berhenti=31 | Best Val F1=83.81%
+[Fold 5/5] n_train=24 n_val=5 | epoch berhenti=21 | Best Val F1=71.11%
+
+Rata-rata Val F1 across 5 fold: 71.94% (std 18.42%)
+=== STAGE 2 TRAINING (K-FOLD) SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2, ENSEMBLE) ===
+Train Days   : 29
+Train Acc    : 79.31%
+Train Prec   : 78.59%
+Train Recall : 79.31%
+Train F1     : 78.51%
+========================================
+
+=== EVALUASI TEST SET (Stage 2, ENSEMBLE - held-out) ===
+Test Days    : 8
+Test Acc     : 62.50%
+Test Prec    : 39.06%
+Test Recall  : 62.50%
+Test F1      : 48.08%
+  Day 30 (09052026): True=Healthy   | Pred=Healthy   OK
+  Day 31 (14052026): True=Warning   | Pred=Healthy   X
+  Day 32 (15052026): True=Healthy   | Pred=Healthy   OK
+  Day 33 (16052026): True=Healthy   | Pred=Healthy   OK
+  Day 34 (17052026): True=Healthy   | Pred=Healthy   OK
+  Day 35 (20052026): True=Warning   | Pred=Healthy   X
+  Day 36 (22052026): True=Warning   | Pred=Healthy   X
+  Day 37 (23052026): True=Healthy   | Pred=Healthy   OK
+========================================
+model_stage2_classifier.pth disimpan (ensemble 5-fold)
+kurva_kfold_stage2.png disimpan
+confusion_matrix_train.png — Acc=79.31% Prec=78.59% Rec=79.31% F1=78.51%
+confusion_matrix_test.png — Acc=62.50% Prec=39.06% Rec=62.50% F1=48.08%
+info_stage2.txt disimpan

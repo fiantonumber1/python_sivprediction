@@ -1,0 +1,27 @@
+[Inference v2] Device: cuda
+[Inference v2] MLP ensemble: 5 fold model dimuat
+====================================================================
+HASIL INFERENCE — IMPROVED v2
+Generated: 2026-09-24 07:32:25
+====================================================================
+
+[TRAINING INFERENCE (ada ground truth)]
+  Input : 06052026, 07052026, 08052026
+  Target: 09052026
+  Prediksi Status : Warning (confidence 52.47%)
+  Prob Healthy/Warning: 47.53% / 52.47%
+  Status Aktual   : Healthy  -> SALAH
+  MSE / RMSE / MAE (skala normalized): 0.010580 / 0.102860 / 0.039410
+
+[TESTING INFERENCE (tanpa ground truth, prediksi masa depan)]
+  Input : 20052026, 22052026, 23052026
+  Target: hari ke-38
+  Prediksi Status : Warning (confidence 52.74%)
+  Prob Healthy/Warning: 47.26% / 52.74%
+  Ground Truth    : tidak tersedia (prediksi masa depan)
+
+
+[Inference v2] Hasil disimpan: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v4_37 data\Setup 100 epoch - Improved v2\evidence\hasil_inference.txt
+[Inference v2] plot_training_inference_contoh.png disimpan
+
+STAGE 3 (IMPROVED v2) SELESAI!
