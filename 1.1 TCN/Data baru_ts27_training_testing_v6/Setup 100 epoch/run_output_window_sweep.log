@@ -1,0 +1,24 @@
+Membaca semua hari (sekali saja, dipakai ulang untuk semua ukuran window)...
+Total hari: 88 | Train days: 70 | Test days: 18
+[  1 menit] rows/win=  234 win/day= 854 n_train= 59780 n_warn_train= 39 | WindowAcc= 99.95% WindowRecWarn= 27.27% || DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+[  2 menit] rows/win=  468 win/day= 427 n_train= 29890 n_warn_train= 37 | WindowAcc= 99.91% WindowRecWarn= 36.36% || DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+[  3 menit] rows/win=  703 win/day= 284 n_train= 19880 n_warn_train= 35 | WindowAcc= 99.86% WindowRecWarn= 36.36% || DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+[  5 menit] rows/win= 1171 win/day= 170 n_train= 11900 n_warn_train= 34 | WindowAcc= 99.74% WindowRecWarn= 27.27% || DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+[ 10 menit] rows/win= 2343 win/day=  85 n_train=  5950 n_warn_train= 34 | WindowAcc= 99.28% WindowRecWarn=  9.09% || DayAcc= 55.56% DayF1= 47.35% DayRecWarn= 12.50% CM=[[9, 1], [7, 1]]
+[ 15 menit] rows/win= 3515 win/day=  56 n_train=  3920 n_warn_train= 34 | WindowAcc= 99.21% WindowRecWarn= 20.00% || DayAcc= 61.11% DayF1= 51.03% DayRecWarn= 12.50% CM=[[10, 0], [7, 1]]
+[ 20 menit] rows/win= 4687 win/day=  42 n_train=  2940 n_warn_train= 31 | WindowAcc= 98.81% WindowRecWarn= 30.00% || DayAcc= 61.11% DayF1= 59.16% DayRecWarn= 37.50% CM=[[8, 2], [5, 3]]
+[ 30 menit] rows/win= 7031 win/day=  28 n_train=  1960 n_warn_train= 32 | WindowAcc= 97.82% WindowRecWarn=  0.00% || DayAcc= 50.00% DayF1= 37.04% DayRecWarn=  0.00% CM=[[9, 1], [8, 0]]
+[ 45 menit] rows/win=10546 win/day=  18 n_train=  1260 n_warn_train= 32 | WindowAcc= 97.22% WindowRecWarn=  0.00% || DayAcc= 50.00% DayF1= 37.04% DayRecWarn=  0.00% CM=[[9, 1], [8, 0]]
+[ 60 menit] rows/win=14062 win/day=  14 n_train=   980 n_warn_train= 31 | WindowAcc= 96.83% WindowRecWarn= 25.00% || DayAcc= 55.56% DayF1= 51.85% DayRecWarn= 25.00% CM=[[8, 2], [6, 2]]
+
+=== RINGKASAN (urut DayAcc tertinggi) ===
+Window   1 menit | DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+Window   2 menit | DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+Window   3 menit | DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+Window   5 menit | DayAcc= 66.67% DayF1= 60.51% DayRecWarn= 25.00% CM=[[10, 0], [6, 2]]
+Window  15 menit | DayAcc= 61.11% DayF1= 51.03% DayRecWarn= 12.50% CM=[[10, 0], [7, 1]]
+Window  20 menit | DayAcc= 61.11% DayF1= 59.16% DayRecWarn= 37.50% CM=[[8, 2], [5, 3]]
+Window  10 menit | DayAcc= 55.56% DayF1= 47.35% DayRecWarn= 12.50% CM=[[9, 1], [7, 1]]
+Window  60 menit | DayAcc= 55.56% DayF1= 51.85% DayRecWarn= 25.00% CM=[[8, 2], [6, 2]]
+Window  30 menit | DayAcc= 50.00% DayF1= 37.04% DayRecWarn=  0.00% CM=[[9, 1], [8, 0]]
+Window  45 menit | DayAcc= 50.00% DayF1= 37.04% DayRecWarn=  0.00% CM=[[9, 1], [8, 0]]

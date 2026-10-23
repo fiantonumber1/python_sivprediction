@@ -1,0 +1,52 @@
+
+============================================================
+STAGE 2 GRADIENT BOOSTING CLASSIFIER | 2026-10-21 13:10:09
+Train days: 63 | Test days: 16
+Sampel train: 63 hari | n_estimators: 200 | max_depth: 3
+Distribusi Train: Healthy=43 Warning=20
+Fitur per hari: 126 dim (21 param x 6 statistik: mean,std,max,min,skew,rate-of-change)
+============================================================
+Stage   50/200 | Deviance: 0.041297 | Acc: 100.00%
+Stage  100/200 | Deviance: 0.003549 | Acc: 100.00%
+Stage  150/200 | Deviance: 0.000301 | Acc: 100.00%
+Stage  200/200 | Deviance: 0.000026 | Acc: 100.00%
+=== STAGE 2 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2) ===
+Train Days   : 63
+Train Acc    : 100.00%
+Train Prec   : 100.00%
+Train Recall : 100.00%
+Train F1     : 100.00%
+========================================
+
+=== EVALUASI TEST SET (Stage 2) ===
+Test Days    : 16
+Test Acc     : 50.00%
+Test Prec    : 30.00%
+Test Recall  : 50.00%
+Test F1      : 37.50%
+  Day 64: True=Healthy   | Pred=Healthy   OK
+  Day 65: True=Warning   | Pred=Healthy   X
+  Day 66: True=Healthy   | Pred=Healthy   OK
+  Day 67: True=Warning   | Pred=Healthy   X
+  Day 68: True=Warning   | Pred=Healthy   X
+  Day 69: True=Healthy   | Pred=Healthy   OK
+  Day 70: True=Healthy   | Pred=Healthy   OK
+  Day 71: True=Healthy   | Pred=Healthy   OK
+  Day 72: True=Warning   | Pred=Healthy   X
+  Day 73: True=Healthy   | Pred=Healthy   OK
+  Day 74: True=Healthy   | Pred=Warning   X
+  Day 75: True=Healthy   | Pred=Healthy   OK
+  Day 76: True=Warning   | Pred=Healthy   X
+  Day 77: True=Warning   | Pred=Healthy   X
+  Day 78: True=Healthy   | Pred=Healthy   OK
+  Day 79: True=Warning   | Pred=Healthy   X
+========================================
+model_stage2_classifier.pkl disimpan
+jurnal_kurva_loss_acc_stage2.png disimpan  <- Jurnal Gambar 14
+jurnal_confusion_matrix_train.png - Acc=100.00% Prec=100.00% Rec=100.00% F1=100.00%
+jurnal_confusion_matrix_test.png - Acc=50.00% Prec=30.00% Rec=50.00% F1=37.50%
+jurnal_aktual_vs_prediksi_mlp.png disimpan  <- Jurnal Gambar 15
+jurnal_fitur_statistik.csv disimpan  <- Tabel Fitur Statistik Jurnal (126 kolom)
+jurnal_info_stage2.txt disimpan  <- Data untuk Tabel & Paragraf Jurnal Stage 2

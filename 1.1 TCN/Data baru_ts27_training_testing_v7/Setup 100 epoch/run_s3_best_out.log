@@ -1,0 +1,803 @@
+
+[Inference] Device: cuda
+
+[DEBUG] CSV ditemukan:
+   10072025.csv
+   11072025.csv
+   13072025.csv
+   14072025.csv
+   17072025.csv
+   18072025.csv
+   21072025.csv
+   22072025.csv
+   23072025.csv
+   24072025.csv
+   25072025.csv
+   01082025.csv
+   03082025.csv
+   07082025.csv
+   08082025.csv
+   09082025.csv
+   10082025.csv
+   11082025.csv
+   13082025.csv
+   14082025.csv
+   15082025.csv
+   16082025.csv
+   17082025.csv
+   18082025.csv
+   19082025.csv
+   20082025.csv
+   21082025.csv
+   22082025.csv
+   23082025.csv
+   24082025.csv
+   25082025.csv
+   26082025.csv
+   27082025.csv
+   31082025.csv
+   02092025.csv
+   03092025.csv
+   04092025.csv
+   05092025.csv
+   06092025.csv
+   07092025.csv
+   08092025.csv
+   09092025.csv
+   10092025.csv
+   11092025.csv
+   12092025.csv
+   14092025.csv
+   15092025.csv
+   16092025.csv
+   17092025.csv
+   18092025.csv
+   19092025.csv
+   20092025.csv
+   21092025.csv
+   22092025.csv
+   11122025.csv
+   16122025.csv
+   02012026.csv
+   10022026.csv
+   13022026.csv
+   15022026.csv
+   19022026.csv
+   23022026.csv
+   25022026.csv
+   01032026.csv
+   07032026.csv
+   22032026.csv
+   28032026.csv
+   08042026.csv
+   09042026.csv
+   11042026.csv
+   12042026.csv
+   15042026.csv
+   16042026.csv
+   17042026.csv
+   19042026.csv
+   21042026.csv
+   22042026.csv
+   23042026.csv
+   24042026.csv
+   27042026.csv
+   04052026.csv
+   05052026.csv
+   06052026.csv
+   07052026.csv
+   08052026.csv
+   09052026.csv
+   14052026.csv
+   15052026.csv
+   16052026.csv
+   17052026.csv
+   20052026.csv
+   22052026.csv
+   23052026.csv
+   18062026.csv
+   19062026.csv
+[Inference] Scaler loaded
+[Inference] Model TCN dan MLP loaded
+
+[Inference] Membaca semua CSV...
+
+  Membaca: 10072025.csv
+    Separator: ';'
+  Skip 10072025.csv: Data terlalu sedikit: 143920 rows (min 200000)
+
+  Membaca: 11072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 13072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 24072025.csv
+    Separator: ';'
+  Skip 24072025.csv: Data terlalu sedikit: 191965 rows (min 200000)
+
+  Membaca: 25072025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 01082025.csv
+    Separator: ';'
+  Skip 01082025.csv: Data terlalu sedikit: 190343 rows (min 200000)
+
+  Membaca: 03082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 13082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18082025.csv
+    Separator: ';'
+  Skip 18082025.csv: Data terlalu sedikit: 197181 rows (min 200000)
+
+  Membaca: 19082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 24082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 25082025.csv
+    Separator: ';'
+  Skip 25082025.csv: Data terlalu sedikit: 162276 rows (min 200000)
+
+  Membaca: 26082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 27082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 31082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 02092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 03092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 04092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 05092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 06092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08092025.csv
+    Separator: ';'
+  Skip 08092025.csv: Data terlalu sedikit: 178760 rows (min 200000)
+
+  Membaca: 09092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 12092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11122025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16122025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 02012026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 13022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 25022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 01032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 28032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 12042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 24042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 27042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 04052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 05052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 06052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18062026.csv
+    Separator: ';'
+  Skip 18062026.csv: Data terlalu sedikit: 162813 rows (min 200000)
+
+  Membaca: 19062026.csv
+    Separator: ';'
+    → 200000 titik
+
+[Inference] Total hari valid: 88
+  Day  1 → Warning
+  Day  2 → Healthy
+  Day  3 → Warning
+  Day  4 → Warning
+  Day  5 → Healthy
+  Day  6 → Healthy
+  Day  7 → Warning
+  Day  8 → Healthy
+  Day  9 → Warning
+  Day 10 → Healthy
+  Day 11 → Warning
+  Day 12 → Warning
+  Day 13 → Warning
+  Day 14 → Warning
+  Day 15 → Healthy
+  Day 16 → Warning
+  Day 17 → Healthy
+  Day 18 → Warning
+  Day 19 → Healthy
+  Day 20 → Healthy
+  Day 21 → Healthy
+  Day 22 → Warning
+  Day 23 → Healthy
+  Day 24 → Healthy
+  Day 25 → Healthy
+  Day 26 → Healthy
+  Day 27 → Healthy
+  Day 28 → Warning
+  Day 29 → Healthy
+  Day 30 → Healthy
+  Day 31 → Healthy
+  Day 32 → Warning
+  Day 33 → Healthy
+  Day 34 → Warning
+  Day 35 → Healthy
+  Day 36 → Healthy
+  Day 37 → Healthy
+  Day 38 → Warning
+  Day 39 → Warning
+  Day 40 → Warning
+  Day 41 → Healthy
+  Day 42 → Warning
+  Day 43 → Warning
+  Day 44 → Healthy
+  Day 45 → Healthy
+  Day 46 → Healthy
+  Day 47 → Warning
+  Day 48 → Healthy
+  Day 49 → Healthy
+  Day 50 → Healthy
+  Day 51 → Warning
+  Day 52 → Warning
+  Day 53 → Healthy
+  Day 54 → Healthy
+  Day 55 → Healthy
+  Day 56 → Healthy
+  Day 57 → Healthy
+  Day 58 → Warning
+  Day 59 → Healthy
+  Day 60 → Warning
+  Day 61 → Healthy
+  Day 62 → Healthy
+  Day 63 → Healthy
+  Day 64 → Healthy
+  Day 65 → Healthy
+  Day 66 → Healthy
+  Day 67 → Healthy
+  Day 68 → Healthy
+  Day 69 → Healthy
+  Day 70 → Warning
+  Day 71 → Healthy
+  Day 72 → Warning
+  Day 73 → Healthy
+  Day 74 → Warning
+  Day 75 → Healthy
+  Day 76 → Warning
+  Day 77 → Warning
+  Day 78 → Healthy
+  Day 79 → Healthy
+  Day 80 → Healthy
+  Day 81 → Warning
+  Day 82 → Healthy
+  Day 83 → Healthy
+  Day 84 → Healthy
+  Day 85 → Warning
+  Day 86 → Warning
+  Day 87 → Healthy
+  Day 88 → Warning
+
+=================================================================
+PEMBAGIAN DATA TRAIN / TEST (TRAIN_RATIO=0.8)
+=================================================================
+  Total hari valid  : 88
+  Hari TRAINING     : 70 hari (80%)
+  Hari TESTING      : 18 hari (20%)
+
+   Day     Tanggal      Set  Status Kesehatan
+  ------------------------------------------
+     1    10072025    TRAIN         Warning
+     2    11072025    TRAIN         Healthy
+     3    13072025    TRAIN         Warning
+     4    14072025    TRAIN         Warning
+     5    17072025    TRAIN         Healthy
+     6    18072025    TRAIN         Healthy
+     7    21072025    TRAIN         Warning
+     8    22072025    TRAIN         Healthy
+     9    23072025    TRAIN         Warning
+    10    24072025    TRAIN         Healthy
+    11    25072025    TRAIN         Warning
+    12    01082025    TRAIN         Warning
+    13    03082025    TRAIN         Warning
+    14    07082025    TRAIN         Warning
+    15    08082025    TRAIN         Healthy
+    16    09082025    TRAIN         Warning
+    17    10082025    TRAIN         Healthy
+    18    11082025    TRAIN         Warning
+    19    13082025    TRAIN         Healthy
+    20    14082025    TRAIN         Healthy
+    21    15082025    TRAIN         Healthy
+    22    16082025    TRAIN         Warning
+    23    17082025    TRAIN         Healthy
+    24    18082025    TRAIN         Healthy
+    25    19082025    TRAIN         Healthy
+    26    20082025    TRAIN         Healthy
+    27    21082025    TRAIN         Healthy
+    28    22082025    TRAIN         Warning
+    29    23082025    TRAIN         Healthy
+    30    24082025    TRAIN         Healthy
+    31    25082025    TRAIN         Healthy
+    32    26082025    TRAIN         Warning
+    33    27082025    TRAIN         Healthy
+    34    31082025    TRAIN         Warning
+    35    02092025    TRAIN         Healthy
+    36    03092025    TRAIN         Healthy
+    37    04092025    TRAIN         Healthy
+    38    05092025    TRAIN         Warning
+    39    06092025    TRAIN         Warning
+    40    07092025    TRAIN         Warning
+    41    08092025    TRAIN         Healthy
+    42    09092025    TRAIN         Warning
+    43    10092025    TRAIN         Warning
+    44    11092025    TRAIN         Healthy
+    45    12092025    TRAIN         Healthy
+    46    14092025    TRAIN         Healthy
+    47    15092025    TRAIN         Warning
+    48    16092025    TRAIN         Healthy
+    49    17092025    TRAIN         Healthy
+    50    18092025    TRAIN         Healthy
+    51    19092025    TRAIN         Warning
+    52    20092025    TRAIN         Warning
+    53    21092025    TRAIN         Healthy
+    54    22092025    TRAIN         Healthy
+    55    11122025    TRAIN         Healthy
+    56    16122025    TRAIN         Healthy
+    57    02012026    TRAIN         Healthy
+    58    10022026    TRAIN         Warning
+    59    13022026    TRAIN         Healthy
+    60    15022026    TRAIN         Warning
+    61    19022026    TRAIN         Healthy
+    62    23022026    TRAIN         Healthy
+    63    25022026    TRAIN         Healthy
+    64    01032026    TRAIN         Healthy
+    65    07032026    TRAIN         Healthy
+    66    22032026    TRAIN         Healthy
+    67    28032026    TRAIN         Healthy
+    68    08042026    TRAIN         Healthy
+    69    09042026    TRAIN         Healthy
+    70    11042026    TRAIN         Warning
+    71    12042026     TEST         Healthy
+    72    15042026     TEST         Warning
+    73    16042026     TEST         Healthy
+    74    17042026     TEST         Warning
+    75    19042026     TEST         Healthy
+    76    21042026     TEST         Warning
+    77    22042026     TEST         Warning
+    78    23042026     TEST         Healthy
+    79    24042026     TEST         Healthy
+    80    27042026     TEST         Healthy
+    81    04052026     TEST         Warning
+    82    05052026     TEST         Healthy
+    83    06052026     TEST         Healthy
+    84    07052026     TEST         Healthy
+    85    08052026     TEST         Warning
+    86    09052026     TEST         Warning
+    87    14052026     TEST         Healthy
+    88    15052026     TEST         Warning
+  ------------------------------------------
+
+  DATA TRAINING  → Day 1 s/d Day 70 (10072025 – 11042026)
+  DATA TESTING   → Day 71 s/d Day 88 (12042026 – 19062026)
+=================================================================
+
+[Plot] plot_all_parameters_TCN.png ...
+  → plot_all_parameters_TCN.png  (supplementary)
+
+[Plot] jurnal_sliding_window.png (Jurnal Gambar 6) ...
+  → jurnal_sliding_window.png  ← Jurnal Gambar 6
+
+[Plot] jurnal_normalisasi_comparison.png (Jurnal Gambar 5) ...
+  → jurnal_normalisasi_comparison.png  ← Jurnal Gambar 5
+
+=================================================================
+BAGIAN 1: TRAINING INFERENCE
+Konsep: gunakan 3 hari TERAKHIR data TRAINING → prediksi hari ke-(n_train+1)
+        Hari ke-(n_train+1) adalah hari PERTAMA data TESTING → ada ground truth
+=================================================================
+
+  [INPUT — dari data TRAINING]
+    Hari A (Day 68): 08042026.csv  Status: Healthy
+    Hari B (Day 69): 09042026.csv  Status: Healthy
+    Hari C (Day 70  ): 11042026.csv  Status: Warning
+
+  [TARGET — hari pertama data TESTING (ground truth tersedia)]
+    Hari D (Day 71): 12042026.csv  Status Aktual: Healthy
+
+  [HASIL TRAINING INFERENCE]
+    Prediksi Status : Healthy  (65.30% confidence)
+    Status Aktual   : Healthy
+    Klasifikasi     : BENAR ✓
+    Prob Healthy    : 65.30%
+    Prob Warning    : 34.70%
+
+  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]
+    MSE   = 0.00519248
+    RMSE  = 0.07205884
+    MAE   = 0.02804091
+    MAPE  = 99715.50%
+[Plot] gambar_train1_input_prediksi.png ...
+  → gambar_train1_input_prediksi.png
+[Plot] gambar_train2_real_vs_pred.png ...
+  → gambar_train2_real_vs_pred.png
+
+=================================================================
+BAGIAN 2: TESTING INFERENCE
+Konsep: gunakan 3 hari TERAKHIR dari SEMUA data → prediksi hari MASA DEPAN
+        Tidak ada ground truth → hanya prediksi + confidence
+=================================================================
+
+  [INPUT — dari data TESTING (hari terakhir dataset)]
+    Hari A (Day 86): 23052026.csv  Status: Warning
+    Hari B (Day 87): 18062026.csv  Status: Healthy
+    Hari C (Day 88): 19062026.csv  Status: Warning
+
+  [HASIL TESTING INFERENCE — prediksi hari ke-89 (masa depan)]
+    Prediksi Status : Healthy  (66.37% confidence)
+    Prob Healthy      : 66.37%
+    Prob Warning    : 33.63%
+    Ground Truth    : TIDAK ADA (hari masa depan)
+
+  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]
+    MSE   = TIDAK DAPAT DIHITUNG (tidak ada ground truth)
+    RMSE  = TIDAK DAPAT DIHITUNG
+    MAE   = TIDAK DAPAT DIHITUNG
+    MAPE  = TIDAK DAPAT DIHITUNG
+=================================================================
+[Plot] gambar1_4hari_real_TCN.png (supplementary) ...
+  → gambar1_4hari_real_TCN.png
+[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 15) ...
+  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 15
+[Plot] gambar3_real_vs_prediksi_TCN.png (supplementary) ...
+  → gambar3_real_vs_prediksi_TCN.png
+
+======================================================================
+RINGKASAN PERBANDINGAN: TRAINING INFERENCE vs TESTING INFERENCE
+======================================================================
+  Aspek                          Training Inference   Testing Inference
+  ----------------------------------------------------------------------
+  Input Days                      Day 68–70 (Train)    Day 86–88 (Test)
+  Target                          Day 71 (1st Test)     Day 89 (Future)
+  Prediksi Status                   Healthy (65.3%)     Healthy (66.4%)
+  Ground Truth                              Healthy           TIDAK ADA
+  Klasifikasi Benar?                        BENAR ✓    Tidak dpt diukur
+  MSE (normalized)                         0.005192    Tidak dpt diukur
+  RMSE (normalized)                        0.072059    Tidak dpt diukur
+  MAE (normalized)                         0.028041    Tidak dpt diukur
+  MAPE                                    99715.50%    Tidak dpt diukur
+  ----------------------------------------------------------------------
+
+  NOTE: Training inference BISA diukur MSE/RMSE/MAE/MAPE karena ground truth
+        hari D+1 (data test) tersedia. Testing inference TIDAK BISA diukur
+        karena prediksi ke hari masa depan yang belum ada datanya.
+======================================================================
+
+SELESAI! Output disimpan ke folder evidence/:
+
+[TRAINING INFERENCE — Gambar 11 Jurnal]
+  gambar_train1_input_prediksi.png   (supplementary — 3 hari train input + prediksi)
+  gambar_train2_real_vs_pred.png     ← Jurnal Gambar 11 (Aktual Y_Testing vs Prediksi)
+  inference_train_prediksi_sensor.csv
+  inference_train_health_status.csv
+
+[TESTING INFERENCE — Gambar 15 Jurnal]
+  jurnal_normalisasi_comparison.png      ← Jurnal Gambar 5
+  jurnal_sliding_window.png              ← Jurnal Gambar 6
+  plot_all_parameters_TCN.png            (supplementary)
+  gambar2_input_plus_prediksi_TCN.png    ← Jurnal Gambar 11 (3 hari test + prediksi D+1)
+  inference_prediksi_sensor.csv
+  inference_health_status.csv
+
+[SUPPLEMENTARY — tidak bernomor gambar jurnal]
+  gambar1_4hari_real_TCN.png             (konteks 4 hari real testing)
+  gambar3_real_vs_prediksi_TCN.png       (overlay real vs pred testing)
+======================================================================
+
+[Plot] Membuat flowchart jurnal ...
+  → jurnal_flowchart_stage1.png
+  → jurnal_flowchart_stage2.png
+
+[FLOWCHART JURNAL]
+  jurnal_flowchart_stage1.png   ← Jurnal Gambar 1
+  jurnal_flowchart_stage2.png   ← Jurnal Gambar 2
+
+[INFO] jurnal_informasi_lengkap.txt disimpan ← BACA INI untuk semua data jurnal
+
+Catatan: Gambar 3 (LeadMind), Gambar 4 (Laporan Gangguan),
+         Gambar 5 (Detail insiden) → perlu screenshot manual.
+         Gambar 7 & 8 → jalankan stage1 (jurnal_kurva_loss_stage1.png).
+         Gambar 12   → jalankan stage2 (kurva_loss_stage2.png).

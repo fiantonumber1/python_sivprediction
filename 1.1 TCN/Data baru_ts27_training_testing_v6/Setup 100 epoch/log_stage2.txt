@@ -1,0 +1,153 @@
+
+============================================================
+STAGE 2 MLP CLASSIFIER | 2026-10-21 14:35:59
+Train days: 70 | Test days: 18
+Sampel train: 70 hari | Epoch: 100 | Batch: 3
+Distribusi Train: Healthy=44 Warning=26
+============================================================
+Epoch    1/100 | CE: 0.727973 | Acc:  39.13% | LR: 1.00e-03
+Epoch    2/100 | CE: 0.683472 | Acc:  43.48% | LR: 1.00e-03
+Epoch    3/100 | CE: 0.674709 | Acc:  46.38% | LR: 1.00e-03
+Epoch    4/100 | CE: 0.662408 | Acc:  36.23% | LR: 1.00e-03
+Epoch    5/100 | CE: 0.615888 | Acc:  47.83% | LR: 1.00e-03
+Epoch    6/100 | CE: 0.661691 | Acc:  46.38% | LR: 1.00e-03
+Epoch    7/100 | CE: 0.655943 | Acc:  50.72% | LR: 1.00e-03
+Epoch    8/100 | CE: 0.651919 | Acc:  68.12% | LR: 1.00e-03
+Epoch    9/100 | CE: 0.572054 | Acc:  66.67% | LR: 1.00e-03
+Epoch   10/100 | CE: 0.645700 | Acc:  60.87% | LR: 1.00e-03
+Epoch   11/100 | CE: 0.653166 | Acc:  73.91% | LR: 1.00e-03
+Epoch   12/100 | CE: 0.734083 | Acc:  62.32% | LR: 1.00e-03
+Epoch   13/100 | CE: 0.586949 | Acc:  69.57% | LR: 1.00e-03
+Epoch   14/100 | CE: 0.623202 | Acc:  72.46% | LR: 1.00e-03
+Epoch   15/100 | CE: 0.626734 | Acc:  63.77% | LR: 1.00e-03
+Epoch   16/100 | CE: 0.583305 | Acc:  68.12% | LR: 1.00e-03
+Epoch   17/100 | CE: 1.001198 | Acc:  59.42% | LR: 1.00e-03
+Epoch   18/100 | CE: 0.548036 | Acc:  62.32% | LR: 1.00e-03
+Epoch   19/100 | CE: 0.538321 | Acc:  68.12% | LR: 1.00e-03
+Epoch   20/100 | CE: 0.752206 | Acc:  72.46% | LR: 1.00e-03
+Epoch   21/100 | CE: 0.613843 | Acc:  73.91% | LR: 1.00e-03
+Epoch   22/100 | CE: 0.641295 | Acc:  66.67% | LR: 1.00e-03
+Epoch   23/100 | CE: 0.626343 | Acc:  72.46% | LR: 1.00e-03
+Epoch   24/100 | CE: 0.487827 | Acc:  76.81% | LR: 1.00e-03
+Epoch   25/100 | CE: 0.771495 | Acc:  52.17% | LR: 1.00e-03
+Epoch   26/100 | CE: 0.545006 | Acc:  72.46% | LR: 1.00e-03
+Epoch   27/100 | CE: 0.533136 | Acc:  72.46% | LR: 1.00e-03
+Epoch   28/100 | CE: 0.825560 | Acc:  73.91% | LR: 1.00e-03
+Epoch   29/100 | CE: 0.506080 | Acc:  75.36% | LR: 1.00e-03
+Epoch   30/100 | CE: 0.676949 | Acc:  69.57% | LR: 1.00e-03
+Epoch   31/100 | CE: 0.704852 | Acc:  72.46% | LR: 1.00e-03
+Epoch   32/100 | CE: 0.489662 | Acc:  71.01% | LR: 1.00e-03
+Epoch   33/100 | CE: 0.599231 | Acc:  75.36% | LR: 1.00e-03
+Epoch   34/100 | CE: 0.424744 | Acc:  81.16% | LR: 1.00e-03
+Epoch   35/100 | CE: 0.620176 | Acc:  76.81% | LR: 1.00e-03
+Epoch   36/100 | CE: 0.637619 | Acc:  78.26% | LR: 1.00e-03
+Epoch   37/100 | CE: 0.526885 | Acc:  73.91% | LR: 1.00e-03
+Epoch   38/100 | CE: 0.406152 | Acc:  82.61% | LR: 1.00e-03
+Epoch   39/100 | CE: 0.663200 | Acc:  81.16% | LR: 1.00e-03
+Epoch   40/100 | CE: 0.871996 | Acc:  72.46% | LR: 1.00e-03
+Epoch   41/100 | CE: 0.447077 | Acc:  82.61% | LR: 1.00e-03
+Epoch   42/100 | CE: 0.633551 | Acc:  81.16% | LR: 1.00e-03
+Epoch   43/100 | CE: 0.308392 | Acc:  88.41% | LR: 1.00e-03
+Epoch   44/100 | CE: 0.547630 | Acc:  81.16% | LR: 1.00e-03
+Epoch   45/100 | CE: 0.524094 | Acc:  82.61% | LR: 1.00e-03
+Epoch   46/100 | CE: 0.619452 | Acc:  81.16% | LR: 1.00e-03
+Epoch   47/100 | CE: 0.440367 | Acc:  82.61% | LR: 1.00e-03
+Epoch   48/100 | CE: 0.365687 | Acc:  84.06% | LR: 1.00e-03
+Epoch   49/100 | CE: 0.403761 | Acc:  85.51% | LR: 1.00e-03
+Epoch   50/100 | CE: 0.650895 | Acc:  84.06% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_50.pth
+Epoch   51/100 | CE: 0.843756 | Acc:  79.71% | LR: 1.00e-03
+Epoch   52/100 | CE: 0.307296 | Acc:  82.61% | LR: 1.00e-03
+Epoch   53/100 | CE: 0.848537 | Acc:  85.51% | LR: 1.00e-03
+Epoch   54/100 | CE: 0.393514 | Acc:  84.06% | LR: 1.00e-03
+Epoch   55/100 | CE: 0.474005 | Acc:  78.26% | LR: 1.00e-03
+Epoch   56/100 | CE: 0.628383 | Acc:  85.51% | LR: 1.00e-03
+Epoch   57/100 | CE: 0.397950 | Acc:  86.96% | LR: 1.00e-03
+Epoch   58/100 | CE: 0.534807 | Acc:  84.06% | LR: 1.00e-03
+Epoch   59/100 | CE: 0.460071 | Acc:  85.51% | LR: 1.00e-03
+Epoch   60/100 | CE: 0.977000 | Acc:  76.81% | LR: 1.00e-03
+Epoch   61/100 | CE: 0.436270 | Acc:  76.81% | LR: 1.00e-03
+Epoch   62/100 | CE: 0.371222 | Acc:  85.51% | LR: 1.00e-03
+Epoch   63/100 | CE: 0.428549 | Acc:  82.61% | LR: 1.00e-03
+Epoch   64/100 | CE: 0.395618 | Acc:  86.96% | LR: 1.00e-03
+Epoch   65/100 | CE: 0.355314 | Acc:  86.96% | LR: 1.00e-03
+Epoch   66/100 | CE: 0.673200 | Acc:  85.51% | LR: 1.00e-03
+Epoch   67/100 | CE: 0.358386 | Acc:  91.30% | LR: 1.00e-03
+Epoch   68/100 | CE: 0.370684 | Acc:  91.30% | LR: 1.00e-03
+Epoch   69/100 | CE: 0.289927 | Acc:  92.75% | LR: 1.00e-03
+Epoch   70/100 | CE: 0.373891 | Acc:  88.41% | LR: 1.00e-03
+Epoch   71/100 | CE: 0.763451 | Acc:  84.06% | LR: 1.00e-03
+Epoch   72/100 | CE: 0.375395 | Acc:  91.30% | LR: 1.00e-03
+Epoch   73/100 | CE: 0.331276 | Acc:  88.41% | LR: 1.00e-03
+Epoch   74/100 | CE: 0.423614 | Acc:  88.41% | LR: 1.00e-03
+Epoch   75/100 | CE: 0.552767 | Acc:  86.96% | LR: 1.00e-03
+Epoch   76/100 | CE: 0.291210 | Acc:  91.30% | LR: 1.00e-03
+Epoch   77/100 | CE: 0.582370 | Acc:  85.51% | LR: 1.00e-03
+Epoch   78/100 | CE: 0.524504 | Acc:  91.30% | LR: 1.00e-03
+Epoch   79/100 | CE: 0.589720 | Acc:  85.51% | LR: 1.00e-03
+Epoch   80/100 | CE: 0.285273 | Acc:  92.75% | LR: 1.00e-03
+Epoch   81/100 | CE: 0.331257 | Acc:  91.30% | LR: 1.00e-03
+Epoch   82/100 | CE: 0.339640 | Acc:  91.30% | LR: 1.00e-03
+Epoch   83/100 | CE: 0.377898 | Acc:  88.41% | LR: 1.00e-03
+Epoch   84/100 | CE: 0.537994 | Acc:  85.51% | LR: 1.00e-03
+Epoch   85/100 | CE: 0.347170 | Acc:  88.41% | LR: 1.00e-03
+Epoch   86/100 | CE: 0.400508 | Acc:  84.06% | LR: 1.00e-03
+Epoch   87/100 | CE: 0.251420 | Acc:  89.86% | LR: 1.00e-03
+Epoch   88/100 | CE: 0.437946 | Acc:  91.30% | LR: 1.00e-03
+Epoch   89/100 | CE: 0.282458 | Acc:  91.30% | LR: 1.00e-03
+Epoch   90/100 | CE: 0.526101 | Acc:  84.06% | LR: 1.00e-03
+Epoch   91/100 | CE: 0.415419 | Acc:  88.41% | LR: 1.00e-03
+Epoch   92/100 | CE: 0.455044 | Acc:  86.96% | LR: 1.00e-03
+Epoch   93/100 | CE: 0.343951 | Acc:  92.75% | LR: 1.00e-03
+Epoch   94/100 | CE: 0.351431 | Acc:  86.96% | LR: 1.00e-03
+Epoch   95/100 | CE: 0.304277 | Acc:  89.86% | LR: 1.00e-03
+Epoch   96/100 | CE: 0.325918 | Acc:  85.51% | LR: 1.00e-03
+Epoch   97/100 | CE: 0.362817 | Acc:  88.41% | LR: 1.00e-03
+Epoch   98/100 | CE: 0.518700 | Acc:  86.96% | LR: 1.00e-03
+Epoch   99/100 | CE: 0.406152 | Acc:  91.30% | LR: 1.00e-03
+Epoch  100/100 | CE: 0.380112 | Acc:  91.30% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_100.pth
+=== STAGE 2 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2) ===
+Train Days   : 70
+Train CE     : 0.307296
+Train Acc    : 94.29%
+Train Prec   : 94.29%
+Train Recall : 94.29%
+Train F1     : 94.29%
+========================================
+
+=== EVALUASI TEST SET (Stage 2) ===
+Test Days    : 18
+Test CE      : 3.631627
+Test Acc     : 50.00%
+Test Prec    : 44.44%
+Test Recall  : 50.00%
+Test F1      : 43.64%
+  Day 71: True=Healthy   | Pred=Warning   ✗
+  Day 72: True=Warning   | Pred=Healthy   ✗
+  Day 73: True=Healthy   | Pred=Healthy   ✓
+  Day 74: True=Warning   | Pred=Healthy   ✗
+  Day 75: True=Healthy   | Pred=Healthy   ✓
+  Day 76: True=Warning   | Pred=Warning   ✓
+  Day 77: True=Warning   | Pred=Healthy   ✗
+  Day 78: True=Healthy   | Pred=Healthy   ✓
+  Day 79: True=Healthy   | Pred=Healthy   ✓
+  Day 80: True=Healthy   | Pred=Healthy   ✓
+  Day 81: True=Warning   | Pred=Healthy   ✗
+  Day 82: True=Healthy   | Pred=Healthy   ✓
+  Day 83: True=Healthy   | Pred=Warning   ✗
+  Day 84: True=Healthy   | Pred=Healthy   ✓
+  Day 85: True=Warning   | Pred=Healthy   ✗
+  Day 86: True=Warning   | Pred=Healthy   ✗
+  Day 87: True=Healthy   | Pred=Healthy   ✓
+  Day 88: True=Warning   | Pred=Healthy   ✗
+========================================
+model_stage2_classifier.pth disimpan
+jurnal_kurva_loss_acc_stage2.png disimpan  ← Jurnal Gambar 14
+jurnal_confusion_matrix_train.png — Acc=94.29% Prec=94.29% Rec=94.29% F1=94.29%
+jurnal_confusion_matrix_test.png — Acc=50.00% Prec=44.44% Rec=50.00% F1=43.64%
+jurnal_aktual_vs_prediksi_mlp.png disimpan  ← Jurnal Gambar 15
+jurnal_fitur_statistik.csv disimpan  ← Tabel Fitur Statistik Jurnal (84 kolom)
+jurnal_info_stage2.txt disimpan  ← Data untuk Tabel & Paragraf Jurnal Stage 2

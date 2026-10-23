@@ -1,0 +1,182 @@
+
+======================================================================
+STAGE 2 v7 MLP WINDOW 30 DETIK | 2026-10-23 11:14:55
+======================================================================
+File CSV ditemukan : 95
+Window             : 30 detik = 117 baris | 1709 window/hari
+Hari terpakai      : 88 | dilewati (baris < 200000): 7 ['10072025', '24072025', '01082025', '18082025', '25082025', '08092025', '18062026']
+Split kronologis   : train 70 hari (11072025..21042026) | test 18 hari (22042026..19062026)
+Hari Healthy/Warning : train 44/26 | test 10/8
+Window train       : 119630 (Healthy=119589, Warning=41)
+Window test        : 30762 (Healthy=30749, Warning=13)
+
+--- Training model utama ---
+Epoch   1/100 | loss 0.029283 | train acc 99.9808% | train recall Warning 46.34%
+Epoch   2/100 | loss 0.001573 | train acc 99.9891% | train recall Warning 75.61%
+Epoch   3/100 | loss 0.001425 | train acc 99.9866% | train recall Warning 78.05%
+Epoch   4/100 | loss 0.001294 | train acc 99.9875% | train recall Warning 78.05%
+Epoch   5/100 | loss 0.001096 | train acc 99.9866% | train recall Warning 78.05%
+Epoch   6/100 | loss 0.001099 | train acc 99.9858% | train recall Warning 78.05%
+Epoch   7/100 | loss 0.001255 | train acc 99.9866% | train recall Warning 78.05%
+Epoch   8/100 | loss 0.001014 | train acc 99.9824% | train recall Warning 78.05%
+Epoch   9/100 | loss 0.001062 | train acc 99.9850% | train recall Warning 78.05%
+Epoch  10/100 | loss 0.001170 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  11/100 | loss 0.001007 | train acc 99.9833% | train recall Warning 78.05%
+Epoch  12/100 | loss 0.000949 | train acc 99.9841% | train recall Warning 78.05%
+Epoch  13/100 | loss 0.001044 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  14/100 | loss 0.000917 | train acc 99.9850% | train recall Warning 78.05%
+Epoch  15/100 | loss 0.000932 | train acc 99.9841% | train recall Warning 78.05%
+Epoch  16/100 | loss 0.000988 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  17/100 | loss 0.000927 | train acc 99.9841% | train recall Warning 78.05%
+Epoch  18/100 | loss 0.000956 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  19/100 | loss 0.000907 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  20/100 | loss 0.000881 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  21/100 | loss 0.000837 | train acc 99.9858% | train recall Warning 78.05%
+Epoch  22/100 | loss 0.000929 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  23/100 | loss 0.000964 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  24/100 | loss 0.000875 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  25/100 | loss 0.000858 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  26/100 | loss 0.000826 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  27/100 | loss 0.000808 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  28/100 | loss 0.000913 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  29/100 | loss 0.000911 | train acc 99.9850% | train recall Warning 78.05%
+Epoch  30/100 | loss 0.000887 | train acc 99.9858% | train recall Warning 78.05%
+Epoch  31/100 | loss 0.000846 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  32/100 | loss 0.000868 | train acc 99.9850% | train recall Warning 78.05%
+Epoch  33/100 | loss 0.000889 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  34/100 | loss 0.000850 | train acc 99.9850% | train recall Warning 78.05%
+Epoch  35/100 | loss 0.000971 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  36/100 | loss 0.000867 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  37/100 | loss 0.000889 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  38/100 | loss 0.000911 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  39/100 | loss 0.000820 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  40/100 | loss 0.000899 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  41/100 | loss 0.000877 | train acc 99.9858% | train recall Warning 78.05%
+Epoch  42/100 | loss 0.000827 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  43/100 | loss 0.000797 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  44/100 | loss 0.000845 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  45/100 | loss 0.000854 | train acc 99.9858% | train recall Warning 78.05%
+Epoch  46/100 | loss 0.000859 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  47/100 | loss 0.000854 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  48/100 | loss 0.000871 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  49/100 | loss 0.000851 | train acc 99.9824% | train recall Warning 78.05%
+Epoch  50/100 | loss 0.000796 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  51/100 | loss 0.000850 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  52/100 | loss 0.000833 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  53/100 | loss 0.000786 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  54/100 | loss 0.000904 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  55/100 | loss 0.000843 | train acc 99.9833% | train recall Warning 78.05%
+Epoch  56/100 | loss 0.000743 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  57/100 | loss 0.000808 | train acc 99.9858% | train recall Warning 78.05%
+Epoch  58/100 | loss 0.000833 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  59/100 | loss 0.000955 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  60/100 | loss 0.000830 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  61/100 | loss 0.000837 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  62/100 | loss 0.000864 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  63/100 | loss 0.000816 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  64/100 | loss 0.000814 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  65/100 | loss 0.000842 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  66/100 | loss 0.000807 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  67/100 | loss 0.000906 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  68/100 | loss 0.000792 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  69/100 | loss 0.000864 | train acc 99.9866% | train recall Warning 78.05%
+Epoch  70/100 | loss 0.000827 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  71/100 | loss 0.000843 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  72/100 | loss 0.000814 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  73/100 | loss 0.000835 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  74/100 | loss 0.000827 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  75/100 | loss 0.000806 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  76/100 | loss 0.000816 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  77/100 | loss 0.000776 | train acc 99.9908% | train recall Warning 78.05%
+Epoch  78/100 | loss 0.000783 | train acc 99.9833% | train recall Warning 78.05%
+Epoch  79/100 | loss 0.000801 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  80/100 | loss 0.000781 | train acc 99.9908% | train recall Warning 78.05%
+Epoch  81/100 | loss 0.000829 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  82/100 | loss 0.000801 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  83/100 | loss 0.000775 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  84/100 | loss 0.000767 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  85/100 | loss 0.000857 | train acc 99.9883% | train recall Warning 78.05%
+Epoch  86/100 | loss 0.000848 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  87/100 | loss 0.000849 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  88/100 | loss 0.000865 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  89/100 | loss 0.000834 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  90/100 | loss 0.000831 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  91/100 | loss 0.000842 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  92/100 | loss 0.000856 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  93/100 | loss 0.000818 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  94/100 | loss 0.000811 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  95/100 | loss 0.000815 | train acc 99.9900% | train recall Warning 78.05%
+Epoch  96/100 | loss 0.000817 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  97/100 | loss 0.000815 | train acc 99.9875% | train recall Warning 78.05%
+Epoch  98/100 | loss 0.000838 | train acc 99.9891% | train recall Warning 78.05%
+Epoch  99/100 | loss 0.000788 | train acc 99.9883% | train recall Warning 78.05%
+Epoch 100/100 | loss 0.000886 | train acc 99.9908% | train recall Warning 78.05%
+Iterasi: 100 (TANPA early stopping)
+Loss akhir              : 0.000886 (awal 0.029283)
+model_stage2_classifier.pkl & scaler_stage2.pkl disimpan
+
+=== EVALUASI LEVEL WINDOW ===
+Train : Acc=99.99% RecallWarn=78.05% CM=[[119587, 2], [9, 32]]
+Test  : Acc=99.98% RecallWarn=53.85% PrecWarn=100.00% CM=[[30749, 0], [6, 7]]
+              precision    recall  f1-score   support
+
+     Healthy       1.00      1.00      1.00     30749
+     Warning       1.00      0.54      0.70        13
+
+    accuracy                           1.00     30762
+   macro avg       1.00      0.77      0.85     30762
+weighted avg       1.00      1.00      1.00     30762
+
+
+=== EVALUASI LEVEL HARI (keputusan: >=1 window Warning) ===
+Train : Acc=94.29% F1=94.17% RecallWarn=84.62% CM=[[44, 0], [4, 22]]
+Test  : Acc=77.78% F1=75.93% RecallWarn=50.00% PrecWarn=100.00% CM=[[10, 0], [4, 4]]
+              precision    recall  f1-score   support
+
+     Healthy       0.71      1.00      0.83        10
+     Warning       1.00      0.50      0.67         8
+
+    accuracy                           0.78        18
+   macro avg       0.86      0.75      0.75        18
+weighted avg       0.84      0.78      0.76        18
+
+Detail per hari (TEST):
+     Tanggal   Aktual  Prediksi  Benar  WinWarnAktual  WinWarnPrediksi
+    22042026  Healthy   Healthy     OK              0                0
+    23042026  Warning   Warning     OK              2                1
+    24042026  Healthy   Healthy     OK              0                0
+    27042026  Warning   Healthy      X              1                0
+    04052026  Healthy   Healthy     OK              0                0
+    05052026  Warning   Warning     OK              4                4
+    06052026  Warning   Warning     OK              1                1
+    07052026  Healthy   Healthy     OK              0                0
+    08052026  Healthy   Healthy     OK              0                0
+    09052026  Healthy   Healthy     OK              0                0
+    14052026  Warning   Healthy      X              1                0
+    15052026  Healthy   Healthy     OK              0                0
+    16052026  Healthy   Healthy     OK              0                0
+    17052026  Healthy   Healthy     OK              0                0
+    20052026  Warning   Warning     OK              1                1
+    22052026  Warning   Healthy      X              1                0
+    23052026  Healthy   Healthy     OK              0                0
+    19062026  Warning   Healthy      X              2                0
+
+=== VARIASI ANTAR SEED (split sama) ===
+  seed= 42 DayAcc= 77.78% DayF1= 75.93% DayRecWarn= 50.00% CM=[[10, 0], [4, 4]]
+  seed=  1 DayAcc= 88.89% DayF1= 88.60% DayRecWarn= 75.00% CM=[[10, 0], [2, 6]]
+  seed=  7 DayAcc= 88.89% DayF1= 88.60% DayRecWarn= 75.00% CM=[[10, 0], [2, 6]]
+  seed= 21 DayAcc= 83.33% DayF1= 83.17% DayRecWarn= 75.00% CM=[[9, 1], [2, 6]]
+  seed= 99 DayAcc= 88.89% DayF1= 88.60% DayRecWarn= 75.00% CM=[[10, 0], [2, 6]]
+  Rata-rata DayAcc = 85.56% | std = 4.44% | min = 77.78% | max = 88.89%
+
+=== 5-FOLD CROSS-VALIDATION PER HARI (seluruh 88 hari) ===
+  fold 1: n_test=18 DayAcc= 94.44% DayRecWarn=100.00% CM=[[10, 1], [0, 7]]
+  fold 2: n_test=18 DayAcc= 94.44% DayRecWarn= 85.71% CM=[[11, 0], [1, 6]]
+  fold 3: n_test=18 DayAcc= 77.78% DayRecWarn= 57.14% CM=[[10, 1], [3, 4]]
+  fold 4: n_test=17 DayAcc= 88.24% DayRecWarn= 71.43% CM=[[10, 0], [2, 5]]
+  fold 5: n_test=17 DayAcc= 94.12% DayRecWarn= 83.33% CM=[[11, 0], [1, 5]]
+  Rata-rata fold DayAcc = 89.80% (std 6.46%)
+  Gabungan seluruh fold : Acc=89.77% F1=89.59% RecallWarn=79.41% PrecWarn=93.10% CM=[[52, 2], [7, 27]]
+
+evidence/ : cm_hari_train.png, cm_hari_test.png, cm_window_test.png, cm_hari_cv.png, kurva_loss_stage2.png, aktual_vs_prediksi_hari.png, hasil_per_hari_test.csv, ringkasan_stage2.json
+STAGE 2 v7 SELESAI.

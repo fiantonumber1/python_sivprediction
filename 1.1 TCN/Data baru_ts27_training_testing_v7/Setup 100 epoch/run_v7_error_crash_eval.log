@@ -1,0 +1,36 @@
+Traceback (most recent call last):
+  File "C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\stage1_forecaster.py", line 291, in <module>
+    pred_train, _ = model(X_tensor)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\stage1_forecaster.py", line 225, in forward
+    ctx  = self.pool(self.tcn(x.transpose(1, 2))).squeeze(-1)   # (B, 96)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\container.py", line 250, in forward
+    input = module(input)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\stage1_forecaster.py", line 201, in forward
+    o = self.d1(self.r1(self.n1(self.c1(x))))
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\stage1_forecaster.py", line 188, in forward
+    o = self.conv(x)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1736, in _wrapped_call_impl
+    return self._call_impl(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\module.py", line 1747, in _call_impl
+    return forward_call(*args, **kwargs)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\conv.py", line 375, in forward
+    return self._conv_forward(input, self.weight, self.bias)
+  File "C:\Users\User\AppData\Local\Programs\Python\Python310\lib\site-packages\torch\nn\modules\conv.py", line 370, in _conv_forward
+    return F.conv1d(
+RuntimeError: cuDNN error: CUDNN_STATUS_BAD_PARAM_STREAM_MISMATCH

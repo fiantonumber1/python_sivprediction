@@ -1,0 +1,250 @@
+====================================================================
+INFORMASI LENGKAP UNTUK PENULISAN JURNAL — TCN SIV TS27
+Generated: 2026-10-21 09:37:39
+====================================================================
+
+FILE INI BERISI SEMUA DATA NUMERIK YANG DIBUTUHKAN JURNAL.
+Cukup copy-paste nilai-nilai di bawah ke dokumen jurnal.
+
+====================================================================
+BAGIAN A — DATA UMUM
+====================================================================
+
+[A1. DATASET]
+  Total hari CSV valid         : 79
+  Train days (80%)             : 63
+  Test days  (20%)             : 16
+  Baris per hari               : 200,000
+  Total baris digunakan        : 15,800,000
+  Warmup di-drop per hari      : 3,600 baris
+  Window TCN (train)           : 60 window
+  Window TCN (test)            : 16 window (overlap 3 hari terakhir train)
+
+[A2. DETAIL HARI TRAINING vs TESTING]
+   Day     Tanggal      Set  Status Kesehatan
+  ------------------------------------------
+     1    01082025    TRAIN         Healthy
+     2    03082025    TRAIN         Warning
+     3    07082025    TRAIN         Warning
+     4    08082025    TRAIN         Warning
+     5    09082025    TRAIN         Warning
+     6    10082025    TRAIN         Healthy
+     7    11082025    TRAIN         Warning
+     8    13082025    TRAIN         Healthy
+     9    14082025    TRAIN         Warning
+    10    15082025    TRAIN         Healthy
+    11    16082025    TRAIN         Healthy
+    12    17082025    TRAIN         Healthy
+    13    18082025    TRAIN         Warning
+    14    19082025    TRAIN         Healthy
+    15    20082025    TRAIN         Healthy
+    16    21082025    TRAIN         Healthy
+    17    22082025    TRAIN         Healthy
+    18    23082025    TRAIN         Healthy
+    19    24082025    TRAIN         Warning
+    20    25082025    TRAIN         Healthy
+    21    26082025    TRAIN         Healthy
+    22    27082025    TRAIN         Healthy
+    23    31082025    TRAIN         Warning
+    24    02092025    TRAIN         Healthy
+    25    03092025    TRAIN         Warning
+    26    04092025    TRAIN         Healthy
+    27    05092025    TRAIN         Healthy
+    28    06092025    TRAIN         Healthy
+    29    07092025    TRAIN         Warning
+    30    08092025    TRAIN         Warning
+    31    09092025    TRAIN         Warning
+    32    10092025    TRAIN         Healthy
+    33    11092025    TRAIN         Warning
+    34    12092025    TRAIN         Warning
+    35    14092025    TRAIN         Healthy
+    36    15092025    TRAIN         Healthy
+    37    16092025    TRAIN         Healthy
+    38    17092025    TRAIN         Warning
+    39    18092025    TRAIN         Healthy
+    40    19092025    TRAIN         Healthy
+    41    20092025    TRAIN         Healthy
+    42    21092025    TRAIN         Warning
+    43    22092025    TRAIN         Warning
+    44    11122025    TRAIN         Healthy
+    45    16122025    TRAIN         Healthy
+    46    02012026    TRAIN         Healthy
+    47    10022026    TRAIN         Healthy
+    48    13022026    TRAIN         Healthy
+    49    15022026    TRAIN         Warning
+    50    19022026    TRAIN         Healthy
+    51    23022026    TRAIN         Warning
+    52    25022026    TRAIN         Healthy
+    53    01032026    TRAIN         Healthy
+    54    07032026    TRAIN         Healthy
+    55    22032026    TRAIN         Healthy
+    56    28032026    TRAIN         Healthy
+    57    08042026    TRAIN         Healthy
+    58    09042026    TRAIN         Healthy
+    59    11042026    TRAIN         Healthy
+    60    12042026    TRAIN         Healthy
+    61    15042026    TRAIN         Warning
+    62    16042026    TRAIN         Healthy
+    63    17042026    TRAIN         Warning
+    64    19042026     TEST         Healthy
+    65    21042026     TEST         Warning
+    66    22042026     TEST         Healthy
+    67    23042026     TEST         Warning
+    68    24042026     TEST         Warning
+    69    27042026     TEST         Healthy
+    70    04052026     TEST         Healthy
+    71    05052026     TEST         Healthy
+    72    06052026     TEST         Warning
+    73    07052026     TEST         Healthy
+    74    08052026     TEST         Healthy
+    75    09052026     TEST         Healthy
+    76    14052026     TEST         Warning
+    77    15052026     TEST         Warning
+    78    16052026     TEST         Healthy
+    79    17052026     TEST         Warning
+  ------------------------------------------
+  Data TRAINING → Day 1 s/d Day 63  (01082025 – 17042026)
+  Data TESTING  → Day 64 s/d Day 79  (19042026 – 19062026)
+
+[A3. NORMALISASI — untuk Tabel Normalisasi Jurnal]
+  Metode                       : Min-Max Scaler
+  Rentang output               : [-0.1, 1.1]
+  Jumlah parameter             : 21
+  Fit dari                     : 63 hari training saja
+
+  Parameter                        Min Data     Max Data
+  ------------------------------------------------------
+  SIV_T_HS_InConv_1                  0.0000     665.0000
+  SIV_T_HS_InConv_2                  0.0000     546.0000
+  SIV_T_HS_Inv_1                    31.0000    1599.0000
+  SIV_T_HS_Inv_2                -32738.0000   12032.0000
+  SIV_T_Container                    0.0000     557.0000
+  SIV_I_L1                           0.0000    4144.0000
+  SIV_I_L2                           0.0000     144.0000
+  SIV_I_L3                           0.0000     168.0000
+  SIV_I_Battery                 -32712.0000   24800.0000
+  SIV_I_DC_In                        0.0000     330.0000
+  SIV_U_Battery                      0.0000    6256.0000
+  SIV_U_DC_In                        0.0000    1768.0000
+  SIV_U_DC_Out                       3.0000     127.0000
+  SIV_U_L1                           0.0000   24768.0000
+  SIV_U_L2                           0.0000   14272.0000
+  SIV_U_L3                           0.0000   24603.0000
+  SIV_InConv_InEnergy                0.0000    1261.0000
+  SIV_Output_Energy                  0.0000    1069.0000
+  PLC_OpenACOutputCont               0.0000       0.0000
+  PLC_OpenInputCont                  0.0000       0.0000
+  SIV_DevIsAlive                     0.0000   65535.0000
+
+[A4. LABEL KONDISI — untuk Kalimat Jurnal Para 175 & Tabel Distribusi]
+  Total hari dilabel           : 79
+  Healthy (0)   : 50 hari → 01082025, 10082025, 13082025, 15082025, 16082025, 17082025, 19082025, 20082025, 21082025, 22082025, 23082025, 25082025, 26082025, 27082025, 02092025, 04092025, 05092025, 06092025, 10092025, 14092025, 15092025, 16092025, 18092025, 19092025, 20092025, 11122025, 16122025, 02012026, 10022026, 13022026, 19022026, 25022026, 01032026, 07032026, 22032026, 28032026, 08042026, 09042026, 11042026, 12042026, 16042026, 19042026, 22042026, 27042026, 04052026, 05052026, 07052026, 08052026, 09052026, 16052026
+  Warning (1)   : 29 hari → 03082025, 07082025, 08082025, 09082025, 11082025, 14082025, 18082025, 24082025, 31082025, 03092025, 07092025, 08092025, 09092025, 11092025, 12092025, 17092025, 21092025, 22092025, 15022026, 23022026, 15042026, 17042026, 21042026, 23042026, 24042026, 06052026, 14052026, 15052026, 17052026
+
+====================================================================
+BAGIAN B — TRAINING INFERENCE
+Konsep: 3 hari terakhir DATA TRAINING → prediksi hari pertama DATA TESTING
+        Ground truth tersedia → metrik MSE/RMSE/MAE DAPAT dihitung
+====================================================================
+
+  [INPUT — dari data TRAINING]
+    Hari A (Day 61): 15042026  Status: Warning
+    Hari B (Day 62): 16042026  Status: Healthy
+    Hari C (Day 63  ): 17042026  Status: Warning
+
+  Prediksi hari D (Day 64)     : Healthy (99.65% confidence)
+  Prob Healthy                   : 99.65%
+  Prob Warning                 : 0.35%
+
+  [GROUND TRUTH — hari pertama data TESTING]
+    Hari D (Day 64): 19042026  Status Aktual: Healthy
+
+  Status Prediksi              : Healthy
+  Status Aktual                : Healthy
+  Klasifikasi                  : BENAR ✓
+
+  [METRIK REGRESI SINYAL]
+  MSE Prediksi vs Aktual       : 0.00401493  (0.4015%)
+  RMSE                         : 0.06336347
+  MAE                          : 0.02201255
+
+  → Untuk Para 170 Jurnal:
+    'Training inference menghasilkan MSE=0.004015, RMSE=0.063363, MAE=0.022013'
+    'Prediksi status kesehatan: Healthy — sesuai ground truth (Healthy)'
+
+====================================================================
+BAGIAN C — TESTING INFERENCE
+Konsep: 3 hari terakhir DATA TESTING → prediksi hari MASA DEPAN
+        Tidak ada ground truth → metrik MSE/RMSE/MAE TIDAK dapat dihitung
+====================================================================
+
+  [INPUT — dari data TESTING (hari terakhir dataset)]
+    Hari A (Day 77): 23052026.csv  Status: Warning
+    Hari B (Day 78): 18062026.csv  Status: Healthy
+    Hari C (Day 79  ): 19062026.csv  Status: Warning
+
+  Prediksi hari ke-80 (masa depan) : Warning
+  Confidence                   : 98.50%
+  Prob Healthy                   : 1.50%
+  Prob Warning                 : 98.50%
+  Ground Truth                 : TIDAK ADA
+  Metrik MSE/RMSE/MAE          : TIDAK DAPAT DIHITUNG
+
+  → Untuk Para 224 Jurnal (caption gambar forecasting):
+    'Hasil forecasting dari input tanggal 23052026.csv, 18062026.csv, 19062026.csv
+     didapatkan prediksi hari ke-80 dengan Label Kelas: Warning'
+
+====================================================================
+BAGIAN D — PERBANDINGAN TRAINING INFERENCE vs TESTING INFERENCE
+====================================================================
+
+  Aspek                            Training Inference   Testing Inference
+  ------------------------------------------------------------------------
+  Input Days                        Day 61–63 (Train)    Day 77–79 (Test)
+  Target                            Day 64 (1st Test)     Day 80 (Future)
+  Prediksi Status                     Healthy (99.7%)     Warning (98.5%)
+  Ground Truth                                Healthy           TIDAK ADA
+  Klasifikasi Benar?                          BENAR ✓      Tdk dpt diukur
+  MSE                                        0.004015      Tdk dpt diukur
+  RMSE                                       0.063363      Tdk dpt diukur
+  MAE                                        0.022013      Tdk dpt diukur
+  ------------------------------------------------------------------------
+
+  KESIMPULAN:
+  - Training Inference memiliki metrik kuantitatif (MSE/RMSE/MAE) karena
+    hari yang diprediksi (D+1) sudah ada datanya sebagai ground truth.
+  - Testing Inference hanya memiliki confidence score karena memprediksi
+    hari masa depan yang belum ada datanya. Akurasi tidak dapat diukur.
+  - Kedua inference menggunakan model yang SAMA (hasil training stage1 & stage2).
+    Perbedaan hanya pada DATA INPUT dan ketersediaan GROUND TRUTH.
+
+====================================================================
+BAGIAN E — DAFTAR SEMUA FILE OUTPUT
+====================================================================
+
+[GAMBAR — siap dimasukkan ke jurnal]
+  Gambar 1  : jurnal_flowchart_stage1.png     (Pipeline TCN)
+  Gambar 2  : jurnal_flowchart_stage2.png     (Pipeline MLP)
+  Gambar 3  : MANUAL — screenshot LeadMind
+  Gambar 4  : MANUAL — laporan gangguan sarana
+  Gambar 5  : MANUAL — detail insiden SIV TS27
+  Gambar 5  : jurnal_normalisasi_comparison.png (sebelum vs sesudah normalisasi)
+  Gambar 6  : jurnal_sliding_window.png        (skema sliding window 3 hari → 1 hari)
+  Suppl.    : plot_all_parameters_TCN.png      (21 param semua hari — supplementary)
+  Gambar 10 : jurnal_kurva_loss_stage1.png     (Kurva Epoch vs MSE Training TCN)
+  Gambar 10 : jurnal_kurva_loss_stage1.png      (Kurva Epoch vs MSE Training)
+  Gambar 11 : gambar_train2_real_vs_pred.png    [TRAINING INFERENCE] Aktual Y_Testing vs Prediksi
+  Gambar 15 : gambar2_input_plus_prediksi_TCN.png [TESTING INFERENCE] Hasil Forecasting + Label Kelas
+  Suppl.    : gambar_train1_input_prediksi.png  (3 hari train input + prediksi — Training Inference)
+  Gambar 12 : jurnal_kurva_loss_acc_stage2.png  CE Loss + Accuracy MLP
+  Suppl.    : gambar1_4hari_real_TCN.png        (konteks 4 hari real testing)
+  Suppl.    : gambar3_real_vs_prediksi_TCN.png  (overlay real vs pred testing)
+  Suppl.    : jurnal_confusion_matrix_train.png  (4 metrik: Acc/Prec/Rec/F1 — train)
+  Suppl.    : jurnal_confusion_matrix_test.png   (4 metrik: Acc/Prec/Rec/F1 — test)
+
+[DATA NUMERIK]
+  jurnal_info_stage1.txt       (Hyperpar, MSE train/test, sequence table)
+  jurnal_info_stage2.txt       (Hyperpar, CE/Acc, confusion matrix, label dates)
+  jurnal_fitur_statistik.csv   (mean/std/max/min per parameter per hari)
+  inference_train_health_status.csv
+  inference_health_status.csv

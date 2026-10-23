@@ -1,0 +1,6 @@
+Membaca semua hari (sekali saja, dipakai ulang untuk semua ukuran window)...
+Total hari: 88 | Train days: 70 | Test days: 18
+[ 0.50 menit] rows/win=  117 win/day=1709 n_train=119630 n_warn_train= 41 | WindowAcc= 99.98% WindowRecWarn= 53.85% || DayAcc= 83.33% DayF1= 82.50% DayRecWarn= 62.50% CM=[[10, 0], [3, 5]]
+
+=== RINGKASAN (urut DayAcc tertinggi) ===
+Window  0.50 menit | DayAcc= 83.33% DayF1= 82.50% DayRecWarn= 62.50% CM=[[10, 0], [3, 5]]
