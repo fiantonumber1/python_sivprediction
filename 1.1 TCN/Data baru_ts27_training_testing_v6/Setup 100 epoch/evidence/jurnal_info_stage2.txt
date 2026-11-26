@@ -1,0 +1,109 @@
+====================================================================
+INFORMASI JURNAL — MLP CLASSIFIER (STAGE 2)
+Generated: 2026-10-21 14:36:09
+====================================================================
+
+[DATASET & SPLIT]
+  Total hari                   : 88
+  Train days (TRAIN_RATIO=0.8) : 70
+  Test days                    : 18
+  Input dimensi fitur          : 21 param x 4 statistik = 84 dim
+
+[DISTRIBUSI LABEL — untuk Tabel Jurnal (dengan tanggal)]
+  Healthy (0)   : 54 hari
+    Tanggal     : 11072025, 17072025, 18072025, 22072025, 24072025, 08082025, 10082025, 13082025, 14082025, 15082025, 17082025, 18082025, 19082025, 20082025, 21082025, 23082025, 24082025, 25082025, 27082025, 02092025, 03092025, 04092025, 08092025, 11092025, 12092025, 14092025, 16092025, 17092025, 18092025, 21092025, 22092025, 11122025, 16122025, 02012026, 13022026, 19022026, 23022026, 25022026, 01032026, 07032026, 22032026, 28032026, 08042026, 09042026, 12042026, 16042026, 19042026, 23042026, 24042026, 27042026, 05052026, 06052026, 07052026, 14052026
+  Warning (1)   : 34 hari
+    Tanggal     : 10072025, 13072025, 14072025, 21072025, 23072025, 25072025, 01082025, 03082025, 07082025, 09082025, 11082025, 16082025, 22082025, 26082025, 31082025, 05092025, 06092025, 07092025, 09092025, 10092025, 15092025, 19092025, 20092025, 10022026, 15022026, 11042026, 15042026, 17042026, 21042026, 22042026, 04052026, 08052026, 09052026, 15052026
+
+[HYPERPARAMETER MLP — untuk Tabel Jurnal]
+  Optimizer                    : AdamW
+  Learning Rate (awal)         : 0.001
+  Batch Size                   : 3
+  Epoch                        : 100
+  Loss Function                : Cross-Entropy Loss
+  Class Weight                 : [Healthy=0.5, Warning=2.5]
+  Dropout                      : 0.3
+  Weight Decay                 : 1e-5
+  Scheduler                    : ReduceLROnPlateau (factor=0.5, patience=30)
+
+[ARSITEKTUR MLP — untuk Tabel Jurnal]
+  Input Layer                  : 84 neuron (84 fitur statistik)
+  Hidden Layer 1               : 256 neuron + LayerNorm + ReLU + Dropout
+  Hidden Layer 2               : 128 neuron + LayerNorm + ReLU + Dropout
+  Hidden Layer 3               : 64 neuron  + LayerNorm + ReLU + Dropout
+  Output Layer                 : 2 neuron (Softmax) — Healthy/Warning
+
+[HASIL TRAINING — untuk Para 213 Jurnal]
+  CE Loss Epoch 1              : 0.727973
+  CE Loss Epoch 100 (akhir)   : 0.380112
+  Penurunan CE Loss            : 47.8%
+  Accuracy Epoch 1             : 39.13%
+  Accuracy Epoch 100 (akhir)  : 91.30%
+
+[EVALUASI TRAINING SET]
+  CE Loss Training             : 0.307296
+  Accuracy   (weighted)        : 94.29%
+  Precision  (weighted)        : 94.29%
+  Recall     (weighted)        : 94.29%
+  F1-Score   (weighted)        : 94.29%
+
+[CONFUSION MATRIX — TRAINING SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy            42            2
+  Aktual Warning             2           24
+
+[CLASSIFICATION REPORT — TRAINING SET]
+                precision    recall  f1-score   support
+  
+       Healthy       0.95      0.95      0.95        44
+       Warning       0.92      0.92      0.92        26
+  
+      accuracy                           0.94        70
+     macro avg       0.94      0.94      0.94        70
+  weighted avg       0.94      0.94      0.94        70
+
+[EVALUASI TEST SET — untuk Para 215 Jurnal]
+  Test Days                    : 18
+  CE Loss Test                 : 3.631627
+  Accuracy   (weighted)        : 50.00%
+  Precision  (weighted)        : 44.44%
+  Recall     (weighted)        : 50.00%
+  F1-Score   (weighted)        : 43.64%
+  Selisih CE Loss (Train-Test)  : 3.251515  → relatif kecil
+
+[CONFUSION MATRIX — TEST SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy             8            2
+  Aktual Warning             7            1
+
+[CLASSIFICATION REPORT — TEST SET]
+                precision    recall  f1-score   support
+  
+       Healthy       0.53      0.80      0.64        10
+       Warning       0.33      0.12      0.18         8
+  
+      accuracy                           0.50        18
+     macro avg       0.43      0.46      0.41        18
+  weighted avg       0.44      0.50      0.44        18
+
+[DETAIL PREDIKSI PER HARI — TEST SET]
+    Day     Tanggal        Aktual      Prediksi   Benar?
+  ----------------------------------------------------
+     71    12042026       Healthy       Warning        ✗
+     72    15042026       Warning       Healthy        ✗
+     73    16042026       Healthy       Healthy        ✓
+     74    17042026       Warning       Healthy        ✗
+     75    19042026       Healthy       Healthy        ✓
+     76    21042026       Warning       Warning        ✓
+     77    22042026       Warning       Healthy        ✗
+     78    23042026       Healthy       Healthy        ✓
+     79    24042026       Healthy       Healthy        ✓
+     80    27042026       Healthy       Healthy        ✓
+     81    04052026       Warning       Healthy        ✗
+     82    05052026       Healthy       Healthy        ✓
+     83    06052026       Healthy       Warning        ✗
+     84    07052026       Healthy       Healthy        ✓
+     85    08052026       Warning       Healthy        ✗
+     86    09052026       Warning       Healthy        ✗
+     87    14052026       Healthy       Healthy        ✓
+     88    15052026       Warning       Healthy        ✗

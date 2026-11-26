@@ -1,0 +1,133 @@
+10072025 -
+11072025 Warning
+13072025 Healthy
+14072025 Warning
+17072025 Warning
+18072025 Healthy
+21072025 Healthy
+22072025 Warning
+23072025 Healthy
+24072025 -
+25072025 Warning
+01082025 -
+03082025 Healthy
+07082025 Warning
+08082025 Warning
+09082025 Warning
+10082025 Warning
+11082025 Healthy
+13082025 Warning
+14082025 Healthy
+15082025 Warning
+16082025 Healthy
+17082025 Healthy
+18082025 -
+19082025 Healthy
+20082025 Warning
+21082025 Healthy
+22082025 Healthy
+23082025 Healthy
+24082025 Healthy
+25082025 -
+26082025 Healthy
+27082025 Warning
+31082025 Healthy
+02092025 Healthy
+03092025 Healthy
+04092025 Warning
+05092025 Healthy
+06092025 Warning
+07092025 Healthy
+08092025 -
+09092025 Healthy
+10092025 Healthy
+11092025 Warning
+12092025 Warning
+14092025 Warning
+15092025 Healthy
+16092025 Warning
+17092025 Warning
+18092025 Healthy
+19092025 Healthy
+20092025 Healthy
+21092025 Warning
+22092025 Healthy
+11122025 Healthy
+16122025 Healthy
+02012026 Warning
+10022026 Warning
+13022026 Healthy
+15022026 Healthy
+19022026 Healthy
+23022026 Healthy
+25022026 Healthy
+01032026 Warning
+07032026 Healthy
+22032026 Warning
+28032026 Healthy
+08042026 Healthy
+09042026 Healthy
+11042026 Healthy
+12042026 Healthy
+15042026 Healthy
+16042026 Healthy
+17042026 Healthy
+19042026 Healthy
+21042026 Warning
+22042026 Healthy
+23042026 Warning
+24042026 Healthy
+27042026 Warning
+04052026 Healthy
+05052026 Warning
+06052026 Warning
+07052026 Healthy
+08052026 Healthy
+09052026 Healthy
+14052026 Warning
+15052026 Healthy
+16052026 Healthy
+17052026 Healthy
+20052026 Warning
+22052026 Warning
+23052026 Healthy
+18062026 -
+19062026 Warning
+{
+  "file_csv": 95,
+  "hari_dipakai": 88,
+  "hari_dilewati": [
+    "10072025",
+    "24072025",
+    "01082025",
+    "18082025",
+    "25082025",
+    "08092025",
+    "18062026"
+  ],
+  "tanggal_pertama": "11072025",
+  "tanggal_terakhir": "19062026",
+  "hari_healthy": 54,
+  "hari_warning": 34,
+  "baris_fault_per_hari_warning": {
+    "min": 2,
+    "median": 22.0,
+    "max": 66
+  },
+  "persen_fault_per_hari_warning": {
+    "min": 0.001,
+    "median": 0.011,
+    "max": 0.033
+  },
+  "hari_warning_per_kolom": {
+    "SIV_MajorBCFltPres": 2,
+    "SIV_MajorInputConvFltPres": 1,
+    "SIV_MajorInverterFltPres": 33
+  },
+  "hari_dengan_lebih_dari_satu_blok": 10,
+  "panjang_blok_maks": {
+    "min": 2,
+    "median": 22.0,
+    "max": 24
+  }
+}

@@ -1,0 +1,38 @@
+{
+  "file_csv": 95,
+  "hari_dipakai": 88,
+  "hari_dilewati": [
+    "10072025",
+    "24072025",
+    "01082025",
+    "18082025",
+    "25082025",
+    "08092025",
+    "18062026"
+  ],
+  "tanggal_pertama": "11072025",
+  "tanggal_terakhir": "19062026",
+  "hari_healthy": 54,
+  "hari_warning": 34,
+  "baris_fault_per_hari_warning": {
+    "min": 2,
+    "median": 22.0,
+    "max": 66
+  },
+  "persen_fault_per_hari_warning": {
+    "min": 0.001,
+    "median": 0.011,
+    "max": 0.033
+  },
+  "hari_warning_per_kolom": {
+    "SIV_MajorBCFltPres": 2,
+    "SIV_MajorInputConvFltPres": 1,
+    "SIV_MajorInverterFltPres": 33
+  },
+  "hari_dengan_lebih_dari_satu_blok": 10,
+  "panjang_blok_maks": {
+    "min": 2,
+    "median": 22.0,
+    "max": 24
+  }
+}

@@ -8,3 +8,5 @@
 *.pkl
 
 *.h5
+# Dataset terkompresi
+*.csv.gz

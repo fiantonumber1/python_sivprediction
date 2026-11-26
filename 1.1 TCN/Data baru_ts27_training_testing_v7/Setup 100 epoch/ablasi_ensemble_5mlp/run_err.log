@@ -1,0 +1,4 @@
+  File "C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\ablasi_ensemble_5mlp\stage2_ensemble5.py", line 204
+    ax.set_xlabel('Prediksi'); ax.set_ylabel('Aktual'); ax.set_title(title + "
+                                                                             ^
+SyntaxError: unterminated string literal (detected at line 204)

@@ -1,0 +1,1181 @@
+[Stage 1] Device: cuda | CPU threads: 64
+[Stage 1] Data dir : C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\data
+[Stage 1] File CSV : 84 ditemukan
+  Skip 01082025.csv
+  Skip 18082025.csv
+  Skip 25082025.csv
+  Skip 08092025.csv
+  Skip 18062026.csv
+[Stage 1] Total hari: 79
+[Stage 1] Train days: 63 | Test days: 16
+[Stage 1] Window training: 60
+[Stage 1] Window testing : 16
+[Stage 1] scaler_stage1.pkl disimpan
+[Stage 1] Sudah selesai epoch 100
+
+============================================================
+STAGE 1 TCN FORECASTER | 2026-10-19 13:26:25
+Train days: 63 | Test days: 16
+Window train: 60 | Window test: 16
+Epoch: 100 | Batch: 3
+============================================================
+Epoch    1/100 | MSE: 0.0827101 | LR: 1.00e-03
+Epoch    2/100 | MSE: 0.0523112 | LR: 1.00e-03
+Epoch    3/100 | MSE: 0.0325096 | LR: 1.00e-03
+Epoch    4/100 | MSE: 0.0209937 | LR: 1.00e-03
+Epoch    5/100 | MSE: 0.0138758 | LR: 1.00e-03
+Epoch    6/100 | MSE: 0.0134134 | LR: 1.00e-03
+Epoch    7/100 | MSE: 0.0128273 | LR: 1.00e-03
+Epoch    8/100 | MSE: 0.0106126 | LR: 1.00e-03
+Epoch    9/100 | MSE: 0.0107325 | LR: 1.00e-03
+Epoch   10/100 | MSE: 0.0104480 | LR: 1.00e-03
+Epoch   11/100 | MSE: 0.0100601 | LR: 1.00e-03
+Epoch   12/100 | MSE: 0.0094531 | LR: 1.00e-03
+Epoch   13/100 | MSE: 0.0108890 | LR: 1.00e-03
+Epoch   14/100 | MSE: 0.0091615 | LR: 1.00e-03
+Epoch   15/100 | MSE: 0.0090723 | LR: 1.00e-03
+Epoch   16/100 | MSE: 0.0094310 | LR: 1.00e-03
+Epoch   17/100 | MSE: 0.0091597 | LR: 1.00e-03
+Epoch   18/100 | MSE: 0.0106659 | LR: 1.00e-03
+Epoch   19/100 | MSE: 0.0089336 | LR: 1.00e-03
+Epoch   20/100 | MSE: 0.0087788 | LR: 1.00e-03
+Epoch   21/100 | MSE: 0.0091384 | LR: 1.00e-03
+Epoch   22/100 | MSE: 0.0083199 | LR: 1.00e-03
+Epoch   23/100 | MSE: 0.0089114 | LR: 1.00e-03
+Epoch   24/100 | MSE: 0.0085290 | LR: 1.00e-03
+Epoch   25/100 | MSE: 0.0084000 | LR: 1.00e-03
+Epoch   26/100 | MSE: 0.0097598 | LR: 1.00e-03
+Epoch   27/100 | MSE: 0.0085843 | LR: 1.00e-03
+Epoch   28/100 | MSE: 0.0092594 | LR: 1.00e-03
+Epoch   29/100 | MSE: 0.0089438 | LR: 1.00e-03
+Epoch   30/100 | MSE: 0.0088320 | LR: 1.00e-03
+Epoch   31/100 | MSE: 0.0090343 | LR: 1.00e-03
+Epoch   32/100 | MSE: 0.0097100 | LR: 1.00e-03
+Epoch   33/100 | MSE: 0.0096185 | LR: 1.00e-03
+Epoch   34/100 | MSE: 0.0088051 | LR: 1.00e-03
+Epoch   35/100 | MSE: 0.0093169 | LR: 1.00e-03
+Epoch   36/100 | MSE: 0.0088057 | LR: 1.00e-03
+Epoch   37/100 | MSE: 0.0087669 | LR: 1.00e-03
+Epoch   38/100 | MSE: 0.0086997 | LR: 1.00e-03
+Epoch   39/100 | MSE: 0.0078205 | LR: 1.00e-03
+Epoch   40/100 | MSE: 0.0081123 | LR: 1.00e-03
+Epoch   41/100 | MSE: 0.0091031 | LR: 1.00e-03
+Epoch   42/100 | MSE: 0.0081044 | LR: 1.00e-03
+Epoch   43/100 | MSE: 0.0085153 | LR: 1.00e-03
+Epoch   44/100 | MSE: 0.0081450 | LR: 1.00e-03
+Epoch   45/100 | MSE: 0.0080507 | LR: 1.00e-03
+Epoch   46/100 | MSE: 0.0081663 | LR: 1.00e-03
+Epoch   47/100 | MSE: 0.0079180 | LR: 1.00e-03
+Epoch   48/100 | MSE: 0.0079238 | LR: 1.00e-03
+Epoch   49/100 | MSE: 0.0082220 | LR: 1.00e-03
+Epoch   50/100 | MSE: 0.0084653 | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\checkpoints_stage1\checkpoint_epoch_50.pth
+Epoch   51/100 | MSE: 0.0081239 | LR: 1.00e-03
+Epoch   52/100 | MSE: 0.0082045 | LR: 1.00e-03
+Epoch   53/100 | MSE: 0.0075827 | LR: 1.00e-03
+Epoch   54/100 | MSE: 0.0080681 | LR: 1.00e-03
+Epoch   55/100 | MSE: 0.0087079 | LR: 1.00e-03
+Epoch   56/100 | MSE: 0.0075958 | LR: 1.00e-03
+Epoch   57/100 | MSE: 0.0074058 | LR: 1.00e-03
+Epoch   58/100 | MSE: 0.0074608 | LR: 1.00e-03
+Epoch   59/100 | MSE: 0.0084335 | LR: 1.00e-03
+Epoch   60/100 | MSE: 0.0086602 | LR: 1.00e-03
+Epoch   61/100 | MSE: 0.0077038 | LR: 1.00e-03
+Epoch   62/100 | MSE: 0.0079466 | LR: 1.00e-03
+Epoch   63/100 | MSE: 0.0080780 | LR: 1.00e-03
+Epoch   64/100 | MSE: 0.0078599 | LR: 1.00e-03
+Epoch   65/100 | MSE: 0.0070915 | LR: 1.00e-03
+Epoch   66/100 | MSE: 0.0076399 | LR: 1.00e-03
+Epoch   67/100 | MSE: 0.0073384 | LR: 1.00e-03
+Epoch   68/100 | MSE: 0.0080742 | LR: 1.00e-03
+Epoch   69/100 | MSE: 0.0076470 | LR: 1.00e-03
+Epoch   70/100 | MSE: 0.0079943 | LR: 1.00e-03
+Epoch   71/100 | MSE: 0.0078160 | LR: 1.00e-03
+Epoch   72/100 | MSE: 0.0073303 | LR: 1.00e-03
+Epoch   73/100 | MSE: 0.0075853 | LR: 1.00e-03
+Epoch   74/100 | MSE: 0.0075129 | LR: 1.00e-03
+Epoch   75/100 | MSE: 0.0077887 | LR: 1.00e-03
+Epoch   76/100 | MSE: 0.0075929 | LR: 1.00e-03
+Epoch   77/100 | MSE: 0.0077744 | LR: 1.00e-03
+Epoch   78/100 | MSE: 0.0075826 | LR: 1.00e-03
+Epoch   79/100 | MSE: 0.0072938 | LR: 1.00e-03
+Epoch   80/100 | MSE: 0.0076665 | LR: 1.00e-03
+Epoch   81/100 | MSE: 0.0076929 | LR: 1.00e-03
+Epoch   82/100 | MSE: 0.0074346 | LR: 1.00e-03
+Epoch   83/100 | MSE: 0.0072646 | LR: 1.00e-03
+Epoch   84/100 | MSE: 0.0079663 | LR: 1.00e-03
+Epoch   85/100 | MSE: 0.0069057 | LR: 1.00e-03
+Epoch   86/100 | MSE: 0.0078592 | LR: 1.00e-03
+Epoch   87/100 | MSE: 0.0072345 | LR: 1.00e-03
+Epoch   88/100 | MSE: 0.0073780 | LR: 1.00e-03
+Epoch   89/100 | MSE: 0.0068529 | LR: 1.00e-03
+Epoch   90/100 | MSE: 0.0074534 | LR: 1.00e-03
+Epoch   91/100 | MSE: 0.0071581 | LR: 1.00e-03
+Epoch   92/100 | MSE: 0.0072728 | LR: 1.00e-03
+Epoch   93/100 | MSE: 0.0076349 | LR: 1.00e-03
+Epoch   94/100 | MSE: 0.0072682 | LR: 1.00e-03
+Epoch   95/100 | MSE: 0.0069933 | LR: 1.00e-03
+Epoch   96/100 | MSE: 0.0072603 | LR: 1.00e-03
+Epoch   97/100 | MSE: 0.0072813 | LR: 1.00e-03
+Epoch   98/100 | MSE: 0.0070654 | LR: 1.00e-03
+Epoch   99/100 | MSE: 0.0072796 | LR: 1.00e-03
+Epoch  100/100 | MSE: 0.0068843 | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\checkpoints_stage1\checkpoint_epoch_100.pth
+=== STAGE 1 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 1) — skala normalized [-0.1, 1.1] ===
+Train Windows : 60
+Train MSE     : 0.006053
+Train RMSE    : 0.077802
+Train MAE     : 0.031394
+Train MAPE    : 552300.73%
+========================================
+
+=== EVALUASI TEST SET (Stage 1) — skala normalized [-0.1, 1.1] ===
+Test Windows : 16
+Test MSE     : 0.006217  (sebanding dengan training MSE)
+Test RMSE    : 0.078846
+Test MAE     : 0.031662
+Test MAPE    : 90818.93%
+========================================
+model_stage1_forecaster.pth disimpan
+jurnal_kurva_loss_stage1.png disimpan  ← Jurnal Gambar 10
+jurnal_info_stage1.txt disimpan  ← Data untuk Tabel & Paragraf Jurnal Stage 1
+
+STAGE 1 SELESAI! Jalankan stage2_classifier.py berikutnya.
+[Stage 2] Device: cuda | CPU threads: 64
+[Stage 2] Data dir : C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\data
+[Stage 2] File CSV : 84 ditemukan
+  Skip 01082025.csv
+  Skip 18082025.csv
+  Skip 25082025.csv
+  Skip 08092025.csv
+  Skip 18062026.csv
+[Stage 2] Total hari: 79
+[Stage 2] Train days: 63 | Test days: 16
+  [Train] Day  1 -> Healthy
+  [Train] Day  2 -> Warning
+  [Train] Day  3 -> Warning
+  [Train] Day  4 -> Warning
+  [Train] Day  5 -> Warning
+  [Train] Day  6 -> Healthy
+  [Train] Day  7 -> Warning
+  [Train] Day  8 -> Healthy
+  [Train] Day  9 -> Warning
+  [Train] Day 10 -> Healthy
+  [Train] Day 11 -> Healthy
+  [Train] Day 12 -> Healthy
+  [Train] Day 13 -> Warning
+  [Train] Day 14 -> Healthy
+  [Train] Day 15 -> Healthy
+  [Train] Day 16 -> Healthy
+  [Train] Day 17 -> Healthy
+  [Train] Day 18 -> Healthy
+  [Train] Day 19 -> Warning
+  [Train] Day 20 -> Healthy
+  [Train] Day 21 -> Healthy
+  [Train] Day 22 -> Healthy
+  [Train] Day 23 -> Warning
+  [Train] Day 24 -> Healthy
+  [Train] Day 25 -> Warning
+  [Train] Day 26 -> Healthy
+  [Train] Day 27 -> Healthy
+  [Train] Day 28 -> Healthy
+  [Train] Day 29 -> Warning
+  [Train] Day 30 -> Warning
+  [Train] Day 31 -> Warning
+  [Train] Day 32 -> Healthy
+  [Train] Day 33 -> Warning
+  [Train] Day 34 -> Warning
+  [Train] Day 35 -> Healthy
+  [Train] Day 36 -> Healthy
+  [Train] Day 37 -> Healthy
+  [Train] Day 38 -> Warning
+  [Train] Day 39 -> Healthy
+  [Train] Day 40 -> Healthy
+  [Train] Day 41 -> Healthy
+  [Train] Day 42 -> Warning
+  [Train] Day 43 -> Warning
+  [Train] Day 44 -> Healthy
+  [Train] Day 45 -> Healthy
+  [Train] Day 46 -> Healthy
+  [Train] Day 47 -> Healthy
+  [Train] Day 48 -> Healthy
+  [Train] Day 49 -> Warning
+  [Train] Day 50 -> Healthy
+  [Train] Day 51 -> Warning
+  [Train] Day 52 -> Healthy
+  [Train] Day 53 -> Healthy
+  [Train] Day 54 -> Healthy
+  [Train] Day 55 -> Healthy
+  [Train] Day 56 -> Healthy
+  [Train] Day 57 -> Healthy
+  [Train] Day 58 -> Healthy
+  [Train] Day 59 -> Healthy
+  [Train] Day 60 -> Healthy
+  [Train] Day 61 -> Warning
+  [Train] Day 62 -> Healthy
+  [Train] Day 63 -> Warning
+  [Test]  Day 64 -> Healthy
+  [Test]  Day 65 -> Warning
+  [Test]  Day 66 -> Healthy
+  [Test]  Day 67 -> Warning
+  [Test]  Day 68 -> Warning
+  [Test]  Day 69 -> Healthy
+  [Test]  Day 70 -> Healthy
+  [Test]  Day 71 -> Healthy
+  [Test]  Day 72 -> Warning
+  [Test]  Day 73 -> Healthy
+  [Test]  Day 74 -> Healthy
+  [Test]  Day 75 -> Healthy
+  [Test]  Day 76 -> Warning
+  [Test]  Day 77 -> Warning
+  [Test]  Day 78 -> Healthy
+  [Test]  Day 79 -> Warning
+[Stage 2] Sampel training: 63 hari
+[Stage 2] Sampel testing : 16 hari
+[Stage 2] scaler_stage2.pkl disimpan
+[Stage 2] Sudah selesai epoch 100
+
+============================================================
+STAGE 2 MLP CLASSIFIER | 2026-10-21 09:34:22
+Train days: 63 | Test days: 16
+Sampel train: 63 hari | Epoch: 100 | Batch: 3
+Distribusi Train: Healthy=41 Warning=22
+============================================================
+Epoch    1/100 | CE: 2.721951 | Acc:  60.32% | LR: 1.00e-03
+Epoch    2/100 | CE: 1.521864 | Acc:  52.38% | LR: 1.00e-03
+Epoch    3/100 | CE: 1.142384 | Acc:  61.90% | LR: 1.00e-03
+Epoch    4/100 | CE: 0.740999 | Acc:  46.03% | LR: 1.00e-03
+Epoch    5/100 | CE: 0.768272 | Acc:  50.79% | LR: 1.00e-03
+Epoch    6/100 | CE: 0.641531 | Acc:  68.25% | LR: 1.00e-03
+Epoch    7/100 | CE: 0.575133 | Acc:  55.56% | LR: 1.00e-03
+Epoch    8/100 | CE: 0.612583 | Acc:  66.67% | LR: 1.00e-03
+Epoch    9/100 | CE: 0.740295 | Acc:  71.43% | LR: 1.00e-03
+Epoch   10/100 | CE: 0.673599 | Acc:  63.49% | LR: 1.00e-03
+Epoch   11/100 | CE: 0.836331 | Acc:  53.97% | LR: 1.00e-03
+Epoch   12/100 | CE: 0.770257 | Acc:  66.67% | LR: 1.00e-03
+Epoch   13/100 | CE: 0.520656 | Acc:  69.84% | LR: 1.00e-03
+Epoch   14/100 | CE: 0.447676 | Acc:  76.19% | LR: 1.00e-03
+Epoch   15/100 | CE: 0.610928 | Acc:  77.78% | LR: 1.00e-03
+Epoch   16/100 | CE: 0.650778 | Acc:  68.25% | LR: 1.00e-03
+Epoch   17/100 | CE: 1.132871 | Acc:  73.02% | LR: 1.00e-03
+Epoch   18/100 | CE: 0.585447 | Acc:  71.43% | LR: 1.00e-03
+Epoch   19/100 | CE: 0.803615 | Acc:  68.25% | LR: 1.00e-03
+Epoch   20/100 | CE: 0.414287 | Acc:  77.78% | LR: 1.00e-03
+Epoch   21/100 | CE: 0.571405 | Acc:  77.78% | LR: 1.00e-03
+Epoch   22/100 | CE: 0.470342 | Acc:  74.60% | LR: 1.00e-03
+Epoch   23/100 | CE: 0.345104 | Acc:  79.37% | LR: 1.00e-03
+Epoch   24/100 | CE: 0.856675 | Acc:  77.78% | LR: 1.00e-03
+Epoch   25/100 | CE: 0.401358 | Acc:  84.13% | LR: 1.00e-03
+Epoch   26/100 | CE: 0.460689 | Acc:  88.89% | LR: 1.00e-03
+Epoch   27/100 | CE: 1.271425 | Acc:  68.25% | LR: 1.00e-03
+Epoch   28/100 | CE: 0.645049 | Acc:  79.37% | LR: 1.00e-03
+Epoch   29/100 | CE: 0.548455 | Acc:  80.95% | LR: 1.00e-03
+Epoch   30/100 | CE: 0.233429 | Acc:  87.30% | LR: 1.00e-03
+Epoch   31/100 | CE: 0.413063 | Acc:  88.89% | LR: 1.00e-03
+Epoch   32/100 | CE: 0.610192 | Acc:  74.60% | LR: 1.00e-03
+Epoch   33/100 | CE: 0.655097 | Acc:  74.60% | LR: 1.00e-03
+Epoch   34/100 | CE: 0.462307 | Acc:  82.54% | LR: 1.00e-03
+Epoch   35/100 | CE: 0.443450 | Acc:  85.71% | LR: 1.00e-03
+Epoch   36/100 | CE: 0.463653 | Acc:  87.30% | LR: 1.00e-03
+Epoch   37/100 | CE: 0.343134 | Acc:  87.30% | LR: 1.00e-03
+Epoch   38/100 | CE: 0.688087 | Acc:  85.71% | LR: 1.00e-03
+Epoch   39/100 | CE: 0.219631 | Acc:  87.30% | LR: 1.00e-03
+Epoch   40/100 | CE: 0.452007 | Acc:  87.30% | LR: 1.00e-03
+Epoch   41/100 | CE: 0.450635 | Acc:  87.30% | LR: 1.00e-03
+Epoch   42/100 | CE: 0.466941 | Acc:  84.13% | LR: 1.00e-03
+Epoch   43/100 | CE: 0.473270 | Acc:  87.30% | LR: 1.00e-03
+Epoch   44/100 | CE: 0.358927 | Acc:  90.48% | LR: 1.00e-03
+Epoch   45/100 | CE: 0.803405 | Acc:  76.19% | LR: 1.00e-03
+Epoch   46/100 | CE: 0.432749 | Acc:  90.48% | LR: 1.00e-03
+Epoch   47/100 | CE: 0.388535 | Acc:  85.71% | LR: 1.00e-03
+Epoch   48/100 | CE: 0.323746 | Acc:  87.30% | LR: 1.00e-03
+Epoch   49/100 | CE: 0.531117 | Acc:  84.13% | LR: 1.00e-03
+Epoch   50/100 | CE: 0.344533 | Acc:  87.30% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_50.pth
+Epoch   51/100 | CE: 0.524217 | Acc:  85.71% | LR: 1.00e-03
+Epoch   52/100 | CE: 0.293367 | Acc:  90.48% | LR: 1.00e-03
+Epoch   53/100 | CE: 0.402134 | Acc:  90.48% | LR: 1.00e-03
+Epoch   54/100 | CE: 0.708717 | Acc:  84.13% | LR: 1.00e-03
+Epoch   55/100 | CE: 0.310442 | Acc:  87.30% | LR: 1.00e-03
+Epoch   56/100 | CE: 0.872898 | Acc:  82.54% | LR: 1.00e-03
+Epoch   57/100 | CE: 0.321980 | Acc:  85.71% | LR: 1.00e-03
+Epoch   58/100 | CE: 0.446419 | Acc:  87.30% | LR: 1.00e-03
+Epoch   59/100 | CE: 0.215741 | Acc:  95.24% | LR: 1.00e-03
+Epoch   60/100 | CE: 0.435078 | Acc:  92.06% | LR: 1.00e-03
+Epoch   61/100 | CE: 0.348349 | Acc:  85.71% | LR: 1.00e-03
+Epoch   62/100 | CE: 0.322061 | Acc:  88.89% | LR: 1.00e-03
+Epoch   63/100 | CE: 0.268713 | Acc:  87.30% | LR: 1.00e-03
+Epoch   64/100 | CE: 0.259458 | Acc:  92.06% | LR: 1.00e-03
+Epoch   65/100 | CE: 0.519286 | Acc:  92.06% | LR: 1.00e-03
+Epoch   66/100 | CE: 0.306041 | Acc:  90.48% | LR: 1.00e-03
+Epoch   67/100 | CE: 0.442082 | Acc:  85.71% | LR: 1.00e-03
+Epoch   68/100 | CE: 0.603661 | Acc:  84.13% | LR: 1.00e-03
+Epoch   69/100 | CE: 0.411622 | Acc:  88.89% | LR: 1.00e-03
+Epoch   70/100 | CE: 0.206718 | Acc:  88.89% | LR: 1.00e-03
+Epoch   71/100 | CE: 0.359426 | Acc:  95.24% | LR: 1.00e-03
+Epoch   72/100 | CE: 0.548330 | Acc:  84.13% | LR: 1.00e-03
+Epoch   73/100 | CE: 0.434064 | Acc:  87.30% | LR: 1.00e-03
+Epoch   74/100 | CE: 0.336188 | Acc:  95.24% | LR: 1.00e-03
+Epoch   75/100 | CE: 0.312042 | Acc:  95.24% | LR: 1.00e-03
+Epoch   76/100 | CE: 0.283070 | Acc:  93.65% | LR: 1.00e-03
+Epoch   77/100 | CE: 0.277286 | Acc:  90.48% | LR: 1.00e-03
+Epoch   78/100 | CE: 0.192287 | Acc:  90.48% | LR: 1.00e-03
+Epoch   79/100 | CE: 0.087662 | Acc:  96.83% | LR: 1.00e-03
+Epoch   80/100 | CE: 0.791072 | Acc:  85.71% | LR: 1.00e-03
+Epoch   81/100 | CE: 0.586532 | Acc:  87.30% | LR: 1.00e-03
+Epoch   82/100 | CE: 0.424511 | Acc:  90.48% | LR: 1.00e-03
+Epoch   83/100 | CE: 0.422095 | Acc:  93.65% | LR: 1.00e-03
+Epoch   84/100 | CE: 0.663694 | Acc:  88.89% | LR: 1.00e-03
+Epoch   85/100 | CE: 0.333349 | Acc:  87.30% | LR: 1.00e-03
+Epoch   86/100 | CE: 0.143515 | Acc:  95.24% | LR: 1.00e-03
+Epoch   87/100 | CE: 0.348458 | Acc:  95.24% | LR: 1.00e-03
+Epoch   88/100 | CE: 0.394812 | Acc:  88.89% | LR: 1.00e-03
+Epoch   89/100 | CE: 0.357631 | Acc:  92.06% | LR: 1.00e-03
+Epoch   90/100 | CE: 0.172195 | Acc:  93.65% | LR: 1.00e-03
+Epoch   91/100 | CE: 0.360939 | Acc:  93.65% | LR: 1.00e-03
+Epoch   92/100 | CE: 0.305327 | Acc:  90.48% | LR: 1.00e-03
+Epoch   93/100 | CE: 0.535310 | Acc:  92.06% | LR: 1.00e-03
+Epoch   94/100 | CE: 0.194807 | Acc:  92.06% | LR: 1.00e-03
+Epoch   95/100 | CE: 0.272616 | Acc:  95.24% | LR: 1.00e-03
+Epoch   96/100 | CE: 0.421222 | Acc:  88.89% | LR: 1.00e-03
+Epoch   97/100 | CE: 0.357375 | Acc:  95.24% | LR: 1.00e-03
+Epoch   98/100 | CE: 0.450265 | Acc:  90.48% | LR: 1.00e-03
+Epoch   99/100 | CE: 0.286547 | Acc:  90.48% | LR: 1.00e-03
+Epoch  100/100 | CE: 0.259332 | Acc:  93.65% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v5_next generation\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_100.pth
+=== STAGE 2 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2) ===
+Train Days   : 63
+Train CE     : 0.161206
+Train Acc    : 93.65%
+Train Prec   : 93.97%
+Train Recall : 93.65%
+Train F1     : 93.71%
+========================================
+
+=== EVALUASI TEST SET (Stage 2) ===
+Test Days    : 16
+Test CE      : 4.889199
+Test Acc     : 62.50%
+Test Prec    : 77.50%
+Test Recall  : 62.50%
+Test F1      : 53.12%
+  Day 64: True=Healthy   | Pred=Healthy   ✓
+  Day 65: True=Warning   | Pred=Warning   ✓
+  Day 66: True=Healthy   | Pred=Healthy   ✓
+  Day 67: True=Warning   | Pred=Healthy   ✗
+  Day 68: True=Warning   | Pred=Healthy   ✗
+  Day 69: True=Healthy   | Pred=Healthy   ✓
+  Day 70: True=Healthy   | Pred=Healthy   ✓
+  Day 71: True=Healthy   | Pred=Healthy   ✓
+  Day 72: True=Warning   | Pred=Healthy   ✗
+  Day 73: True=Healthy   | Pred=Healthy   ✓
+  Day 74: True=Healthy   | Pred=Healthy   ✓
+  Day 75: True=Healthy   | Pred=Healthy   ✓
+  Day 76: True=Warning   | Pred=Healthy   ✗
+  Day 77: True=Warning   | Pred=Healthy   ✗
+  Day 78: True=Healthy   | Pred=Healthy   ✓
+  Day 79: True=Warning   | Pred=Healthy   ✗
+========================================
+model_stage2_classifier.pth disimpan
+jurnal_kurva_loss_acc_stage2.png disimpan  ← Jurnal Gambar 14
+jurnal_confusion_matrix_train.png — Acc=93.65% Prec=93.97% Rec=93.65% F1=93.71%
+jurnal_confusion_matrix_test.png — Acc=62.50% Prec=77.50% Rec=62.50% F1=53.12%
+jurnal_aktual_vs_prediksi_mlp.png disimpan  ← Jurnal Gambar 15
+jurnal_fitur_statistik.csv disimpan  ← Tabel Fitur Statistik Jurnal (84 kolom)
+jurnal_info_stage2.txt disimpan  ← Data untuk Tabel & Paragraf Jurnal Stage 2
+
+STAGE 2 SELESAI! Jalankan stage3_inference.py untuk prediksi.
+
+[Inference] Device: cuda
+
+[DEBUG] CSV ditemukan:
+   01082025.csv
+   03082025.csv
+   07082025.csv
+   08082025.csv
+   09082025.csv
+   10082025.csv
+   11082025.csv
+   13082025.csv
+   14082025.csv
+   15082025.csv
+   16082025.csv
+   17082025.csv
+   18082025.csv
+   19082025.csv
+   20082025.csv
+   21082025.csv
+   22082025.csv
+   23082025.csv
+   24082025.csv
+   25082025.csv
+   26082025.csv
+   27082025.csv
+   31082025.csv
+   02092025.csv
+   03092025.csv
+   04092025.csv
+   05092025.csv
+   06092025.csv
+   07092025.csv
+   08092025.csv
+   09092025.csv
+   10092025.csv
+   11092025.csv
+   12092025.csv
+   14092025.csv
+   15092025.csv
+   16092025.csv
+   17092025.csv
+   18092025.csv
+   19092025.csv
+   20092025.csv
+   21092025.csv
+   22092025.csv
+   11122025.csv
+   16122025.csv
+   02012026.csv
+   10022026.csv
+   13022026.csv
+   15022026.csv
+   19022026.csv
+   23022026.csv
+   25022026.csv
+   01032026.csv
+   07032026.csv
+   22032026.csv
+   28032026.csv
+   08042026.csv
+   09042026.csv
+   11042026.csv
+   12042026.csv
+   15042026.csv
+   16042026.csv
+   17042026.csv
+   19042026.csv
+   21042026.csv
+   22042026.csv
+   23042026.csv
+   24042026.csv
+   27042026.csv
+   04052026.csv
+   05052026.csv
+   06052026.csv
+   07052026.csv
+   08052026.csv
+   09052026.csv
+   14052026.csv
+   15052026.csv
+   16052026.csv
+   17052026.csv
+   20052026.csv
+   22052026.csv
+   23052026.csv
+   18062026.csv
+   19062026.csv
+[Inference] Scaler loaded
+[Inference] Model TCN dan MLP loaded
+
+[Inference] Membaca semua CSV...
+
+  Membaca: 01082025.csv
+    Separator: ';'
+  Skip 01082025.csv: Data terlalu sedikit: 190343 rows (min 200000)
+
+  Membaca: 03082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 13082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18082025.csv
+    Separator: ';'
+  Skip 18082025.csv: Data terlalu sedikit: 197181 rows (min 200000)
+
+  Membaca: 19082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 24082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 25082025.csv
+    Separator: ';'
+  Skip 25082025.csv: Data terlalu sedikit: 162276 rows (min 200000)
+
+  Membaca: 26082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 27082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 31082025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 02092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 03092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 04092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 05092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 06092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08092025.csv
+    Separator: ';'
+  Skip 08092025.csv: Data terlalu sedikit: 178760 rows (min 200000)
+
+  Membaca: 09092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 12092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22092025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11122025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16122025.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 02012026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 10022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 13022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 25022026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 01032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 28032026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 11042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 12042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 19042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 21042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 24042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 27042026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 04052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 05052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 06052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 07052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 08052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 09052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 14052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 15052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 16052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 17052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 20052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 22052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 23052026.csv
+    Separator: ';'
+    → 200000 titik
+
+  Membaca: 18062026.csv
+    Separator: ';'
+  Skip 18062026.csv: Data terlalu sedikit: 162813 rows (min 200000)
+
+  Membaca: 19062026.csv
+    Separator: ';'
+    → 200000 titik
+
+[Inference] Total hari valid: 79
+  Day  1 → Healthy
+  Day  2 → Warning
+  Day  3 → Warning
+  Day  4 → Warning
+  Day  5 → Warning
+  Day  6 → Healthy
+  Day  7 → Warning
+  Day  8 → Healthy
+  Day  9 → Warning
+  Day 10 → Healthy
+  Day 11 → Healthy
+  Day 12 → Healthy
+  Day 13 → Warning
+  Day 14 → Healthy
+  Day 15 → Healthy
+  Day 16 → Healthy
+  Day 17 → Healthy
+  Day 18 → Healthy
+  Day 19 → Warning
+  Day 20 → Healthy
+  Day 21 → Healthy
+  Day 22 → Healthy
+  Day 23 → Warning
+  Day 24 → Healthy
+  Day 25 → Warning
+  Day 26 → Healthy
+  Day 27 → Healthy
+  Day 28 → Healthy
+  Day 29 → Warning
+  Day 30 → Warning
+  Day 31 → Warning
+  Day 32 → Healthy
+  Day 33 → Warning
+  Day 34 → Warning
+  Day 35 → Healthy
+  Day 36 → Healthy
+  Day 37 → Healthy
+  Day 38 → Warning
+  Day 39 → Healthy
+  Day 40 → Healthy
+  Day 41 → Healthy
+  Day 42 → Warning
+  Day 43 → Warning
+  Day 44 → Healthy
+  Day 45 → Healthy
+  Day 46 → Healthy
+  Day 47 → Healthy
+  Day 48 → Healthy
+  Day 49 → Warning
+  Day 50 → Healthy
+  Day 51 → Warning
+  Day 52 → Healthy
+  Day 53 → Healthy
+  Day 54 → Healthy
+  Day 55 → Healthy
+  Day 56 → Healthy
+  Day 57 → Healthy
+  Day 58 → Healthy
+  Day 59 → Healthy
+  Day 60 → Healthy
+  Day 61 → Warning
+  Day 62 → Healthy
+  Day 63 → Warning
+  Day 64 → Healthy
+  Day 65 → Warning
+  Day 66 → Healthy
+  Day 67 → Warning
+  Day 68 → Warning
+  Day 69 → Healthy
+  Day 70 → Healthy
+  Day 71 → Healthy
+  Day 72 → Warning
+  Day 73 → Healthy
+  Day 74 → Healthy
+  Day 75 → Healthy
+  Day 76 → Warning
+  Day 77 → Warning
+  Day 78 → Healthy
+  Day 79 → Warning
+
+=================================================================
+PEMBAGIAN DATA TRAIN / TEST (TRAIN_RATIO=0.8)
+=================================================================
+  Total hari valid  : 79
+  Hari TRAINING     : 63 hari (80%)
+  Hari TESTING      : 16 hari (20%)
+
+   Day     Tanggal      Set  Status Kesehatan
+  ------------------------------------------
+     1    01082025    TRAIN         Healthy
+     2    03082025    TRAIN         Warning
+     3    07082025    TRAIN         Warning
+     4    08082025    TRAIN         Warning
+     5    09082025    TRAIN         Warning
+     6    10082025    TRAIN         Healthy
+     7    11082025    TRAIN         Warning
+     8    13082025    TRAIN         Healthy
+     9    14082025    TRAIN         Warning
+    10    15082025    TRAIN         Healthy
+    11    16082025    TRAIN         Healthy
+    12    17082025    TRAIN         Healthy
+    13    18082025    TRAIN         Warning
+    14    19082025    TRAIN         Healthy
+    15    20082025    TRAIN         Healthy
+    16    21082025    TRAIN         Healthy
+    17    22082025    TRAIN         Healthy
+    18    23082025    TRAIN         Healthy
+    19    24082025    TRAIN         Warning
+    20    25082025    TRAIN         Healthy
+    21    26082025    TRAIN         Healthy
+    22    27082025    TRAIN         Healthy
+    23    31082025    TRAIN         Warning
+    24    02092025    TRAIN         Healthy
+    25    03092025    TRAIN         Warning
+    26    04092025    TRAIN         Healthy
+    27    05092025    TRAIN         Healthy
+    28    06092025    TRAIN         Healthy
+    29    07092025    TRAIN         Warning
+    30    08092025    TRAIN         Warning
+    31    09092025    TRAIN         Warning
+    32    10092025    TRAIN         Healthy
+    33    11092025    TRAIN         Warning
+    34    12092025    TRAIN         Warning
+    35    14092025    TRAIN         Healthy
+    36    15092025    TRAIN         Healthy
+    37    16092025    TRAIN         Healthy
+    38    17092025    TRAIN         Warning
+    39    18092025    TRAIN         Healthy
+    40    19092025    TRAIN         Healthy
+    41    20092025    TRAIN         Healthy
+    42    21092025    TRAIN         Warning
+    43    22092025    TRAIN         Warning
+    44    11122025    TRAIN         Healthy
+    45    16122025    TRAIN         Healthy
+    46    02012026    TRAIN         Healthy
+    47    10022026    TRAIN         Healthy
+    48    13022026    TRAIN         Healthy
+    49    15022026    TRAIN         Warning
+    50    19022026    TRAIN         Healthy
+    51    23022026    TRAIN         Warning
+    52    25022026    TRAIN         Healthy
+    53    01032026    TRAIN         Healthy
+    54    07032026    TRAIN         Healthy
+    55    22032026    TRAIN         Healthy
+    56    28032026    TRAIN         Healthy
+    57    08042026    TRAIN         Healthy
+    58    09042026    TRAIN         Healthy
+    59    11042026    TRAIN         Healthy
+    60    12042026    TRAIN         Healthy
+    61    15042026    TRAIN         Warning
+    62    16042026    TRAIN         Healthy
+    63    17042026    TRAIN         Warning
+    64    19042026     TEST         Healthy
+    65    21042026     TEST         Warning
+    66    22042026     TEST         Healthy
+    67    23042026     TEST         Warning
+    68    24042026     TEST         Warning
+    69    27042026     TEST         Healthy
+    70    04052026     TEST         Healthy
+    71    05052026     TEST         Healthy
+    72    06052026     TEST         Warning
+    73    07052026     TEST         Healthy
+    74    08052026     TEST         Healthy
+    75    09052026     TEST         Healthy
+    76    14052026     TEST         Warning
+    77    15052026     TEST         Warning
+    78    16052026     TEST         Healthy
+    79    17052026     TEST         Warning
+  ------------------------------------------
+
+  DATA TRAINING  → Day 1 s/d Day 63 (01082025 – 17042026)
+  DATA TESTING   → Day 64 s/d Day 79 (19042026 – 19062026)
+=================================================================
+
+[Plot] plot_all_parameters_TCN.png ...
+  → plot_all_parameters_TCN.png  (supplementary)
+
+[Plot] jurnal_sliding_window.png (Jurnal Gambar 6) ...
+  → jurnal_sliding_window.png  ← Jurnal Gambar 6
+
+[Plot] jurnal_normalisasi_comparison.png (Jurnal Gambar 5) ...
+  → jurnal_normalisasi_comparison.png  ← Jurnal Gambar 5
+
+=================================================================
+BAGIAN 1: TRAINING INFERENCE
+Konsep: gunakan 3 hari TERAKHIR data TRAINING → prediksi hari ke-(n_train+1)
+        Hari ke-(n_train+1) adalah hari PERTAMA data TESTING → ada ground truth
+=================================================================
+
+  [INPUT — dari data TRAINING]
+    Hari A (Day 61): 15042026.csv  Status: Warning
+    Hari B (Day 62): 16042026.csv  Status: Healthy
+    Hari C (Day 63  ): 17042026.csv  Status: Warning
+
+  [TARGET — hari pertama data TESTING (ground truth tersedia)]
+    Hari D (Day 64): 19042026.csv  Status Aktual: Healthy
+
+  [HASIL TRAINING INFERENCE]
+    Prediksi Status : Healthy  (99.65% confidence)
+    Status Aktual   : Healthy
+    Klasifikasi     : BENAR ✓
+    Prob Healthy    : 99.65%
+    Prob Warning    : 0.35%
+
+  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]
+    MSE   = 0.00401493
+    RMSE  = 0.06336347
+    MAE   = 0.02201255
+    MAPE  = 452.11%
+[Plot] gambar_train1_input_prediksi.png ...
+  → gambar_train1_input_prediksi.png
+[Plot] gambar_train2_real_vs_pred.png ...
+  → gambar_train2_real_vs_pred.png
+
+=================================================================
+BAGIAN 2: TESTING INFERENCE
+Konsep: gunakan 3 hari TERAKHIR dari SEMUA data → prediksi hari MASA DEPAN
+        Tidak ada ground truth → hanya prediksi + confidence
+=================================================================
+
+  [INPUT — dari data TESTING (hari terakhir dataset)]
+    Hari A (Day 77): 23052026.csv  Status: Warning
+    Hari B (Day 78): 18062026.csv  Status: Healthy
+    Hari C (Day 79): 19062026.csv  Status: Warning
+
+  [HASIL TESTING INFERENCE — prediksi hari ke-80 (masa depan)]
+    Prediksi Status : Warning  (98.50% confidence)
+    Prob Healthy      : 1.50%
+    Prob Warning    : 98.50%
+    Ground Truth    : TIDAK ADA (hari masa depan)
+
+  [METRIK REGRESI SINYAL — skala normalized [-0.1, 1.1]]
+    MSE   = TIDAK DAPAT DIHITUNG (tidak ada ground truth)
+    RMSE  = TIDAK DAPAT DIHITUNG
+    MAE   = TIDAK DAPAT DIHITUNG
+    MAPE  = TIDAK DAPAT DIHITUNG
+=================================================================
+[Plot] gambar1_4hari_real_TCN.png (supplementary) ...
+  → gambar1_4hari_real_TCN.png
+[Plot] gambar2_input_plus_prediksi_TCN.png (Jurnal Gambar 15) ...
+  → gambar2_input_plus_prediksi_TCN.png  ← Jurnal Gambar 15
+[Plot] gambar3_real_vs_prediksi_TCN.png (supplementary) ...
+  → gambar3_real_vs_prediksi_TCN.png
+
+======================================================================
+RINGKASAN PERBANDINGAN: TRAINING INFERENCE vs TESTING INFERENCE
+======================================================================
+  Aspek                          Training Inference   Testing Inference
+  ----------------------------------------------------------------------
+  Input Days                      Day 61–63 (Train)    Day 77–79 (Test)
+  Target                          Day 64 (1st Test)     Day 80 (Future)
+  Prediksi Status                   Healthy (99.7%)     Warning (98.5%)
+  Ground Truth                              Healthy           TIDAK ADA
+  Klasifikasi Benar?                        BENAR ✓    Tidak dpt diukur
+  MSE (normalized)                         0.004015    Tidak dpt diukur
+  RMSE (normalized)                        0.063363    Tidak dpt diukur
+  MAE (normalized)                         0.022013    Tidak dpt diukur
+  MAPE                                      452.11%    Tidak dpt diukur
+  ----------------------------------------------------------------------
+
+  NOTE: Training inference BISA diukur MSE/RMSE/MAE/MAPE karena ground truth
+        hari D+1 (data test) tersedia. Testing inference TIDAK BISA diukur
+        karena prediksi ke hari masa depan yang belum ada datanya.
+======================================================================
+
+SELESAI! Output disimpan ke folder evidence/:
+
+[TRAINING INFERENCE — Gambar 11 Jurnal]
+  gambar_train1_input_prediksi.png   (supplementary — 3 hari train input + prediksi)
+  gambar_train2_real_vs_pred.png     ← Jurnal Gambar 11 (Aktual Y_Testing vs Prediksi)
+  inference_train_prediksi_sensor.csv
+  inference_train_health_status.csv
+
+[TESTING INFERENCE — Gambar 15 Jurnal]
+  jurnal_normalisasi_comparison.png      ← Jurnal Gambar 5
+  jurnal_sliding_window.png              ← Jurnal Gambar 6
+  plot_all_parameters_TCN.png            (supplementary)
+  gambar2_input_plus_prediksi_TCN.png    ← Jurnal Gambar 11 (3 hari test + prediksi D+1)
+  inference_prediksi_sensor.csv
+  inference_health_status.csv
+
+[SUPPLEMENTARY — tidak bernomor gambar jurnal]
+  gambar1_4hari_real_TCN.png             (konteks 4 hari real testing)
+  gambar3_real_vs_prediksi_TCN.png       (overlay real vs pred testing)
+======================================================================
+
+[Plot] Membuat flowchart jurnal ...
+  → jurnal_flowchart_stage1.png
+  → jurnal_flowchart_stage2.png
+
+[FLOWCHART JURNAL]
+  jurnal_flowchart_stage1.png   ← Jurnal Gambar 1
+  jurnal_flowchart_stage2.png   ← Jurnal Gambar 2
+
+[INFO] jurnal_informasi_lengkap.txt disimpan ← BACA INI untuk semua data jurnal
+
+Catatan: Gambar 3 (LeadMind), Gambar 4 (Laporan Gangguan),
+         Gambar 5 (Detail insiden) → perlu screenshot manual.
+         Gambar 7 & 8 → jalankan stage1 (jurnal_kurva_loss_stage1.png).
+         Gambar 12   → jalankan stage2 (jurnal_kurva_loss_acc_stage2.png).
+=================================================================
+  PIPELINE TCN SIV PREDICTION
+  Mulai        : 2026-10-19 13:23:19
+  Dijalankan   : Stage 1, Stage 2, Stage 3
+  Di-skip      : -
+=================================================================
+
+=================================================================
+  [Stage 1/3] STAGE 1 — TCN Forecaster Training
+  Script       : stage1_forecaster.py
+  Mulai        : 2026-10-19 13:23:19
+=================================================================
+
+
+=================================================================
+  [OK] Stage 1 selesai
+  Mulai    : 2026-10-19 13:23:19
+  Selesai  : 2026-10-21 09:31:33
+  Durasi   : 44:08:13
+=================================================================
+
+=================================================================
+  [Stage 2/3] STAGE 2 — MLP Classifier Training
+  Script       : stage2_classifier.py
+  Mulai        : 2026-10-21 09:31:33
+=================================================================
+
+
+=================================================================
+  [OK] Stage 2 selesai
+  Mulai    : 2026-10-21 09:31:33
+  Selesai  : 2026-10-21 09:34:31
+  Durasi   : 00:02:57
+=================================================================
+
+=================================================================
+  [Stage 3/3] STAGE 3 — Inference & Plot
+  Script       : stage3_inference.py
+  Mulai        : 2026-10-21 09:34:31
+=================================================================
+
+
+=================================================================
+  [OK] Stage 3 selesai
+  Mulai    : 2026-10-21 09:34:31
+  Selesai  : 2026-10-21 09:37:40
+  Durasi   : 00:03:09
+=================================================================
+
+=================================================================
+  PIPELINE SELESAI
+=================================================================
+  Stage 1  Mulai: 13:23:19  Selesai: 09:31:33  Durasi: 44:08:13
+  Stage 2  Mulai: 09:31:33  Selesai: 09:34:31  Durasi: 00:02:57
+  Stage 3  Mulai: 09:34:31  Selesai: 09:37:40  Durasi: 00:03:09
+  -------------------------------------------------------------
+  TOTAL    Mulai: 13:23:19  Selesai: 09:37:40  Durasi: 44:14:20
+  Output ada di folder: evidence/
+=================================================================
+

@@ -1,0 +1,120 @@
+
+============================================================
+STAGE 1 TCN FORECASTER | 2026-10-21 15:59:45
+Train days: 70 | Test days: 18
+Window train: 67 | Window test: 18
+Epoch: 100 | Batch: 3
+============================================================
+Epoch    1/100 | MSE: 0.2414453 | LR: 1.00e-03
+Epoch    2/100 | MSE: 0.1129777 | LR: 1.00e-03
+Epoch    3/100 | MSE: 0.0488055 | LR: 1.00e-03
+Epoch    4/100 | MSE: 0.0313587 | LR: 1.00e-03
+Epoch    5/100 | MSE: 0.0247148 | LR: 1.00e-03
+Epoch    6/100 | MSE: 0.0227453 | LR: 1.00e-03
+Epoch    7/100 | MSE: 0.0218543 | LR: 1.00e-03
+Epoch    8/100 | MSE: 0.0223899 | LR: 1.00e-03
+Epoch    9/100 | MSE: 0.0195599 | LR: 1.00e-03
+Epoch   10/100 | MSE: 0.0182621 | LR: 1.00e-03
+Epoch   11/100 | MSE: 0.0170846 | LR: 1.00e-03
+Epoch   12/100 | MSE: 0.0152640 | LR: 1.00e-03
+Epoch   13/100 | MSE: 0.0168840 | LR: 1.00e-03
+Epoch   14/100 | MSE: 0.0158967 | LR: 1.00e-03
+Epoch   15/100 | MSE: 0.0168489 | LR: 1.00e-03
+Epoch   16/100 | MSE: 0.0165921 | LR: 1.00e-03
+Epoch   17/100 | MSE: 0.0140920 | LR: 1.00e-03
+Epoch   18/100 | MSE: 0.0153883 | LR: 1.00e-03
+Epoch   19/100 | MSE: 0.0134464 | LR: 1.00e-03
+Epoch   20/100 | MSE: 0.0154849 | LR: 1.00e-03
+Epoch   21/100 | MSE: 0.0123222 | LR: 1.00e-03
+Epoch   22/100 | MSE: 0.0139122 | LR: 1.00e-03
+Epoch   23/100 | MSE: 0.0125495 | LR: 1.00e-03
+Epoch   24/100 | MSE: 0.0131120 | LR: 1.00e-03
+Epoch   25/100 | MSE: 0.0123033 | LR: 1.00e-03
+Epoch   26/100 | MSE: 0.0125094 | LR: 1.00e-03
+Epoch   27/100 | MSE: 0.0144536 | LR: 1.00e-03
+Epoch   28/100 | MSE: 0.0138678 | LR: 1.00e-03
+Epoch   29/100 | MSE: 0.0117962 | LR: 1.00e-03
+Epoch   30/100 | MSE: 0.0120706 | LR: 1.00e-03
+Epoch   31/100 | MSE: 0.0114800 | LR: 1.00e-03
+Epoch   32/100 | MSE: 0.0135523 | LR: 1.00e-03
+Epoch   33/100 | MSE: 0.0115742 | LR: 1.00e-03
+Epoch   34/100 | MSE: 0.0109963 | LR: 1.00e-03
+Epoch   35/100 | MSE: 0.0115718 | LR: 1.00e-03
+Epoch   36/100 | MSE: 0.0119984 | LR: 1.00e-03
+Epoch   37/100 | MSE: 0.0119057 | LR: 1.00e-03
+Epoch   38/100 | MSE: 0.0117806 | LR: 1.00e-03
+Epoch   39/100 | MSE: 0.0110936 | LR: 1.00e-03
+Epoch   40/100 | MSE: 0.0103749 | LR: 1.00e-03
+Epoch   41/100 | MSE: 0.0116740 | LR: 1.00e-03
+Epoch   42/100 | MSE: 0.0112850 | LR: 1.00e-03
+Epoch   43/100 | MSE: 0.0126190 | LR: 1.00e-03
+Epoch   44/100 | MSE: 0.0104162 | LR: 1.00e-03
+Epoch   45/100 | MSE: 0.0119691 | LR: 1.00e-03
+Epoch   46/100 | MSE: 0.0103383 | LR: 1.00e-03
+Epoch   47/100 | MSE: 0.0132348 | LR: 1.00e-03
+Epoch   48/100 | MSE: 0.0105176 | LR: 1.00e-03
+Epoch   49/100 | MSE: 0.0197872 | LR: 1.00e-03
+Epoch   50/100 | MSE: 0.0116635 | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\checkpoints_stage1\checkpoint_epoch_50.pth
+Epoch   51/100 | MSE: 0.0111641 | LR: 1.00e-03
+Epoch   52/100 | MSE: 0.0108075 | LR: 1.00e-03
+Epoch   53/100 | MSE: 0.0109253 | LR: 1.00e-03
+Epoch   54/100 | MSE: 0.0107813 | LR: 1.00e-03
+Epoch   55/100 | MSE: 0.0105264 | LR: 1.00e-03
+Epoch   56/100 | MSE: 0.0102498 | LR: 1.00e-03
+Epoch   57/100 | MSE: 0.0090537 | LR: 1.00e-03
+Epoch   58/100 | MSE: 0.0094479 | LR: 1.00e-03
+Epoch   59/100 | MSE: 0.0093299 | LR: 1.00e-03
+Epoch   60/100 | MSE: 0.0107939 | LR: 1.00e-03
+Epoch   61/100 | MSE: 0.0106801 | LR: 1.00e-03
+Epoch   62/100 | MSE: 0.0101158 | LR: 1.00e-03
+Epoch   63/100 | MSE: 0.0105258 | LR: 1.00e-03
+Epoch   64/100 | MSE: 0.0112874 | LR: 1.00e-03
+Epoch   65/100 | MSE: 0.0090782 | LR: 1.00e-03
+Epoch   66/100 | MSE: 0.0101968 | LR: 1.00e-03
+Epoch   67/100 | MSE: 0.0095472 | LR: 1.00e-03
+Epoch   68/100 | MSE: 0.0093411 | LR: 1.00e-03
+Epoch   69/100 | MSE: 0.0096801 | LR: 1.00e-03
+Epoch   70/100 | MSE: 0.0101159 | LR: 1.00e-03
+Epoch   71/100 | MSE: 0.0097048 | LR: 1.00e-03
+Epoch   72/100 | MSE: 0.0097997 | LR: 1.00e-03
+Epoch   73/100 | MSE: 0.0088081 | LR: 1.00e-03
+Epoch   74/100 | MSE: 0.0091267 | LR: 1.00e-03
+Epoch   75/100 | MSE: 0.0090218 | LR: 1.00e-03
+Epoch   76/100 | MSE: 0.0096847 | LR: 1.00e-03
+Epoch   77/100 | MSE: 0.0092929 | LR: 1.00e-03
+Epoch   78/100 | MSE: 0.0091342 | LR: 1.00e-03
+Epoch   79/100 | MSE: 0.0097439 | LR: 1.00e-03
+Epoch   80/100 | MSE: 0.0097556 | LR: 1.00e-03
+Epoch   81/100 | MSE: 0.0098258 | LR: 1.00e-03
+Epoch   82/100 | MSE: 0.0095259 | LR: 1.00e-03
+Epoch   83/100 | MSE: 0.0086849 | LR: 1.00e-03
+Epoch   84/100 | MSE: 0.0084724 | LR: 1.00e-03
+Epoch   85/100 | MSE: 0.0097206 | LR: 1.00e-03
+Epoch   86/100 | MSE: 0.0082498 | LR: 1.00e-03
+Epoch   87/100 | MSE: 0.0093062 | LR: 1.00e-03
+Epoch   88/100 | MSE: 0.0087235 | LR: 1.00e-03
+Epoch   89/100 | MSE: 0.0097594 | LR: 1.00e-03
+Epoch   90/100 | MSE: 0.0093120 | LR: 1.00e-03
+Epoch   91/100 | MSE: 0.0090712 | LR: 1.00e-03
+Epoch   92/100 | MSE: 0.0092717 | LR: 1.00e-03
+Epoch   93/100 | MSE: 0.0083376 | LR: 1.00e-03
+Epoch   94/100 | MSE: 0.0088100 | LR: 1.00e-03
+Epoch   95/100 | MSE: 0.0087706 | LR: 1.00e-03
+Epoch   96/100 | MSE: 0.0081467 | LR: 1.00e-03
+Epoch   97/100 | MSE: 0.0083605 | LR: 1.00e-03
+Epoch   98/100 | MSE: 0.0092963 | LR: 1.00e-03
+Epoch   99/100 | MSE: 0.0089167 | LR: 1.00e-03
+Epoch  100/100 | MSE: 0.0085145 | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v7\Setup 100 epoch\checkpoints_stage1\checkpoint_epoch_100.pth
+=== STAGE 1 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 1) — skala normalized [-0.1, 1.1] ===
+
+============================================================
+STAGE 1 TCN FORECASTER | 2026-10-23 09:44:13
+Train days: 70 | Test days: 18
+Window train: 67 | Window test: 18
+Epoch: 100 | Batch: 3
+============================================================
+Epoch    1/100 | MSE: 0.0092891 | LR: 1.00e-03

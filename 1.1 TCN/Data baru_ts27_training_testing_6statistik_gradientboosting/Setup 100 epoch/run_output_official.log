@@ -1,0 +1,145 @@
+[Stage 2] Data dir : C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6_6statistik_gradientboosting\Setup 100 epoch\data
+[Stage 2] File CSV : 84 ditemukan
+  Skip 01082025.csv
+  Skip 18082025.csv
+  Skip 25082025.csv
+  Skip 08092025.csv
+  Skip 18062026.csv
+[Stage 2] Total hari: 79
+[Stage 2] Train days: 63 | Test days: 16
+  [Train] Day  1 -> Healthy
+  [Train] Day  2 -> Warning
+  [Train] Day  3 -> Warning
+  [Train] Day  4 -> Warning
+  [Train] Day  5 -> Warning
+  [Train] Day  6 -> Healthy
+  [Train] Day  7 -> Warning
+  [Train] Day  8 -> Healthy
+  [Train] Day  9 -> Warning
+  [Train] Day 10 -> Healthy
+  [Train] Day 11 -> Healthy
+  [Train] Day 12 -> Healthy
+  [Train] Day 13 -> Warning
+  [Train] Day 14 -> Healthy
+  [Train] Day 15 -> Healthy
+  [Train] Day 16 -> Healthy
+  [Train] Day 17 -> Healthy
+  [Train] Day 18 -> Healthy
+  [Train] Day 19 -> Warning
+  [Train] Day 20 -> Healthy
+  [Train] Day 21 -> Healthy
+  [Train] Day 22 -> Healthy
+  [Train] Day 23 -> Warning
+  [Train] Day 24 -> Healthy
+  [Train] Day 25 -> Warning
+  [Train] Day 26 -> Healthy
+  [Train] Day 27 -> Healthy
+  [Train] Day 28 -> Healthy
+  [Train] Day 29 -> Warning
+  [Train] Day 30 -> Warning
+  [Train] Day 31 -> Warning
+  [Train] Day 32 -> Healthy
+  [Train] Day 33 -> Warning
+  [Train] Day 34 -> Warning
+  [Train] Day 35 -> Healthy
+  [Train] Day 36 -> Healthy
+  [Train] Day 37 -> Healthy
+  [Train] Day 38 -> Warning
+  [Train] Day 39 -> Healthy
+  [Train] Day 40 -> Healthy
+  [Train] Day 41 -> Healthy
+  [Train] Day 42 -> Warning
+  [Train] Day 43 -> Warning
+  [Train] Day 44 -> Healthy
+  [Train] Day 45 -> Healthy
+  [Train] Day 46 -> Healthy
+  [Train] Day 47 -> Healthy
+  [Train] Day 48 -> Healthy
+  [Train] Day 49 -> Warning
+  [Train] Day 50 -> Healthy
+  [Train] Day 51 -> Warning
+  [Train] Day 52 -> Healthy
+  [Train] Day 53 -> Healthy
+  [Train] Day 54 -> Healthy
+  [Train] Day 55 -> Healthy
+  [Train] Day 56 -> Healthy
+  [Train] Day 57 -> Healthy
+  [Train] Day 58 -> Healthy
+  [Train] Day 59 -> Healthy
+  [Train] Day 60 -> Healthy
+  [Train] Day 61 -> Warning
+  [Train] Day 62 -> Healthy
+  [Train] Day 63 -> Warning
+  [Test]  Day 64 -> Healthy
+  [Test]  Day 65 -> Warning
+  [Test]  Day 66 -> Healthy
+  [Test]  Day 67 -> Warning
+  [Test]  Day 68 -> Warning
+  [Test]  Day 69 -> Healthy
+  [Test]  Day 70 -> Healthy
+  [Test]  Day 71 -> Healthy
+  [Test]  Day 72 -> Warning
+  [Test]  Day 73 -> Healthy
+  [Test]  Day 74 -> Healthy
+  [Test]  Day 75 -> Healthy
+  [Test]  Day 76 -> Warning
+  [Test]  Day 77 -> Warning
+  [Test]  Day 78 -> Healthy
+  [Test]  Day 79 -> Warning
+[Stage 2] Sampel training: 63 hari
+[Stage 2] Sampel testing : 16 hari
+[Stage 2] scaler_stage2.pkl disimpan
+
+============================================================
+STAGE 2 GRADIENT BOOSTING CLASSIFIER | 2026-10-21 11:44:22
+Train days: 63 | Test days: 16
+Sampel train: 63 hari | n_estimators: 200 | max_depth: 3
+Distribusi Train: Healthy=41 Warning=22
+Fitur per hari: 126 dim (21 param x 6 statistik: mean,std,max,min,skew,rate-of-change)
+============================================================
+Stage   50/200 | Deviance: 0.057079 | Acc: 100.00%
+Stage  100/200 | Deviance: 0.005581 | Acc: 100.00%
+Stage  150/200 | Deviance: 0.000547 | Acc: 100.00%
+Stage  200/200 | Deviance: 0.000056 | Acc: 100.00%
+=== STAGE 2 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2) ===
+Train Days   : 63
+Train Acc    : 100.00%
+Train Prec   : 100.00%
+Train Recall : 100.00%
+Train F1     : 100.00%
+========================================
+
+=== EVALUASI TEST SET (Stage 2) ===
+Test Days    : 16
+Test Acc     : 75.00%
+Test Prec    : 75.91%
+Test Recall  : 75.00%
+Test F1      : 74.17%
+  Day 64: True=Healthy   | Pred=Healthy   OK
+  Day 65: True=Warning   | Pred=Warning   OK
+  Day 66: True=Healthy   | Pred=Healthy   OK
+  Day 67: True=Warning   | Pred=Healthy   X
+  Day 68: True=Warning   | Pred=Warning   OK
+  Day 69: True=Healthy   | Pred=Healthy   OK
+  Day 70: True=Healthy   | Pred=Healthy   OK
+  Day 71: True=Healthy   | Pred=Healthy   OK
+  Day 72: True=Warning   | Pred=Healthy   X
+  Day 73: True=Healthy   | Pred=Healthy   OK
+  Day 74: True=Healthy   | Pred=Warning   X
+  Day 75: True=Healthy   | Pred=Healthy   OK
+  Day 76: True=Warning   | Pred=Warning   OK
+  Day 77: True=Warning   | Pred=Healthy   X
+  Day 78: True=Healthy   | Pred=Healthy   OK
+  Day 79: True=Warning   | Pred=Warning   OK
+========================================
+model_stage2_classifier.pkl disimpan
+jurnal_kurva_loss_acc_stage2.png disimpan  <- Jurnal Gambar 14
+jurnal_confusion_matrix_train.png - Acc=100.00% Prec=100.00% Rec=100.00% F1=100.00%
+jurnal_confusion_matrix_test.png - Acc=75.00% Prec=75.91% Rec=75.00% F1=74.17%
+jurnal_aktual_vs_prediksi_mlp.png disimpan  <- Jurnal Gambar 15
+jurnal_fitur_statistik.csv disimpan  <- Tabel Fitur Statistik Jurnal (126 kolom)
+jurnal_info_stage2.txt disimpan  <- Data untuk Tabel & Paragraf Jurnal Stage 2
+
+STAGE 2 (GRADIENT BOOSTING) SELESAI!

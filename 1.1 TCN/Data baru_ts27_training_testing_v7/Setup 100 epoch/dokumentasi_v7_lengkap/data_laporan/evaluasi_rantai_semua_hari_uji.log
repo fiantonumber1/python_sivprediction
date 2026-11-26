@@ -1,0 +1,22 @@
+hari terpakai: 88 | train: 70 | test pertama: 22042026
+target,aktual,real_win_warn,pred_win_warn,pred_max_p,hari_real,hari_pred
+22042026,Healthy,0,0,0.1737,Healthy,Healthy
+23042026,Warning,1,0,0.0051,Warning,Healthy
+24042026,Healthy,0,0,0.0001,Healthy,Healthy
+27042026,Warning,1,0,0.0,Warning,Healthy
+04052026,Healthy,0,0,0.0047,Healthy,Healthy
+05052026,Warning,3,0,0.0083,Warning,Healthy
+06052026,Warning,1,0,0.0,Warning,Healthy
+07052026,Healthy,0,0,0.4381,Healthy,Healthy
+08052026,Healthy,0,0,0.3565,Healthy,Healthy
+09052026,Healthy,0,0,0.0076,Healthy,Healthy
+14052026,Warning,0,0,0.001,Healthy,Healthy
+15052026,Healthy,0,0,0.0,Healthy,Healthy
+16052026,Healthy,0,0,0.0,Healthy,Healthy
+17052026,Healthy,0,0,0.0325,Healthy,Healthy
+20052026,Warning,1,0,0.0168,Warning,Healthy
+22052026,Warning,0,0,0.0093,Healthy,Healthy
+23052026,Healthy,0,0,0.0013,Healthy,Healthy
+19062026,Warning,0,0,0.0597,Healthy,Healthy
+MLP pada sinyal REAL  : {'acc': np.float64(83.33), 'TP': 5, 'FN': 3, 'FP': 0, 'TN': 10}
+RANTAI (sinyal prediksi): {'acc': np.float64(55.56), 'TP': 0, 'FN': 8, 'FP': 0, 'TN': 10}

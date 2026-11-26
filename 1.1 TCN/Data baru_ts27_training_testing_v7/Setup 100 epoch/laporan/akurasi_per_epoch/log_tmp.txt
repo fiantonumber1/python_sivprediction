@@ -1,0 +1,22 @@
+
+======================================================================
+STAGE 2 v7 MLP WINDOW 30 DETIK | 2026-10-23 12:33:59
+======================================================================
+File CSV ditemukan : 95
+Window             : 30 detik = 117 baris | 1709 window/hari
+Hari terpakai      : 88 | dilewati (baris < 200000): 7 ['10072025', '24072025', '01082025', '18082025', '25082025', '08092025', '18062026']
+Split kronologis   : train 70 hari (11072025..21042026) | test 18 hari (22042026..19062026)
+Hari Healthy/Warning : train 44/26 | test 10/8
+Window train       : 119630 (Healthy=119589, Warning=41)
+Window test        : 30762 (Healthy=30749, Warning=13)
+
+======================================================================
+STAGE 2 v7 MLP WINDOW 30 DETIK | 2026-10-23 12:37:04
+======================================================================
+File CSV ditemukan : 95
+Window             : 30 detik = 117 baris | 1709 window/hari
+Hari terpakai      : 88 | dilewati (baris < 200000): 7 ['10072025', '24072025', '01082025', '18082025', '25082025', '08092025', '18062026']
+Split kronologis   : train 70 hari (11072025..21042026) | test 18 hari (22042026..19062026)
+Hari Healthy/Warning : train 44/26 | test 10/8
+Window train       : 119630 (Healthy=119589, Warning=41)
+Window test        : 30762 (Healthy=30749, Warning=13)

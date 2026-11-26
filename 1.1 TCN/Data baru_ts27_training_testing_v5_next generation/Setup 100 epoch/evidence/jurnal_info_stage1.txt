@@ -1,0 +1,171 @@
+====================================================================
+INFORMASI JURNAL — TCN FORECASTER (STAGE 1)
+Generated: 2026-10-21 09:31:25
+====================================================================
+
+[DATASET & SPLIT — untuk Tabel Jurnal]
+  Total hari CSV               : 79
+  Train days (TRAIN_RATIO=0.8) : 63
+  Test days                    : 16
+  Window training (3->1 hari)  : 60
+  Window testing               : 16
+  Timestep per hari (N_TAKE)   : 200,000
+  Jumlah parameter (fitur)     : 21
+
+[PREPROCESSING — untuk Tabel Data Cleaning Jurnal]
+  Jumlah data per hari         : 200,000 baris
+  Warmup baris di-drop         : 0 baris (tidak ada warmup drop)
+  Jumlah data digunakan/hari   : 200,000 baris (100%)
+  Jumlah data total (13 hari)  : 15,800,000 baris
+  Jumlah parameter digunakan   : 21 parameter
+  Timestamp per hari           : 200,000
+  Missing value handling        : forward-fill (ffill) + backward-fill (bfill)
+  Start time                   : awal operasi harian (~03:00–03:27 WIB, tanpa warmup drop)
+  End time                     : 18:16 WIB
+
+[NORMALISASI — untuk Tabel Normalisasi Jurnal]
+  Metode Normalisasi           : Min-Max Scaler
+  Rentang output normalisasi   : [-0.1, 1.1]
+  Jumlah parameter dinorm.     : 21
+  Fit hanya pada               : 63 hari training
+  Transform pada               : training + test (tanpa data leakage)
+
+[RENTANG DATA PER PARAMETER (dari scaler training)]
+  Parameter                        Min Data     Max Data
+  -------------------------------------------------------
+  SIV_T_HS_InConv_1                  0.0000     665.0000
+  SIV_T_HS_InConv_2                  0.0000     546.0000
+  SIV_T_HS_Inv_1                    31.0000    1599.0000
+  SIV_T_HS_Inv_2                -32738.0000   12032.0000
+  SIV_T_Container                    0.0000     557.0000
+  SIV_I_L1                           0.0000    4144.0000
+  SIV_I_L2                           0.0000     144.0000
+  SIV_I_L3                           0.0000     168.0000
+  SIV_I_Battery                 -32712.0000   24800.0000
+  SIV_I_DC_In                        0.0000     330.0000
+  SIV_U_Battery                      0.0000    6256.0000
+  SIV_U_DC_In                        0.0000    1768.0000
+  SIV_U_DC_Out                       3.0000     127.0000
+  SIV_U_L1                           0.0000   24768.0000
+  SIV_U_L2                           0.0000   14272.0000
+  SIV_U_L3                           0.0000   24603.0000
+  SIV_InConv_InEnergy                0.0000    1261.0000
+  SIV_Output_Energy                  0.0000    1069.0000
+  PLC_OpenACOutputCont               0.0000       0.0000
+  PLC_OpenInputCont                  0.0000       0.0000
+  SIV_DevIsAlive                     0.0000   65535.0000
+
+[HYPERPARAMETER TCN — untuk Tabel Jurnal]
+  Optimizer                    : AdamW
+  Learning Rate (awal)         : 0.001
+  Learning Rate (akhir)        : 1.00e-03
+  Batch Size                   : 3
+  Epoch                        : 100
+  Loss Function                : Mean Squared Error (MSE)
+  Gradient Clipping            : 1.0
+  Dropout                      : 0.3
+  Weight Decay                 : 1e-5
+  Scheduler                    : ReduceLROnPlateau (factor=0.5, patience=30)
+
+[ARSITEKTUR TCN — untuk Tabel Jurnal]
+  Jumlah Residual Block        : 7
+  Dilation Factors             : [1, 2, 4, 8, 16, 32, 64]
+  Hidden Channel (n_ch)        : 96
+  Kernel Size                  : 3
+  Input Window                 : 3 hari = 600,000 timestep
+  Output Horizon               : H+1 = 200,000 timestep (1 hari)
+  Input Shape                  : (batch, 600000, 21)
+  Output Shape                 : (batch, 200000, 21)
+
+[HASIL TRAINING — untuk Para 168 Jurnal]
+  MSE Epoch 1                  : 0.0827101  (8.2710%)
+  MSE Epoch 100 (akhir)        : 0.0068843  (0.6884%)
+  Penurunan MSE total          : 91.7%
+  MSE akhir (persen)           : ~0.69%
+
+[EVALUASI TEST SET — untuk Para 170 Jurnal]
+  Test Windows                 : 16
+  MSE Test                     : 0.0062167  (0.6217%)
+  RMSE Test                    : 0.0788460
+  MAE Test                     : 0.0316620
+  Selisih MSE (Train - Test)   : 0.0006676  → relatif kecil
+
+[PEMBENTUKAN SEQUENCE — untuk Tabel 11 Jurnal]
+  Seq     Input A     Input B     Input C  Target H+1  Set
+  ----------------------------------------------------------
+    1    01082025    03082025    07082025    08082025  Training
+    2    03082025    07082025    08082025    09082025  Training
+    3    07082025    08082025    09082025    10082025  Training
+    4    08082025    09082025    10082025    11082025  Training
+    5    09082025    10082025    11082025    13082025  Training
+    6    10082025    11082025    13082025    14082025  Training
+    7    11082025    13082025    14082025    15082025  Training
+    8    13082025    14082025    15082025    16082025  Training
+    9    14082025    15082025    16082025    17082025  Training
+   10    15082025    16082025    17082025    18082025  Training
+   11    16082025    17082025    18082025    19082025  Training
+   12    17082025    18082025    19082025    20082025  Training
+   13    18082025    19082025    20082025    21082025  Training
+   14    19082025    20082025    21082025    22082025  Training
+   15    20082025    21082025    22082025    23082025  Training
+   16    21082025    22082025    23082025    24082025  Training
+   17    22082025    23082025    24082025    25082025  Training
+   18    23082025    24082025    25082025    26082025  Training
+   19    24082025    25082025    26082025    27082025  Training
+   20    25082025    26082025    27082025    31082025  Training
+   21    26082025    27082025    31082025    02092025  Training
+   22    27082025    31082025    02092025    03092025  Training
+   23    31082025    02092025    03092025    04092025  Training
+   24    02092025    03092025    04092025    05092025  Training
+   25    03092025    04092025    05092025    06092025  Training
+   26    04092025    05092025    06092025    07092025  Training
+   27    05092025    06092025    07092025    08092025  Training
+   28    06092025    07092025    08092025    09092025  Training
+   29    07092025    08092025    09092025    10092025  Training
+   30    08092025    09092025    10092025    11092025  Training
+   31    09092025    10092025    11092025    12092025  Training
+   32    10092025    11092025    12092025    14092025  Training
+   33    11092025    12092025    14092025    15092025  Training
+   34    12092025    14092025    15092025    16092025  Training
+   35    14092025    15092025    16092025    17092025  Training
+   36    15092025    16092025    17092025    18092025  Training
+   37    16092025    17092025    18092025    19092025  Training
+   38    17092025    18092025    19092025    20092025  Training
+   39    18092025    19092025    20092025    21092025  Training
+   40    19092025    20092025    21092025    22092025  Training
+   41    20092025    21092025    22092025    11122025  Training
+   42    21092025    22092025    11122025    16122025  Training
+   43    22092025    11122025    16122025    02012026  Training
+   44    11122025    16122025    02012026    10022026  Training
+   45    16122025    02012026    10022026    13022026  Training
+   46    02012026    10022026    13022026    15022026  Training
+   47    10022026    13022026    15022026    19022026  Training
+   48    13022026    15022026    19022026    23022026  Training
+   49    15022026    19022026    23022026    25022026  Training
+   50    19022026    23022026    25022026    01032026  Training
+   51    23022026    25022026    01032026    07032026  Training
+   52    25022026    01032026    07032026    22032026  Training
+   53    01032026    07032026    22032026    28032026  Training
+   54    07032026    22032026    28032026    08042026  Training
+   55    22032026    28032026    08042026    09042026  Training
+   56    28032026    08042026    09042026    11042026  Training
+   57    08042026    09042026    11042026    12042026  Training
+   58    09042026    11042026    12042026    15042026  Training
+   59    11042026    12042026    15042026    16042026  Training
+   60    12042026    15042026    16042026    17042026  Training
+   61    15042026    16042026    17042026    19042026  Testing
+   62    16042026    17042026    19042026    21042026  Testing
+   63    17042026    19042026    21042026    22042026  Testing
+   64    19042026    21042026    22042026    23042026  Testing
+   65    21042026    22042026    23042026    24042026  Testing
+   66    22042026    23042026    24042026    27042026  Testing
+   67    23042026    24042026    27042026    04052026  Testing
+   68    24042026    27042026    04052026    05052026  Testing
+   69    27042026    04052026    05052026    06052026  Testing
+   70    04052026    05052026    06052026    07052026  Testing
+   71    05052026    06052026    07052026    08052026  Testing
+   72    06052026    07052026    08052026    09052026  Testing
+   73    07052026    08052026    09052026    14052026  Testing
+   74    08052026    09052026    14052026    15052026  Testing
+   75    09052026    14052026    15052026    16052026  Testing
+   76    14052026    15052026    16052026    17052026  Testing

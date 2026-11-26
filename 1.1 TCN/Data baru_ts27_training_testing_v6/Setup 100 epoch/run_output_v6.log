@@ -1,0 +1,245 @@
+[Stage 2] Device: cuda | CPU threads: 64
+[Stage 2] Data dir : C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6\Setup 100 epoch\data
+[Stage 2] File CSV : 84 ditemukan
+  Skip 01082025.csv
+  Skip 18082025.csv
+  Skip 25082025.csv
+  Skip 08092025.csv
+  Skip 18062026.csv
+[Stage 2] Total hari: 79
+[Stage 2] Train days: 63 | Test days: 16
+  [Train] Day  1 -> Healthy
+  [Train] Day  2 -> Warning
+  [Train] Day  3 -> Warning
+  [Train] Day  4 -> Warning
+  [Train] Day  5 -> Warning
+  [Train] Day  6 -> Healthy
+  [Train] Day  7 -> Warning
+  [Train] Day  8 -> Healthy
+  [Train] Day  9 -> Warning
+  [Train] Day 10 -> Healthy
+  [Train] Day 11 -> Healthy
+  [Train] Day 12 -> Healthy
+  [Train] Day 13 -> Warning
+  [Train] Day 14 -> Healthy
+  [Train] Day 15 -> Healthy
+  [Train] Day 16 -> Healthy
+  [Train] Day 17 -> Healthy
+  [Train] Day 18 -> Healthy
+  [Train] Day 19 -> Healthy
+  [Train] Day 20 -> Healthy
+  [Train] Day 21 -> Healthy
+  [Train] Day 22 -> Healthy
+  [Train] Day 23 -> Warning
+  [Train] Day 24 -> Healthy
+  [Train] Day 25 -> Warning
+  [Train] Day 26 -> Healthy
+  [Train] Day 27 -> Healthy
+  [Train] Day 28 -> Healthy
+  [Train] Day 29 -> Healthy
+  [Train] Day 30 -> Warning
+  [Train] Day 31 -> Warning
+  [Train] Day 32 -> Healthy
+  [Train] Day 33 -> Warning
+  [Train] Day 34 -> Warning
+  [Train] Day 35 -> Healthy
+  [Train] Day 36 -> Healthy
+  [Train] Day 37 -> Healthy
+  [Train] Day 38 -> Warning
+  [Train] Day 39 -> Healthy
+  [Train] Day 40 -> Healthy
+  [Train] Day 41 -> Healthy
+  [Train] Day 42 -> Warning
+  [Train] Day 43 -> Warning
+  [Train] Day 44 -> Healthy
+  [Train] Day 45 -> Healthy
+  [Train] Day 46 -> Healthy
+  [Train] Day 47 -> Healthy
+  [Train] Day 48 -> Healthy
+  [Train] Day 49 -> Warning
+  [Train] Day 50 -> Healthy
+  [Train] Day 51 -> Warning
+  [Train] Day 52 -> Healthy
+  [Train] Day 53 -> Healthy
+  [Train] Day 54 -> Healthy
+  [Train] Day 55 -> Healthy
+  [Train] Day 56 -> Healthy
+  [Train] Day 57 -> Healthy
+  [Train] Day 58 -> Healthy
+  [Train] Day 59 -> Healthy
+  [Train] Day 60 -> Healthy
+  [Train] Day 61 -> Warning
+  [Train] Day 62 -> Healthy
+  [Train] Day 63 -> Warning
+  [Test]  Day 64 -> Healthy
+  [Test]  Day 65 -> Warning
+  [Test]  Day 66 -> Healthy
+  [Test]  Day 67 -> Warning
+  [Test]  Day 68 -> Warning
+  [Test]  Day 69 -> Healthy
+  [Test]  Day 70 -> Healthy
+  [Test]  Day 71 -> Healthy
+  [Test]  Day 72 -> Warning
+  [Test]  Day 73 -> Healthy
+  [Test]  Day 74 -> Healthy
+  [Test]  Day 75 -> Healthy
+  [Test]  Day 76 -> Warning
+  [Test]  Day 77 -> Warning
+  [Test]  Day 78 -> Healthy
+  [Test]  Day 79 -> Warning
+[Stage 2] Sampel training: 63 hari
+[Stage 2] Sampel testing : 16 hari
+[Stage 2] scaler_stage2.pkl disimpan
+
+============================================================
+STAGE 2 MLP CLASSIFIER | 2026-10-21 13:11:38
+Train days: 63 | Test days: 16
+Sampel train: 63 hari | Epoch: 100 | Batch: 3
+Distribusi Train: Healthy=43 Warning=20
+============================================================
+Epoch    1/100 | CE: 0.761327 | Acc:  41.27% | LR: 1.00e-03
+Epoch    2/100 | CE: 0.765660 | Acc:  38.10% | LR: 1.00e-03
+Epoch    3/100 | CE: 0.725674 | Acc:  49.21% | LR: 1.00e-03
+Epoch    4/100 | CE: 0.732551 | Acc:  36.51% | LR: 1.00e-03
+Epoch    5/100 | CE: 0.745230 | Acc:  36.51% | LR: 1.00e-03
+Epoch    6/100 | CE: 0.690868 | Acc:  41.27% | LR: 1.00e-03
+Epoch    7/100 | CE: 0.637943 | Acc:  36.51% | LR: 1.00e-03
+Epoch    8/100 | CE: 0.617852 | Acc:  47.62% | LR: 1.00e-03
+Epoch    9/100 | CE: 0.730703 | Acc:  49.21% | LR: 1.00e-03
+Epoch   10/100 | CE: 0.673366 | Acc:  53.97% | LR: 1.00e-03
+Epoch   11/100 | CE: 0.695418 | Acc:  49.21% | LR: 1.00e-03
+Epoch   12/100 | CE: 0.701307 | Acc:  68.25% | LR: 1.00e-03
+Epoch   13/100 | CE: 0.598054 | Acc:  61.90% | LR: 1.00e-03
+Epoch   14/100 | CE: 0.813638 | Acc:  71.43% | LR: 1.00e-03
+Epoch   15/100 | CE: 0.764953 | Acc:  52.38% | LR: 1.00e-03
+Epoch   16/100 | CE: 0.575747 | Acc:  63.49% | LR: 1.00e-03
+Epoch   17/100 | CE: 0.920826 | Acc:  73.02% | LR: 1.00e-03
+Epoch   18/100 | CE: 0.633247 | Acc:  58.73% | LR: 1.00e-03
+Epoch   19/100 | CE: 0.663659 | Acc:  65.08% | LR: 1.00e-03
+Epoch   20/100 | CE: 0.669522 | Acc:  66.67% | LR: 1.00e-03
+Epoch   21/100 | CE: 0.552607 | Acc:  66.67% | LR: 1.00e-03
+Epoch   22/100 | CE: 0.647386 | Acc:  68.25% | LR: 1.00e-03
+Epoch   23/100 | CE: 0.667207 | Acc:  60.32% | LR: 1.00e-03
+Epoch   24/100 | CE: 0.733789 | Acc:  74.60% | LR: 1.00e-03
+Epoch   25/100 | CE: 0.472586 | Acc:  74.60% | LR: 1.00e-03
+Epoch   26/100 | CE: 0.561029 | Acc:  74.60% | LR: 1.00e-03
+Epoch   27/100 | CE: 0.453337 | Acc:  76.19% | LR: 1.00e-03
+Epoch   28/100 | CE: 0.814321 | Acc:  77.78% | LR: 1.00e-03
+Epoch   29/100 | CE: 0.557125 | Acc:  82.54% | LR: 1.00e-03
+Epoch   30/100 | CE: 0.569356 | Acc:  76.19% | LR: 1.00e-03
+Epoch   31/100 | CE: 0.671490 | Acc:  80.95% | LR: 1.00e-03
+Epoch   32/100 | CE: 0.504434 | Acc:  82.54% | LR: 1.00e-03
+Epoch   33/100 | CE: 0.655811 | Acc:  77.78% | LR: 1.00e-03
+Epoch   34/100 | CE: 0.455472 | Acc:  84.13% | LR: 1.00e-03
+Epoch   35/100 | CE: 0.574245 | Acc:  77.78% | LR: 1.00e-03
+Epoch   36/100 | CE: 0.614185 | Acc:  82.54% | LR: 1.00e-03
+Epoch   37/100 | CE: 0.592528 | Acc:  82.54% | LR: 1.00e-03
+Epoch   38/100 | CE: 0.533481 | Acc:  77.78% | LR: 1.00e-03
+Epoch   39/100 | CE: 0.633415 | Acc:  71.43% | LR: 1.00e-03
+Epoch   40/100 | CE: 0.535971 | Acc:  77.78% | LR: 1.00e-03
+Epoch   41/100 | CE: 0.635243 | Acc:  80.95% | LR: 1.00e-03
+Epoch   42/100 | CE: 0.555991 | Acc:  82.54% | LR: 1.00e-03
+Epoch   43/100 | CE: 0.397735 | Acc:  79.37% | LR: 1.00e-03
+Epoch   44/100 | CE: 0.422828 | Acc:  82.54% | LR: 1.00e-03
+Epoch   45/100 | CE: 0.556778 | Acc:  88.89% | LR: 1.00e-03
+Epoch   46/100 | CE: 0.486286 | Acc:  87.30% | LR: 1.00e-03
+Epoch   47/100 | CE: 0.664773 | Acc:  84.13% | LR: 1.00e-03
+Epoch   48/100 | CE: 0.442468 | Acc:  88.89% | LR: 1.00e-03
+Epoch   49/100 | CE: 0.578563 | Acc:  88.89% | LR: 1.00e-03
+Epoch   50/100 | CE: 0.800858 | Acc:  84.13% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_50.pth
+Epoch   51/100 | CE: 0.616175 | Acc:  84.13% | LR: 1.00e-03
+Epoch   52/100 | CE: 0.421646 | Acc:  88.89% | LR: 1.00e-03
+Epoch   53/100 | CE: 0.315350 | Acc:  87.30% | LR: 1.00e-03
+Epoch   54/100 | CE: 0.394535 | Acc:  90.48% | LR: 1.00e-03
+Epoch   55/100 | CE: 0.548908 | Acc:  88.89% | LR: 1.00e-03
+Epoch   56/100 | CE: 0.407521 | Acc:  88.89% | LR: 1.00e-03
+Epoch   57/100 | CE: 0.588850 | Acc:  90.48% | LR: 1.00e-03
+Epoch   58/100 | CE: 0.359458 | Acc:  85.71% | LR: 1.00e-03
+Epoch   59/100 | CE: 0.432283 | Acc:  87.30% | LR: 1.00e-03
+Epoch   60/100 | CE: 0.415027 | Acc:  93.65% | LR: 1.00e-03
+Epoch   61/100 | CE: 0.716708 | Acc:  87.30% | LR: 1.00e-03
+Epoch   62/100 | CE: 0.335383 | Acc:  90.48% | LR: 1.00e-03
+Epoch   63/100 | CE: 0.404093 | Acc:  88.89% | LR: 1.00e-03
+Epoch   64/100 | CE: 0.445346 | Acc:  90.48% | LR: 1.00e-03
+Epoch   65/100 | CE: 0.277367 | Acc:  87.30% | LR: 1.00e-03
+Epoch   66/100 | CE: 0.520028 | Acc:  88.89% | LR: 1.00e-03
+Epoch   67/100 | CE: 0.444500 | Acc:  90.48% | LR: 1.00e-03
+Epoch   68/100 | CE: 0.420335 | Acc:  90.48% | LR: 1.00e-03
+Epoch   69/100 | CE: 0.341335 | Acc:  88.89% | LR: 1.00e-03
+Epoch   70/100 | CE: 0.337878 | Acc:  88.89% | LR: 1.00e-03
+Epoch   71/100 | CE: 0.157160 | Acc:  90.48% | LR: 1.00e-03
+Epoch   72/100 | CE: 0.630757 | Acc:  87.30% | LR: 1.00e-03
+Epoch   73/100 | CE: 0.437279 | Acc:  87.30% | LR: 1.00e-03
+Epoch   74/100 | CE: 0.385319 | Acc:  90.48% | LR: 1.00e-03
+Epoch   75/100 | CE: 0.403728 | Acc:  90.48% | LR: 1.00e-03
+Epoch   76/100 | CE: 0.558447 | Acc:  88.89% | LR: 1.00e-03
+Epoch   77/100 | CE: 0.227485 | Acc:  93.65% | LR: 1.00e-03
+Epoch   78/100 | CE: 0.511972 | Acc:  87.30% | LR: 1.00e-03
+Epoch   79/100 | CE: 0.560118 | Acc:  88.89% | LR: 1.00e-03
+Epoch   80/100 | CE: 0.350976 | Acc:  88.89% | LR: 1.00e-03
+Epoch   81/100 | CE: 0.568109 | Acc:  90.48% | LR: 1.00e-03
+Epoch   82/100 | CE: 0.317838 | Acc:  90.48% | LR: 1.00e-03
+Epoch   83/100 | CE: 0.363682 | Acc:  92.06% | LR: 1.00e-03
+Epoch   84/100 | CE: 0.222755 | Acc:  90.48% | LR: 1.00e-03
+Epoch   85/100 | CE: 0.876149 | Acc:  88.89% | LR: 1.00e-03
+Epoch   86/100 | CE: 0.107454 | Acc:  93.65% | LR: 1.00e-03
+Epoch   87/100 | CE: 0.804014 | Acc:  87.30% | LR: 1.00e-03
+Epoch   88/100 | CE: 0.421927 | Acc:  87.30% | LR: 1.00e-03
+Epoch   89/100 | CE: 0.309978 | Acc:  87.30% | LR: 1.00e-03
+Epoch   90/100 | CE: 0.457269 | Acc:  87.30% | LR: 1.00e-03
+Epoch   91/100 | CE: 0.189690 | Acc:  93.65% | LR: 1.00e-03
+Epoch   92/100 | CE: 0.286532 | Acc:  92.06% | LR: 1.00e-03
+Epoch   93/100 | CE: 0.518622 | Acc:  88.89% | LR: 1.00e-03
+Epoch   94/100 | CE: 0.338248 | Acc:  95.24% | LR: 1.00e-03
+Epoch   95/100 | CE: 0.440382 | Acc:  88.89% | LR: 1.00e-03
+Epoch   96/100 | CE: 0.326805 | Acc:  92.06% | LR: 1.00e-03
+Epoch   97/100 | CE: 0.608690 | Acc:  88.89% | LR: 1.00e-03
+Epoch   98/100 | CE: 0.223894 | Acc:  92.06% | LR: 1.00e-03
+Epoch   99/100 | CE: 0.615514 | Acc:  90.48% | LR: 1.00e-03
+Epoch  100/100 | CE: 0.287293 | Acc:  93.65% | LR: 1.00e-03
+   → Checkpoint: C:\Users\User\Documents\GitHub\siv-prediction\1.1 TCN\Data baru_ts27_training_testing_v6\Setup 100 epoch\checkpoints_stage2\checkpoint_epoch_100.pth
+=== STAGE 2 TRAINING SELESAI ===
+
+=== EVALUASI TRAINING SET (Stage 2) ===
+Train Days   : 63
+Train CE     : 0.133971
+Train Acc    : 96.83%
+Train Prec   : 96.83%
+Train Recall : 96.83%
+Train F1     : 96.83%
+========================================
+
+=== EVALUASI TEST SET (Stage 2) ===
+Test Days    : 16
+Test CE      : 5.529174
+Test Acc     : 43.75%
+Test Prec    : 28.12%
+Test Recall  : 43.75%
+Test F1      : 34.24%
+  Day 64: True=Healthy   | Pred=Healthy   ✓
+  Day 65: True=Warning   | Pred=Healthy   ✗
+  Day 66: True=Healthy   | Pred=Healthy   ✓
+  Day 67: True=Warning   | Pred=Healthy   ✗
+  Day 68: True=Warning   | Pred=Healthy   ✗
+  Day 69: True=Healthy   | Pred=Healthy   ✓
+  Day 70: True=Healthy   | Pred=Warning   ✗
+  Day 71: True=Healthy   | Pred=Warning   ✗
+  Day 72: True=Warning   | Pred=Healthy   ✗
+  Day 73: True=Healthy   | Pred=Healthy   ✓
+  Day 74: True=Healthy   | Pred=Healthy   ✓
+  Day 75: True=Healthy   | Pred=Healthy   ✓
+  Day 76: True=Warning   | Pred=Healthy   ✗
+  Day 77: True=Warning   | Pred=Healthy   ✗
+  Day 78: True=Healthy   | Pred=Healthy   ✓
+  Day 79: True=Warning   | Pred=Healthy   ✗
+========================================
+model_stage2_classifier.pth disimpan
+jurnal_kurva_loss_acc_stage2.png disimpan  ← Jurnal Gambar 14
+jurnal_confusion_matrix_train.png — Acc=96.83% Prec=96.83% Rec=96.83% F1=96.83%
+jurnal_confusion_matrix_test.png — Acc=43.75% Prec=28.12% Rec=43.75% F1=34.24%
+jurnal_aktual_vs_prediksi_mlp.png disimpan  ← Jurnal Gambar 15
+jurnal_fitur_statistik.csv disimpan  ← Tabel Fitur Statistik Jurnal (84 kolom)
+jurnal_info_stage2.txt disimpan  ← Data untuk Tabel & Paragraf Jurnal Stage 2
+
+STAGE 2 SELESAI! Jalankan stage3_inference.py untuk prediksi.

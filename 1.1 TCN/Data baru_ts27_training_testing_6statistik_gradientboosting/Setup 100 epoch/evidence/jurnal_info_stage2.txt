@@ -1,0 +1,97 @@
+====================================================================
+INFORMASI JURNAL - GRADIENT BOOSTING CLASSIFIER (STAGE 2)
+Generated: 2026-10-21 13:10:23
+====================================================================
+
+[DATASET & SPLIT]
+  Total hari                   : 79
+  Train days (TRAIN_RATIO=0.8) : 63
+  Test days                    : 16
+  Input dimensi fitur          : 21 param x 6 statistik = 126 dim
+
+[DISTRIBUSI LABEL - untuk Tabel Jurnal (dengan tanggal)]
+  Healthy (0)   : 52 hari
+    Tanggal     : 01082025, 10082025, 13082025, 15082025, 16082025, 17082025, 19082025, 20082025, 21082025, 22082025, 23082025, 24082025, 25082025, 26082025, 27082025, 02092025, 04092025, 05092025, 06092025, 07092025, 10092025, 14092025, 15092025, 16092025, 18092025, 19092025, 20092025, 11122025, 16122025, 02012026, 10022026, 13022026, 19022026, 25022026, 01032026, 07032026, 22032026, 28032026, 08042026, 09042026, 11042026, 12042026, 16042026, 19042026, 22042026, 27042026, 04052026, 05052026, 07052026, 08052026, 09052026, 16052026
+  Warning (1)   : 27 hari
+    Tanggal     : 03082025, 07082025, 08082025, 09082025, 11082025, 14082025, 18082025, 31082025, 03092025, 08092025, 09092025, 11092025, 12092025, 17092025, 21092025, 22092025, 15022026, 23022026, 15042026, 17042026, 21042026, 23042026, 24042026, 06052026, 14052026, 15052026, 17052026
+
+[HYPERPARAMETER GRADIENT BOOSTING - untuk Tabel Jurnal]
+  Algoritma                    : Gradient Boosting Classifier (sklearn)
+  n_estimators                 : 200
+  max_depth                    : 3
+  learning_rate                : 0.1
+  random_state                 : 42
+  Normalisasi fitur            : StandardScaler (fit hanya pada training)
+
+[FITUR - untuk Tabel Jurnal]
+  Input                         : 126 fitur (21 parameter x 6 statistik)
+  Statistik per parameter       : mean, std, max, min, skewness, rate-of-change (mean |diff|)
+
+[HASIL TRAINING - untuk Para 213 Jurnal]
+  Training Deviance Stage 1    : 1.117279
+  Training Deviance Stage 200 (akhir) : 0.000026
+  Accuracy Stage 1              : 68.25%
+  Accuracy Stage 200 (akhir)   : 100.00%
+
+[EVALUASI TRAINING SET]
+  Accuracy   (weighted)        : 100.00%
+  Precision  (weighted)        : 100.00%
+  Recall     (weighted)        : 100.00%
+  F1-Score   (weighted)        : 100.00%
+
+[CONFUSION MATRIX - TRAINING SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy            43            0
+  Aktual Warning             0           20
+
+[CLASSIFICATION REPORT - TRAINING SET]
+                precision    recall  f1-score   support
+  
+       Healthy       1.00      1.00      1.00        43
+       Warning       1.00      1.00      1.00        20
+  
+      accuracy                           1.00        63
+     macro avg       1.00      1.00      1.00        63
+  weighted avg       1.00      1.00      1.00        63
+
+[EVALUASI TEST SET - untuk Para 215 Jurnal]
+  Test Days                    : 16
+  Accuracy   (weighted)        : 50.00%
+  Precision  (weighted)        : 30.00%
+  Recall     (weighted)        : 50.00%
+  F1-Score   (weighted)        : 37.50%
+
+[CONFUSION MATRIX - TEST SET]
+                  Pred Healthy Pred Warning
+  Aktual Healthy             8            1
+  Aktual Warning             7            0
+
+[CLASSIFICATION REPORT - TEST SET]
+                precision    recall  f1-score   support
+  
+       Healthy       0.53      0.89      0.67         9
+       Warning       0.00      0.00      0.00         7
+  
+      accuracy                           0.50        16
+     macro avg       0.27      0.44      0.33        16
+  weighted avg       0.30      0.50      0.38        16
+
+[DETAIL PREDIKSI PER HARI - TEST SET]
+    Day     Tanggal        Aktual      Prediksi   Benar?
+  ----------------------------------------------------
+     64    19042026       Healthy       Healthy       OK
+     65    21042026       Warning       Healthy        X
+     66    22042026       Healthy       Healthy       OK
+     67    23042026       Warning       Healthy        X
+     68    24042026       Warning       Healthy        X
+     69    27042026       Healthy       Healthy       OK
+     70    04052026       Healthy       Healthy       OK
+     71    05052026       Healthy       Healthy       OK
+     72    06052026       Warning       Healthy        X
+     73    07052026       Healthy       Healthy       OK
+     74    08052026       Healthy       Warning        X
+     75    09052026       Healthy       Healthy       OK
+     76    14052026       Warning       Healthy        X
+     77    15052026       Warning       Healthy        X
+     78    16052026       Healthy       Healthy       OK
+     79    17052026       Warning       Healthy        X
